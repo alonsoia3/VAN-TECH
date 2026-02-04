@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>TECH+VAN – Mobile Reparatur Frankfurt & Umgebung</title>
-  <meta name="description" content="TECH+VAN – Mobile Reparatur für Smartphones, PCs, Laptops & Tablets. Wir kommen zu dir – im Van oder bei dir zuhause. 100 km um Frankfurt am Main." />
-
+  <title>TECH+VAN – Mobile Reparatur & Aufrüstung | Frankfurt & Umgebung</title>
+  <meta name="description" content="TECH+VAN: Mobile Reparatur & Aufrüstung für Smartphones, Tablets, PCs, Laptops, Konsolen & Controller. Wir kommen zu dir – im Van oder bei dir zuhause (bis 100 km um Frankfurt am Main). Same-Day wenn verfügbar." />
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <style>
@@ -15,204 +13,1016 @@
       --card:#121b2e;
       --text:#eaf0ff;
       --muted:#9aa3b2;
-      --border:rgba(255,255,255,.08);
+      --border:rgba(255,255,255,.10);
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
       --blue:#2f87ff;
       --green:#39d98a;
-      --radius:18px;
-      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --amber:#ffcc66;
+      --danger:#ff6b6b;
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:radial-gradient(900px 500px at 15% 15%,rgba(47,135,255,.22),transparent 60%),
-                 radial-gradient(900px 500px at 85% 25%,rgba(57,217,138,.16),transparent 60%),
-                 var(--bg);
+      background:
+        radial-gradient(900px 520px at 15% 15%,rgba(47,135,255,.22),transparent 60%),
+        radial-gradient(900px 520px at 85% 25%,rgba(57,217,138,.16),transparent 60%),
+        var(--bg);
       color:var(--text);
       line-height:1.55;
     }
-
     a{color:inherit;text-decoration:none}
-
     header{
       position:sticky;top:0;z-index:50;
       backdrop-filter:blur(10px);
-      background:linear-gradient(to bottom,rgba(11,18,32,.9),rgba(11,18,32,.7));
+      background:linear-gradient(to bottom,rgba(11,18,32,.92),rgba(11,18,32,.70));
       border-bottom:1px solid var(--border);
     }
-
     .nav{
-      max-width:1100px;margin:auto;
+      max-width:1150px;margin:0 auto;
       display:flex;align-items:center;justify-content:space-between;
-      padding:12px 16px;
+      padding:12px 16px; gap:16px;
     }
-
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
-    .brand img{height:36px;border-radius:10px}
-
-    nav a{margin-left:14px;color:var(--muted)}
-    nav a:hover{color:var(--text)}
-
-    .wrap{max-width:1100px;margin:auto;padding:24px 16px}
-
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+    .brand img{height:36px;width:auto;border-radius:10px;background:rgba(255,255,255,.05);padding:6px;border:1px solid var(--border)}
+    .brand small{display:block;font-weight:600;color:var(--muted);margin-top:2px}
+    nav{display:flex;flex-wrap:wrap;gap:14px;justify-content:flex-end}
+    nav a{color:var(--muted);padding:8px 10px;border-radius:12px}
+    nav a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+    .wrap{max-width:1150px;margin:0 auto;padding:22px 16px}
     .grid{display:grid;gap:18px}
-    @media(min-width:860px){.grid{grid-template-columns:1.3fr .7fr}}
-
+    @media(min-width:900px){.grid.hero{grid-template-columns:1.25fr .75fr}}
+    @media(min-width:900px){.grid.cols3{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:900px){.grid.cols2{grid-template-columns:repeat(2,1fr)}}
     .card{
-      background:var(--card);
+      background:rgba(18,27,46,.86);
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       padding:22px;
     }
-
-    h1{font-size:42px;line-height:1.1;margin:12px 0}
+    h1{font-size:42px;line-height:1.1;margin:10px 0 12px}
     h2{margin:0 0 10px}
-
-    .logoBig{
-      max-width:420px;width:100%;
-      border-radius:16px;
-      background:rgba(255,255,255,.04);
-      padding:10px;
-      margin-bottom:10px;
-    }
-
-    .badges{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
-    .badge{
-      padding:6px 10px;
-      border-radius:999px;
+    p{margin:10px 0;color:var(--text)}
+    .muted{color:var(--muted)}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
       background:rgba(255,255,255,.06);
       border:1px solid var(--border);
-      font-size:13px;
+      font-size:13px;color:var(--text);
     }
-
+    .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;
       padding:12px 16px;border-radius:14px;
       border:1px solid var(--border);
-      background:transparent;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:600;
+      background:transparent;color:var(--text);
+      cursor:pointer;font-weight:700;
     }
+    .btn:hover{transform:translateY(-1px)}
     .btn.primary{background:linear-gradient(135deg,var(--blue),#5b9dff);border:none}
     .btn.green{background:linear-gradient(135deg,var(--green),#6ef0b8);border:none;color:#062b1b}
-    .btnRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-
-    select{width:100%;margin-top:6px;padding:10px;border-radius:10px;background:#0b1328;color:#fff;border:1px solid var(--border)}
-
-    footer{text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
+    .btn.ghost{background:rgba(255,255,255,.05)}
+    .btn.small{padding:9px 12px;border-radius:12px;font-size:14px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(57,217,138,.12);
+      border:1px solid rgba(57,217,138,.25);
+      padding:10px 12px;border-radius:14px;
+      color:var(--text);
+    }
+    .pill b{color:var(--green)}
+    .logoBig{
+      width:100%;max-width:520px;height:auto;
+      border-radius:18px;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      padding:10px;
+      display:block;margin:0 0 12px;
+    }
+    .kpiRow{display:grid;gap:12px}
+    @media(min-width:900px){.kpiRow{grid-template-columns:repeat(3,1fr)}}
+    .kpi{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--border)}
+    .kpi b{display:block;margin-bottom:4px}
+    .section{margin-top:18px}
+    .list{margin:10px 0 0;padding-left:18px;color:var(--muted)}
+    .list li{margin:6px 0}
+    .divider{height:1px;background:var(--border);margin:14px 0}
+    .field{display:block;margin-top:10px}
+    label{font-weight:700;font-size:14px}
+    select,input,textarea{
+      width:100%;
+      margin-top:6px;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#0b1328;
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:110px;resize:vertical}
+    .row{display:grid;gap:12px}
+    @media(min-width:900px){.row.cols2{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.row.cols3{grid-template-columns:1fr 1fr 1fr}}
+    .note{
+      margin-top:10px;
+      padding:12px 12px;border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .priceBox{
+      margin-top:12px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(47,135,255,.25);
+      background:rgba(47,135,255,.10);
+    }
+    .priceBox .big{font-size:22px;font-weight:900;color:var(--text)}
+    .tagRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .tag{font-size:12px;color:var(--text);padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.06)}
+    footer{padding:28px 16px;text-align:center;color:var(--muted)}
+    .legalLinks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+    .tooltipWrap{position:relative;display:inline-flex}
+    .tooltip{
+      position:absolute;left:0;top:115%;
+      width:min(520px,92vw);
+      background:#0b1328;border:1px solid var(--border);
+      border-radius:14px;padding:12px;
+      box-shadow:var(--shadow);
+      display:none;color:var(--muted);font-size:13px;
+    }
+    .tooltipWrap:hover .tooltip{display:block}
+    .fine{font-size:13px;color:var(--muted)}
   </style>
 </head>
 
 <body>
-
 <header>
   <div class="nav">
-    <a class="brand" href="#top">
+    <a class="brand" href="#top" aria-label="TECH+VAN">
       <img src="logo.png" alt="TECH+VAN Logo">
-      TECH+VAN
+      <div>
+        TECH+VAN
+        <small>Reparieren · Aufrüsten · Optimieren</small>
+      </div>
     </a>
+
     <nav>
-      <a href="#rechner">Kosten</a>
+      <a href="#leistungen">Leistungen</a>
+      <a href="#rechner">Kostenrechner</a>
       <a href="#gebiet">Gebiet</a>
       <a href="#kontakt">Kontakt</a>
+      <div class="tooltipWrap">
+        <a href="#datenschutz">Datenschutz</a>
+        <div class="tooltip">
+          <b style="color:var(--text)">Kurz-Info Datenschutz</b><br>
+          Wir speichern nur Daten, die du uns aktiv sendest (z. B. per Mail/WhatsApp). Keine versteckten Tracker.
+          Details stehen in der vollständigen Datenschutzerklärung (Link).
+        </div>
+      </div>
     </nav>
   </div>
 </header>
 
 <main class="wrap" id="top">
 
-  <div class="grid">
+  <!-- HERO -->
+  <div class="grid hero">
     <section class="card">
       <img class="logoBig" src="logo.png" alt="TECH+VAN Logo groß">
-
       <h1>Mobile Reparatur – wir kommen zu dir.</h1>
       <p>
-        <b>TECH+VAN</b> repariert Smartphones, PCs, Laptops & Tablets
-        <b>im Van oder bei dir zuhause</b>. Schnell, transparent & zuverlässig.
+        <b>TECH+VAN</b> repariert Smartphones, Tablets, PCs & Laptops, Konsolen und Controller
+        <b>im Van oder bei dir zuhause</b> – schnell, transparent und zuverlässig.
       </p>
 
-      <div class="badges">
-        <span class="badge">📍 100 km um Frankfurt am Main</span>
-        <span class="badge">⚡ Same-Day (wenn verfügbar)</span>
+      <div class="chips">
+        <span class="chip">📍 bis 100 km um Frankfurt am Main</span>
+        <span class="chip">⚡ Same-Day (wenn verfügbar)</span>
+        <span class="chip">✅ Klare Preise</span>
       </div>
 
-      <div class="btnRow">
+      <div class="ctaRow">
         <a class="btn primary" href="tel:+4917641286003">📞 Jetzt anrufen</a>
-        <a class="btn green" href="sms:+4917641286003">💬 SMS senden</a>
+        <a class="btn green" href="https://wa.me/4917641286003" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="btn ghost" href="sms:+4917641286003">✉️ SMS</a>
+      </div>
+
+      <div class="note">
+        <b style="color:var(--text)">Diagnose-Regel:</b><br>
+        Diagnose <b>29 €</b> nur wenn <b>keine</b> Reparatur durchgeführt wird.<br>
+        Bei Reparatur wird die Diagnose <b>angerechnet</b> (0 €).
       </div>
     </section>
 
     <section class="card">
-      <h2>Kosten schnell berechnen</h2>
-      <p>Finde in wenigen Klicks heraus, was die Reparatur kostet.</p>
+      <h2>Beliebte Services</h2>
+      <ul class="list">
+        <li>Display- & Akku-Wechsel (Smartphone/Tablet/Laptop)</li>
+        <li>Diagnose / Fehleranalyse (Hardware & Software)</li>
+        <li>Datenübertragung & Backup</li>
+        <li>Viren / Malware entfernen</li>
+        <li>PC/Laptop schneller machen (SSD/RAM, Optimierung)</li>
+        <li>Konsole: Reinigung, Überhitzung, HDMI/Bild, Controller-Drift</li>
+      </ul>
 
-      <button class="btn primary" onclick="startRechner()">💶 Preis berechnen</button>
+      <div class="divider"></div>
 
-      <div id="rechner" style="display:none;margin-top:16px">
-        <label>Gerät:</label>
-        <select id="device" onchange="nextStep()">
-          <option value="">Bitte wählen</option>
-          <option value="phone">Smartphone</option>
-          <option value="laptop">Laptop / PC</option>
-        </select>
+      <div class="kpiRow">
+        <div class="kpi">
+          <b>Vor-Ort Service</b>
+          <span class="muted">Du sparst Zeit & Wege.</span>
+        </div>
+        <div class="kpi">
+          <b>Klare Preise</b>
+          <span class="muted">Transparenz vor Start.</span>
+        </div>
+        <div class="kpi">
+          <b>Schnelle Hilfe</b>
+          <span class="muted">Same-Day wenn möglich.</span>
+        </div>
+      </div>
 
-        <div id="steps"></div>
-        <div id="result" style="margin-top:12px;font-weight:600"></div>
+      <div class="divider"></div>
+
+      <div class="pill">
+        🌿 <b>5%</b> vom Gewinn gehen an Natur/Wasser/Soziales – <span class="muted">für eine bessere Welt.</span>
       </div>
     </section>
   </div>
 
-  <section class="card" id="gebiet">
-    <h2>Servicegebiet</h2>
-    <p>Wir fahren <b>bis 100 km um Frankfurt am Main</b>. Unsicher? Schreib uns kurz.</p>
+  <!-- LEISTUNGEN -->
+  <section class="card section" id="leistungen">
+    <h2>Leistungen</h2>
+    <p class="muted">
+      Wir reparieren und rüsten auf – bei dir zuhause oder im Van.
+      Teile-Qualität nach Wunsch: <b>OEM</b> oder <b>Aftermarket</b>.
+    </p>
+
+    <div class="grid cols3" style="margin-top:14px">
+      <div class="kpi">
+        <b>Smartphones & Tablets</b>
+        <div class="muted">Display, Akku, Ladebuchse, Kamera, Lautsprecher, Rückglas u. v. m.</div>
+      </div>
+      <div class="kpi">
+        <b>PCs & Laptops</b>
+        <div class="muted">Windows/Linux/ReviOS, SSD/RAM, Wartung, Optimierung, Diagnose.</div>
+      </div>
+      <div class="kpi">
+        <b>Konsole & Controller</b>
+        <div class="muted">Reinigung, Überhitzung, HDMI/Bild, Stick-Drift, Hall-Stick Upgrade.</div>
+      </div>
+    </div>
   </section>
 
-  <section class="card" id="kontakt">
+  <!-- KOSTENRECHNER -->
+  <section class="card section" id="rechner">
+    <h2>Kostenrechner</h2>
+    <p class="muted">
+      Klicke dich durch. Wenn dein Modell nicht in der Liste ist: einfach eintippen (seit 2017+).
+      Du bekommst eine <b>Preis-Schätzung (ab)</b>.
+    </p>
+
+    <div class="ctaRow">
+      <button class="btn primary" type="button" onclick="openCalc()">💶 Berechnen, wie viel es kostet</button>
+      <button class="btn ghost" type="button" onclick="resetCalc()">Zurücksetzen</button>
+    </div>
+
+    <div id="calcBox" class="priceBox" style="display:none; margin-top:14px;">
+      <div class="row cols2">
+        <div>
+          <div class="field">
+            <label>1) Gerät</label>
+            <select id="c_device" onchange="onDevice()">
+              <option value="">Bitte wählen…</option>
+              <option value="phone">Smartphone</option>
+              <option value="tablet">Tablet</option>
+              <option value="laptop">Laptop</option>
+              <option value="pc">PC</option>
+              <option value="console">Konsole</option>
+              <option value="controller">Controller</option>
+            </select>
+          </div>
+
+          <div class="field" id="brandWrap" style="display:none;">
+            <label>2) Marke</label>
+            <select id="c_brand" onchange="onBrand()"></select>
+          </div>
+
+          <div class="field" id="modelWrap" style="display:none;">
+            <label>3) Modell (tippen/suchen)</label>
+            <input id="c_model" list="modelList" placeholder="z.B. iPhone X, Galaxy S21, MacBook Pro 2019, PS5…" oninput="onModel()" />
+            <datalist id="modelList"></datalist>
+            <div class="fine" style="margin-top:6px;">
+              Tipp: Wenn du dein Modell nicht findest, einfach eintippen – wir bestätigen den finalen Preis nach kurzer Prüfung.
+            </div>
+          </div>
+
+          <div class="field" id="knownWrap" style="display:none;">
+            <label>4) Wissen Sie, was mit dem Gerät los ist?</label>
+            <select id="c_known" onchange="onKnown()">
+              <option value="">Bitte wählen…</option>
+              <option value="yes">Ja</option>
+              <option value="no">Nein</option>
+            </select>
+          </div>
+
+          <div class="field" id="issueWrap" style="display:none;">
+            <label>5) Was soll gemacht werden?</label>
+            <select id="c_issue" onchange="onIssue()"></select>
+          </div>
+
+          <div class="field" id="qualityWrap" style="display:none;">
+            <label>6) Teile-Qualität</label>
+            <select id="c_quality" onchange="calcPrice()">
+              <option value="">Bitte wählen…</option>
+              <option value="aftermarket">Aftermarket (preiswert)</option>
+              <option value="oem">OEM (Premium)</option>
+            </select>
+            <div class="fine" style="margin-top:6px;">
+              OEM = Premium-Qualität (teurer). Aftermarket = günstiger, trotzdem zuverlässig.
+            </div>
+          </div>
+
+          <!-- Extra PC OS -->
+          <div class="field" id="osWrap" style="display:none;">
+            <label>Zusatz (PC/Laptop): Betriebssystem</label>
+            <select id="c_os" onchange="calcPrice()">
+              <option value="">Bitte wählen…</option>
+              <option value="win10home">Windows 10 Home</option>
+              <option value="win10pro">Windows 10 Pro</option>
+              <option value="win11home">Windows 11 Home</option>
+              <option value="win11pro">Windows 11 Pro</option>
+              <option value="linux">Linux (Ubuntu o.ä.)</option>
+              <option value="revios">ReviOS (Gaming/Performance-optimiert)</option>
+              <option value="macos">macOS Setup (nur Apple Geräte)</option>
+            </select>
+            <div class="fine" id="reviosInfo" style="display:none;margin-top:6px;">
+              ReviOS: optimiertes Windows-System für Gaming/Performance (weniger Hintergrunddienste). Für bestimmte Hardware/Use-Cases.
+            </div>
+          </div>
+
+        </div>
+
+        <div>
+          <div class="big">Ergebnis</div>
+          <div id="out" class="note" style="margin-top:10px;">
+            Wähle Gerät → Marke → Modell → Problem → Qualität.
+          </div>
+
+          <div class="tagRow">
+            <span class="tag">Diagnose ohne Reparatur: <b style="color:var(--amber)">29 €</b></span>
+            <span class="tag">Diagnose mit Reparatur: <b style="color:var(--green)">0 €</b></span>
+            <span class="tag">Preis = <b>ab</b> (final nach Prüfung)</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="muted">
+            Schnell Kontakt:
+          </div>
+          <div class="ctaRow" style="margin-top:10px">
+            <a class="btn small primary" href="tel:+4917641286003">Anrufen</a>
+            <a class="btn small green" href="https://wa.me/4917641286003" target="_blank" rel="noopener">WhatsApp</a>
+            <a class="btn small ghost" href="sms:+4917641286003">SMS</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Upgrade/Fragen: Mail-Formular -->
+      <h3 style="margin:0 0 8px;">Aufrüstung / Sonderwunsch anfragen</h3>
+      <p class="muted" style="margin:0 0 10px;">
+        Für Upgrades (z.B. Hall-Sticks, GPU/CPU-Upgrade, Custom-Build) sende bitte eine Anfrage – wir antworten schnell.
+      </p>
+
+      <form id="mailForm" onsubmit="return sendMail();">
+        <div class="row cols3">
+          <div>
+            <label>Name</label>
+            <input id="f_name" placeholder="Vorname Nachname" required>
+          </div>
+          <div>
+            <label>PLZ</label>
+            <input id="f_zip" placeholder="z.B. 60311" required>
+          </div>
+          <div>
+            <label>E-Mail</label>
+            <input id="f_email" type="email" placeholder="deinname@gmail.com" required>
+          </div>
+        </div>
+
+        <div class="row cols2">
+          <div>
+            <label>Gerät/Modell</label>
+            <input id="f_device" placeholder="z.B. iPhone 13 Pro / PS5 / Gaming PC">
+          </div>
+          <div>
+            <label>Wunsch (Upgrade/Reparatur)</label>
+            <input id="f_goal" placeholder="z.B. SSD+RAM Upgrade, Hall-Sticks, Windows Setup…">
+          </div>
+        </div>
+
+        <label style="margin-top:10px;display:block">Details</label>
+        <textarea id="f_msg" placeholder="Kurz beschreiben: Problem, gewünschte Teile, Termine, Adresse (optional)"></textarea>
+
+        <div class="ctaRow">
+          <button class="btn primary" type="submit">📩 Anfrage per E-Mail senden</button>
+          <a class="btn ghost" href="mailto:techvanservice@gmail.com">Direkt Mail öffnen</a>
+        </div>
+
+        <div class="fine" style="margin-top:10px;">
+          Hinweis: Dieses Formular öffnet dein E-Mail-Programm (keine Server-Speicherung auf der Website).
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- GEBIET -->
+  <section class="card section" id="gebiet">
+    <h2>Servicegebiet</h2>
+    <p>
+      Wir fahren <b>bis 100 km um Frankfurt am Main</b>. Wenn du unsicher bist, ob dein Ort dabei ist: Schreib uns kurz (SMS/WhatsApp).
+    </p>
+    <div class="ctaRow">
+      <a class="btn primary" href="tel:+4917641286003">📞 0176 41286003</a>
+      <a class="btn green" href="https://wa.me/4917641286003" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <a class="btn ghost" href="#rechner">💶 Kostenrechner</a>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section class="card section" id="kontakt">
     <h2>Kontakt</h2>
-    <p>📞 0176 41286003<br>✉️ techvanservice@gmail.com</p>
+    <p>
+      <b>Telefon:</b> <a href="tel:+4917641286003">0176 41286003</a><br>
+      <b>E-Mail:</b> <a href="mailto:techvanservice@gmail.com">techvanservice@gmail.com</a><br>
+      <b>WhatsApp:</b> <a href="https://wa.me/4917641286003" target="_blank" rel="noopener">Chat starten</a>
+    </p>
+    <div class="note">
+      <b style="color:var(--text)">Transparenz:</b><br>
+      Du bekommst vor Reparatur eine klare Einschätzung. Bei Teil-Bestellungen informieren wir dich vorher über Preis & Lieferzeit.
+    </div>
+  </section>
+
+  <!-- IMPRESSUM & DATENSCHUTZ -->
+  <section class="card section" id="datenschutz">
+    <h2>Datenschutz & Impressum (Kurz)</h2>
+    <p class="muted">
+      Diese Website ist eine statische GitHub-Pages Seite. Wir verwenden keine versteckten Tracker.
+      Wenn du uns kontaktierst (Telefon/SMS/WhatsApp/E-Mail), erhalten wir die Daten, die du uns sendest.
+    </p>
+
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-weight:800">Datenschutzerklärung (Kurztext)</summary>
+      <div class="note">
+        <b style="color:var(--text)">Welche Daten?</b><br>
+        Nur Daten, die du freiwillig sendest (z. B. Name, E-Mail, Nachricht, Modell/Problem).<br><br>
+        <b style="color:var(--text)">Wofür?</b><br>
+        Zur Bearbeitung deiner Anfrage und Terminabstimmung.<br><br>
+        <b style="color:var(--text)">Weitergabe?</b><br>
+        Keine Weitergabe an Dritte, außer wenn es für die Leistung nötig ist (z. B. Teile-Bestellung/Versand) oder gesetzlich erforderlich.<br><br>
+        <b style="color:var(--text)">Deine Rechte:</b><br>
+        Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung. Kontakt: <a href="mailto:techvanservice@gmail.com">techvanservice@gmail.com</a>
+      </div>
+    </details>
+
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-weight:800">Impressum (Platzhalter)</summary>
+      <div class="note">
+        <b style="color:var(--danger)">Wichtig:</b> Bitte ergänze hier deine vollständigen Impressumsdaten (Name, Anschrift, Kontakt, ggf. USt-ID), bevor du offiziell startest.<br>
+        Kontakt: <a href="mailto:techvanservice@gmail.com">techvanservice@gmail.com</a>
+      </div>
+    </details>
+
+    <div class="fine" style="margin-top:10px;">
+      Hinweis: Das ist ein Kurztext. Für ein professionelles Impressum/DSGVO können wir die Texte vollständig ausformulieren.
+    </div>
   </section>
 
 </main>
 
 <footer>
-  © 2026 TECH+VAN
+  © 2026 TECH+VAN — <span style="color:var(--muted)">Reparieren · Aufrüsten · Optimieren</span>
+  <div class="legalLinks">
+    <a class="btn small ghost" href="#datenschutz">Datenschutz</a>
+    <a class="btn small ghost" href="#datenschutz">Impressum</a>
+    <a class="btn small ghost" href="#kontakt">Kontakt</a>
+  </div>
 </footer>
 
 <script>
-function startRechner(){
-  document.getElementById("rechner").style.display="block";
-}
+  // ====== DATA: Brands + Model Suggestions (2017+) ======
+  // NOTE: Vollständige "alle Modelle" Listen wären riesig. Lösung: Vorschläge + Suchfeld.
+  const DATA = {
+    phone: {
+      brands: ["Apple (iPhone)", "Samsung", "Google Pixel", "Xiaomi", "OnePlus", "Nothing", "Huawei", "Sony", "Motorola", "Oppo", "Realme", "Andere / unbekannt"],
+      models: {
+        "Apple (iPhone)": [
+          "iPhone 8","iPhone 8 Plus",
+          "iPhone X","iPhone XR","iPhone XS","iPhone XS Max",
+          "iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max",
+          "iPhone SE (2020)","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max",
+          "iPhone 13 mini","iPhone 13","iPhone 13 Pro","iPhone 13 Pro Max",
+          "iPhone SE (2022)","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max",
+          "iPhone 15","iPhone 15 Plus","iPhone 15 Pro","iPhone 15 Pro Max"
+        ],
+        "Samsung": ["Galaxy S8","Galaxy S9","Galaxy S10","Galaxy S20","Galaxy S21","Galaxy S22","Galaxy S23","Galaxy S24","Galaxy Note 9","Galaxy Note 10","Galaxy A50","Galaxy A51","Galaxy A52","Galaxy A53","Galaxy A54","Galaxy Z Flip","Galaxy Z Fold"],
+        "Google Pixel": ["Pixel 2","Pixel 3","Pixel 4","Pixel 5","Pixel 6","Pixel 7","Pixel 8"],
+        "Xiaomi": ["Mi 9","Mi 10","Mi 11","Xiaomi 12","Xiaomi 13","Xiaomi 14","Redmi Note 10","Redmi Note 11","Redmi Note 12","Poco F3","Poco F4","Poco F5"],
+        "OnePlus": ["OnePlus 6","OnePlus 7","OnePlus 8","OnePlus 9","OnePlus 10","OnePlus 11","OnePlus 12"],
+        "Nothing": ["Nothing Phone (1)","Nothing Phone (2)","Nothing Phone (2a)"],
+        "Huawei": ["P20","P30","P40","Mate 20","Mate 30","Mate 40"],
+        "Sony": ["Xperia XZ2","Xperia 1","Xperia 5","Xperia 10"],
+        "Motorola": ["Moto G7","Moto G8","Moto G9","Moto G10","Moto G11","Moto G12","Moto G13","Moto G14"],
+        "Oppo": ["Find X2","Find X3","Find X5","Reno 5","Reno 6","Reno 7"],
+        "Realme": ["Realme 8","Realme 9","Realme 10","Realme 11"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Display",
+        "Akku",
+        "Rückglas (Backcover)",
+        "Ladebuchse / Laden",
+        "Lautsprecher / Mikrofon",
+        "Kamera / Kameralinse",
+        "Frontkamera / Face-ID / Sensoren",
+        "WLAN/Bluetooth/Empfang (Antenne)",
+        "Systemfehler / Software",
+        "Datenübertragung / Backup",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    },
 
-function nextStep(){
-  const steps=document.getElementById("steps");
-  const result=document.getElementById("result");
-  steps.innerHTML="";
-  result.innerHTML="";
+    tablet: {
+      brands: ["Apple (iPad)", "Samsung", "Lenovo", "Huawei", "Microsoft Surface", "Andere / unbekannt"],
+      models: {
+        "Apple (iPad)": ["iPad (2017)","iPad (2018)","iPad (2019)","iPad (2020)","iPad (2021)","iPad (2022)","iPad Air 3","iPad Air 4","iPad Air 5","iPad mini 5","iPad mini 6","iPad Pro 11","iPad Pro 12.9"],
+        "Samsung": ["Galaxy Tab S6","Galaxy Tab S7","Galaxy Tab S8","Galaxy Tab S9","Galaxy Tab A (2019+)"],
+        "Lenovo": ["Tab P11","Tab P12","Yoga Tab"],
+        "Huawei": ["MatePad","MediaPad"],
+        "Microsoft Surface": ["Surface Go","Surface Pro 6","Surface Pro 7","Surface Pro 8","Surface Pro 9"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Display",
+        "Akku",
+        "Ladebuchse / Laden",
+        "Lautsprecher / Mikrofon",
+        "Systemfehler / Software",
+        "Datenübertragung / Backup",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    },
 
-  if(device.value==="phone"){
-    steps.innerHTML=`
-      <label>iPhone Modell:</label>
-      <select onchange="showPrice(this.value)">
-        <option value="">Bitte wählen</option>
-        <option value="12">iPhone 12 / Pro</option>
-        <option value="13">iPhone 13 / Pro</option>
-        <option value="15">iPhone 15 Pro Max</option>
-      </select>`;
+    laptop: {
+      brands: ["Acer","ASUS","Dell","HP","Lenovo","MSI","Apple (MacBook)","Razer","Microsoft Surface","Andere / unbekannt"],
+      models: {
+        "Apple (MacBook)": ["MacBook Air (2018+)","MacBook Pro (2017+)","MacBook (Retina 2017)"],
+        "Lenovo": ["ThinkPad (2017+)","Legion (2018+)","IdeaPad (2017+)"],
+        "Dell": ["XPS (2017+)","Inspiron (2017+)","Latitude (2017+)"],
+        "HP": ["Pavilion (2017+)","Envy (2017+)","Omen (2018+)","EliteBook (2017+)"],
+        "ASUS": ["ROG (2017+)","TUF (2018+)","ZenBook (2017+)","VivoBook (2017+)"],
+        "Acer": ["Nitro (2017+)","Predator (2017+)","Aspire (2017+)","Swift (2017+)"],
+        "MSI": ["GF/GL/GP/GE (2017+)","Stealth (2018+)"],
+        "Razer": ["Blade (2018+)"],
+        "Microsoft Surface": ["Surface Laptop (2017+)","Surface Book (2017+)"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Diagnose / Fehleranalyse",
+        "Windows neu installieren",
+        "Linux installieren",
+        "ReviOS installieren (Gaming/Performance)",
+        "SSD Einbau + Setup",
+        "RAM Upgrade",
+        "Akku tauschen",
+        "Display tauschen",
+        "Tastatur / Touchpad",
+        "Lüfter/Überhitzung (Reinigung/Wärmeleitpaste)",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    },
+
+    pc: {
+      brands: ["Windows PC (Eigenbau/Fertig)","Apple (Mac)","Andere / unbekannt"],
+      models: {
+        "Windows PC (Eigenbau/Fertig)": ["Gaming PC","Office PC","Workstation"],
+        "Apple (Mac)": ["iMac (2017+)","Mac mini (2018+)","MacBook als Desktop-Setup","Mac Studio"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Diagnose / Fehleranalyse",
+        "Wartung/Service (Reinigung + Optimierung)",
+        "Windows installieren (10/11)",
+        "Linux installieren",
+        "ReviOS installieren (Gaming/Performance)",
+        "SSD/HDD Einbau + Setup",
+        "RAM Upgrade",
+        "GPU tauschen",
+        "CPU tauschen",
+        "Mainboard/PSU/Komponenten prüfen",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    },
+
+    console: {
+      brands: ["PlayStation","Xbox","Nintendo","Andere / unbekannt"],
+      models: {
+        "PlayStation": ["PS4","PS4 Pro","PS5","PS5 Slim"],
+        "Xbox": ["Xbox One","Xbox One S","Xbox One X","Xbox Series S","Xbox Series X"],
+        "Nintendo": ["Nintendo Switch","Switch OLED","Switch Lite"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Reinigung/Überhitzung",
+        "HDMI/Bildproblem",
+        "Laufwerk/Lesen (falls vorhanden)",
+        "Software/Update/Setup",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    },
+
+    controller: {
+      brands: ["PlayStation Controller","Xbox Controller","Switch Joy-Con","Andere / unbekannt"],
+      models: {
+        "PlayStation Controller": ["DualShock 4 (PS4)","DualSense (PS5)"],
+        "Xbox Controller": ["Xbox One Controller","Xbox Series Controller"],
+        "Switch Joy-Con": ["Joy-Con (Links/Rechts)","Pro Controller"],
+        "Andere / unbekannt": []
+      },
+      issues: [
+        "Stick-Drift",
+        "Tasten reagieren nicht",
+        "Laden/Akku",
+        "Verbindung/Pairing",
+        "Hall-Sticks Upgrade",
+        "Weiß ich nicht (Diagnose)"
+      ]
+    }
+  };
+
+  // ====== Pricing: competitive "ab"-prices ======
+  // We'll estimate base price by device+issue; OEM adds premium multiplier.
+  const BASE = {
+    phone: {
+      "Display": 139,
+      "Akku": 69,
+      "Rückglas (Backcover)": 89,
+      "Ladebuchse / Laden": 79,
+      "Lautsprecher / Mikrofon": 59,
+      "Kamera / Kameralinse": 79,
+      "Frontkamera / Face-ID / Sensoren": 89,
+      "WLAN/Bluetooth/Empfang (Antenne)": 69,
+      "Systemfehler / Software": 59,
+      "Datenübertragung / Backup": 49,
+      "Weiß ich nicht (Diagnose)": 29
+    },
+    tablet: {
+      "Display": 149,
+      "Akku": 79,
+      "Ladebuchse / Laden": 79,
+      "Lautsprecher / Mikrofon": 59,
+      "Systemfehler / Software": 59,
+      "Datenübertragung / Backup": 49,
+      "Weiß ich nicht (Diagnose)": 29
+    },
+    laptop: {
+      "Diagnose / Fehleranalyse": 29,
+      "Windows neu installieren": 79,
+      "Linux installieren": 69,
+      "ReviOS installieren (Gaming/Performance)": 89,
+      "SSD Einbau + Setup": 99,
+      "RAM Upgrade": 59,
+      "Akku tauschen": 89,
+      "Display tauschen": 149,
+      "Tastatur / Touchpad": 79,
+      "Lüfter/Überhitzung (Reinigung/Wärmeleitpaste)": 79,
+      "Weiß ich nicht (Diagnose)": 29
+    },
+    pc: {
+      "Diagnose / Fehleranalyse": 29,
+      "Wartung/Service (Reinigung + Optimierung)": 79,
+      "Windows installieren (10/11)": 79,
+      "Linux installieren": 69,
+      "ReviOS installieren (Gaming/Performance)": 89,
+      "SSD/HDD Einbau + Setup": 99,
+      "RAM Upgrade": 59,
+      "GPU tauschen": 79,
+      "CPU tauschen": 99,
+      "Mainboard/PSU/Komponenten prüfen": 79,
+      "Weiß ich nicht (Diagnose)": 29
+    },
+    console: {
+      "Reinigung/Überhitzung": 69,
+      "HDMI/Bildproblem": 99,
+      "Laufwerk/Lesen (falls vorhanden)": 89,
+      "Software/Update/Setup": 59,
+      "Weiß ich nicht (Diagnose)": 29
+    },
+    controller: {
+      "Stick-Drift": 49,
+      "Tasten reagieren nicht": 39,
+      "Laden/Akku": 49,
+      "Verbindung/Pairing": 29,
+      "Hall-Sticks Upgrade": 79,
+      "Weiß ich nicht (Diagnose)": 29
+    }
+  };
+
+  function openCalc(){
+    document.getElementById("calcBox").style.display = "block";
+    resetCalc();
+    document.getElementById("out").innerHTML =
+      "Wähle Gerät → Marke → Modell → Problem → Qualität.";
   }
 
-  if(device.value==="laptop"){
-    result.innerHTML="💻 Diagnose: <b>29 €</b> (kostenlos bei Reparatur)";
-  }
-}
+  function resetCalc(){
+    setShow("brandWrap", false);
+    setShow("modelWrap", false);
+    setShow("knownWrap", false);
+    setShow("issueWrap", false);
+    setShow("qualityWrap", false);
+    setShow("osWrap", false);
+    setShow("reviosInfo", false);
 
-function showPrice(model){
-  const prices={12:199,13:229,15:399};
-  document.getElementById("result").innerHTML=
-    "💰 Geschätzter Preis: <b>"+prices[model]+" €</b>";
-}
+    byId("c_device").value = "";
+    byId("c_brand").innerHTML = "";
+    byId("c_model").value = "";
+    byId("modelList").innerHTML = "";
+    byId("c_known").value = "";
+    byId("c_issue").innerHTML = "";
+    byId("c_quality").value = "";
+    byId("c_os").value = "";
+  }
+
+  function byId(id){ return document.getElementById(id); }
+  function setShow(id, yes){ byId(id).style.display = yes ? "block" : "none"; }
+
+  function setOptions(selectEl, placeholder, arr){
+    selectEl.innerHTML = "";
+    const ph = document.createElement("option");
+    ph.value = ""; ph.textContent = placeholder;
+    selectEl.appendChild(ph);
+    arr.forEach(v=>{
+      const o=document.createElement("option");
+      o.value=v; o.textContent=v;
+      selectEl.appendChild(o);
+    });
+  }
+
+  function setDatalist(listEl, arr){
+    listEl.innerHTML = "";
+    arr.forEach(v=>{
+      const o=document.createElement("option");
+      o.value=v;
+      listEl.appendChild(o);
+    });
+  }
+
+  function onDevice(){
+    const d = byId("c_device").value;
+    resetCalc();
+    if(!d) return;
+
+    // re-set device after reset
+    byId("c_device").value = d;
+
+    // brands
+    setShow("brandWrap", true);
+    const brands = DATA[d].brands;
+    setOptions(byId("c_brand"), "Bitte wählen…", brands);
+
+    setShow("modelWrap", false);
+    setShow("knownWrap", false);
+    setShow("issueWrap", false);
+    setShow("qualityWrap", false);
+    setShow("osWrap", false);
+    setShow("reviosInfo", false);
+
+    byId("out").innerHTML = "Wähle jetzt die Marke.";
+  }
+
+  function onBrand(){
+    const d = byId("c_device").value;
+    const b = byId("c_brand").value;
+    if(!d || !b) return;
+
+    setShow("modelWrap", true);
+    setShow("knownWrap", false);
+    setShow("issueWrap", false);
+    setShow("qualityWrap", false);
+    setShow("osWrap", false);
+    setShow("reviosInfo", false);
+
+    // suggestions
+    const suggestions = (DATA[d].models[b] || []);
+    setDatalist(byId("modelList"), suggestions);
+    byId("c_model").value = "";
+
+    byId("out").innerHTML = "Tippe dein Modell ein (oder wähle aus Vorschlägen).";
+  }
+
+  function onModel(){
+    const d = byId("c_device").value;
+    const b = byId("c_brand").value;
+    const m = byId("c_model").value.trim();
+    if(!d || !b || !m) return;
+
+    setShow("knownWrap", true);
+    byId("c_known").value = "";
+    setShow("issueWrap", false);
+    setShow("qualityWrap", false);
+    setShow("osWrap", false);
+    setShow("reviosInfo", false);
+
+    byId("out").innerHTML = "Wissen Sie, was mit dem Gerät los ist?";
+  }
+
+  function onKnown(){
+    const d = byId("c_device").value;
+    const known = byId("c_known").value;
+    if(!d || !known) return;
+
+    setShow("issueWrap", true);
+    setShow("qualityWrap", false);
+    setShow("osWrap", false);
+    setShow("reviosInfo", false);
+
+    // issues per device
+    setOptions(byId("c_issue"), "Bitte wählen…", DATA[d].issues);
+
+    if(known === "no"){
+      // force diagnosis display, but still allow issue selection if they want
+      byId("out").innerHTML =
+        "🔍 <b>Diagnose: 29 €</b> (nur wenn keine Reparatur erfolgt).<br>✅ Bei Reparatur wird die Diagnose angerechnet (0 €).<br><span class='muted'>Du kannst trotzdem ein Problem auswählen, wenn du es später doch weißt.</span>";
+    } else {
+      byId("out").innerHTML = "Wähle aus, was gemacht werden soll.";
+    }
+  }
+
+  function onIssue(){
+    const issue = byId("c_issue").value;
+    if(!issue) return;
+
+    // quality needed for most repairs; for pure diagnosis keep quality optional
+    const diagOnly = issue.includes("Diagnose") || issue.includes("Weiß ich nicht");
+    setShow("qualityWrap", !diagOnly);
+
+    // OS extra for pc/laptop installs
+    const d = byId("c_device").value;
+    const needsOS = (d === "pc" || d === "laptop") && (
+      issue.includes("Windows") || issue.includes("Linux") || issue.includes("ReviOS") || issue.includes("macOS")
+    );
+    setShow("osWrap", needsOS);
+
+    // Show ReviOS info if selected
+    if(needsOS && byId("c_os").value === "revios"){
+      setShow("reviosInfo", true);
+    } else {
+      setShow("reviosInfo", false);
+    }
+
+    // if diagnosis: show instantly
+    if(diagOnly){
+      calcPrice();
+    } else {
+      byId("c_quality").value = "";
+      byId("out").innerHTML = "Wähle jetzt die Teile-Qualität (Aftermarket oder OEM).";
+    }
+  }
+
+  function calcPrice(){
+    const d = byId("c_device").value;
+    const b = byId("c_brand").value;
+    const m = byId("c_model").value.trim();
+    const known = byId("c_known").value;
+    const issue = byId("c_issue").value;
+    const quality = byId("c_quality").value;
+    const os = byId("c_os").value;
+
+    if(!d || !b || !m || !known || !issue) return;
+
+    // show ReviOS info
+    if(byId("osWrap").style.display === "block" && os === "revios") setShow("reviosInfo", true);
+    else setShow("reviosInfo", false);
+
+    let base = (BASE[d] && BASE[d][issue]) ? BASE[d][issue] : 29;
+
+    // If customer doesn't know: show diagnosis rule
+    if(known === "no" || issue.includes("Weiß ich nicht")){
+      byId("out").innerHTML =
+        `<div class="big">Preis ab: <b>29 €</b></div>
+         <div class="muted">Diagnose nur wenn keine Reparatur erfolgt. Bei Reparatur wird die Diagnose angerechnet (0 €).</div>
+         <div class="divider"></div>
+         <div class="muted">Auswahl: ${escapeHtml(d)} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>`;
+      return;
+    }
+
+    // Quality multiplier
+    if(!quality && !issue.includes("Diagnose")){
+      byId("out").innerHTML = "Bitte Qualität auswählen (Aftermarket oder OEM).";
+      return;
+    }
+
+    let mult = 1.0;
+    if(quality === "oem") mult = 1.25;          // OEM premium
+    if(quality === "aftermarket") mult = 1.0;   // standard
+
+    // Model adjustments: iPhone Pro/Max a bit higher, consoles/PC also vary
+    let adj = 0;
+    const low = m.toLowerCase();
+    if(d === "phone" || d === "tablet"){
+      if(low.includes("pro max") || low.includes("ultra")) adj += 35;
+      if(low.includes("pro") && !low.includes("pro max")) adj += 20;
+      if(low.includes("fold")) adj += 45;
+    }
+    if(d === "console" && (low.includes("ps5") || low.includes("series x"))) adj += 15;
+    if(d === "laptop" && low.includes("macbook")) adj += 25;
+
+    // OS selection: keep competitive
+    let osAdd = 0;
+    if(byId("osWrap").style.display === "block" && os){
+      if(os.startsWith("win")) osAdd = 0; // already included in base (we keep competitive)
+      if(os === "linux") osAdd = 0;
+      if(os === "revios") osAdd = 10;
+      if(os === "macos") osAdd = 10;
+    }
+
+    const estimate = Math.round((base + adj) * mult + osAdd);
+
+    const qualityLabel = quality === "oem" ? "OEM (Premium)" : "Aftermarket (preiswert)";
+    const deviceLabel = ({
+      phone:"Smartphone", tablet:"Tablet", laptop:"Laptop", pc:"PC", console:"Konsole", controller:"Controller"
+    })[d] || d;
+
+    let extra = "";
+    if(byId("osWrap").style.display === "block" && os){
+      const osLabel = ({
+        win10home:"Windows 10 Home", win10pro:"Windows 10 Pro",
+        win11home:"Windows 11 Home", win11pro:"Windows 11 Pro",
+        linux:"Linux (Ubuntu o.ä.)", revios:"ReviOS", macos:"macOS Setup"
+      })[os] || os;
+      extra = `<div class="muted">OS: ${escapeHtml(osLabel)}</div>`;
+    }
+
+    byId("out").innerHTML = `
+      <div class="big">Preis ab: <b>${estimate} €</b></div>
+      <div class="muted">${escapeHtml(noteFor(issue))}</div>
+      <div class="divider"></div>
+      <div class="muted">Auswahl:</div>
+      <div><b>${escapeHtml(deviceLabel)}</b> · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
+      <div class="muted">Service: ${escapeHtml(issue)}</div>
+      <div class="muted">Qualität: ${escapeHtml(qualityLabel)}</div>
+      ${extra}
+      <div class="divider"></div>
+      <div class="muted">
+        Hinweis: Endpreis nach kurzer Prüfung/Teileverfügbarkeit. Diagnose ist kostenlos bei Reparatur (sonst 29 €).
+      </div>
+    `;
+  }
+
+  function noteFor(issue){
+    if(issue.includes("Display")) return "Displaypreise sind stark modellabhängig (Standard/OEM).";
+    if(issue.includes("Rückglas")) return "Rückglas je nach Modell/Verklebung.";
+    if(issue.includes("Lade")) return "Oft Reinigung/Port/Teil – prüfen wir schnell.";
+    if(issue.includes("System") || issue.includes("Software")) return "Softwarefehler sind meist schnell lösbar.";
+    if(issue.includes("Windows") || issue.includes("Linux") || issue.includes("ReviOS") || issue.includes("macOS")) return "Installation inkl. Basis-Setup; Datenbackup optional.";
+    if(issue.includes("Wartung")) return "Wartung inkl. Reinigung + Basis-Optimierung.";
+    if(issue.includes("Diagnose") || issue.includes("Weiß")) return "Diagnose 29 € nur wenn keine Reparatur erfolgt.";
+    return "Preis ab – final nach Prüfung.";
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[s]));
+  }
+
+  // ====== Mailto form sender ======
+  function sendMail(){
+    const name = byId("f_name").value.trim();
+    const zip  = byId("f_zip").value.trim();
+    const mail = byId("f_email").value.trim();
+    const dev  = byId("f_device").value.trim();
+    const goal = byId("f_goal").value.trim();
+    const msg  = byId("f_msg").value.trim();
+
+    const subject = encodeURIComponent("TECH+VAN Anfrage (Upgrade/Reparatur)");
+    const body = encodeURIComponent(
+      `Name: ${name}\nPLZ: ${zip}\nE-Mail: ${mail}\n\nGerät/Modell: ${dev}\nWunsch: ${goal}\n\nDetails:\n${msg}\n`
+    );
+
+    window.location.href = `mailto:techvanservice@gmail.com?subject=${subject}&body=${body}`;
+    return false;
+  }
 </script>
 
 </body>
