@@ -933,13 +933,25 @@
 
     // If customer doesn't know: show diagnosis rule
     if(known === "no" || issue.includes("Weiß ich nicht")){
-      byId("out").innerHTML =
-        `<div class="big">Preis ab: <b>29 €</b></div>
-         <div class="muted">Diagnose nur wenn keine Reparatur erfolgt. Bei Reparatur wird die Diagnose angerechnet (0 €).</div>
-         <div class="divider"></div>
-         <div class="muted">Auswahl: ${escapeHtml(d)} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>`;
-      return;
-    }
+  byId("out").innerHTML = `
+    <div class="big">Preis ab: <b>29 €</b></div>
+    <div class="muted">
+      Diagnose nur wenn keine Reparatur erfolgt.
+      Bei Reparatur wird die Diagnose angerechnet (0 €).
+    </div>
+
+    <div class="muted">
+      🚐 Anfahrt: bis <b>10 km kostenlos</b>, danach <b>0,30 € pro km</b>
+    </div>
+
+    <div class="divider"></div>
+    <div class="muted">
+      Auswahl: ${escapeHtml(d)} · ${escapeHtml(b)} · ${escapeHtml(m)}
+    </div>
+  `;
+  return;
+}
+
 
     // Quality multiplier
     if(!quality && !issue.includes("Diagnose")){
@@ -989,6 +1001,7 @@
     }
 
     byId("out").innerHTML = `
+      <div class="muted">🚐 Anfahrt: bis <b>10 km kostenlos</b>, danach <b>0,30 € pro km</b></div>
       <div class="big">Preis ab: <b>${estimate} €</b></div>
       <div class="muted">${escapeHtml(noteFor(issue))}</div>
       <div class="divider"></div>
