@@ -2,327 +2,218 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TECH+VAN – Mobile Reparatur in Frankfurt & Umgebung</title>
-  <meta name="description" content="TECH+VAN: Mobile Reparatur für Smartphones, PCs, Laptops & Tablets. Wir kommen zu dir – im Van oder bei dir zuhause. 100 km um Frankfurt am Main." />
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>TECH+VAN – Mobile Reparatur Frankfurt & Umgebung</title>
+  <meta name="description" content="TECH+VAN – Mobile Reparatur für Smartphones, PCs, Laptops & Tablets. Wir kommen zu dir – im Van oder bei dir zuhause. 100 km um Frankfurt am Main." />
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <style>
     :root{
       --bg:#0b1220;
       --card:#121b2e;
       --text:#eaf0ff;
-      --muted:#b7c3e6;
-      --border:rgba(255,255,255,.10);
-      --shadow:0 12px 40px rgba(0,0,0,.35);
-      --radius:18px;
+      --muted:#9aa3b2;
+      --border:rgba(255,255,255,.08);
       --blue:#2f87ff;
       --green:#39d98a;
+      --radius:18px;
+      --shadow:0 12px 40px rgba(0,0,0,.35);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background:
-        radial-gradient(900px 500px at 15% 15%, rgba(47,135,255,.22), transparent 60%),
-        radial-gradient(900px 500px at 85% 25%, rgba(57,217,138,.16), transparent 60%),
-        var(--bg);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:radial-gradient(900px 500px at 15% 15%,rgba(47,135,255,.22),transparent 60%),
+                 radial-gradient(900px 500px at 85% 25%,rgba(57,217,138,.16),transparent 60%),
+                 var(--bg);
       color:var(--text);
       line-height:1.55;
     }
-    a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
+
+    a{color:inherit;text-decoration:none}
+
     header{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(11,18,32,.92), rgba(11,18,32,.70));
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(10px);
+      background:linear-gradient(to bottom,rgba(11,18,32,.9),rgba(11,18,32,.7));
       border-bottom:1px solid var(--border);
     }
+
     .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:12px 16px; max-width:1100px; margin:0 auto;
+      max-width:1100px;margin:auto;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 16px;
     }
-    .brand{display:flex; align-items:center; gap:12px; text-decoration:none}
-    .brand img{height:38px; width:auto; border-radius:10px}
-    nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-    nav a{
-      text-decoration:none; padding:8px 10px; border-radius:12px;
-      color:var(--muted);
-    }
-    nav a:hover{background:rgba(255,255,255,.06); color:var(--text)}
+
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+    .brand img{height:36px;border-radius:10px}
+
+    nav a{margin-left:14px;color:var(--muted)}
+    nav a:hover{color:var(--text)}
+
+    .wrap{max-width:1100px;margin:auto;padding:24px 16px}
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:860px){.grid{grid-template-columns:1.3fr .7fr}}
+
     .card{
-      background:rgba(18,27,46,.86);
+      background:var(--card);
       border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       padding:22px;
     }
-    .grid{display:grid; gap:16px}
-    @media (min-width: 900px){
-      .grid.hero{grid-template-columns: 1.25fr .75fr}
-      .grid.cols3{grid-template-columns:repeat(3,1fr)}
-      .grid.cols2{grid-template-columns:repeat(2,1fr)}
-    }
-    h1{font-size:42px; line-height:1.1; margin:0 0 12px}
-    h2{margin:0 0 10px; font-size:22px}
-    p{margin:0 0 14px; color:var(--muted)}
-    .badgeRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
-    .badge{
-      font-size:13px; color:var(--muted);
-      padding:7px 10px; border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-    }
-    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 14px; border-radius:14px;
-      border:1px solid var(--border);
-      text-decoration:none; font-weight:700;
-      background:rgba(255,255,255,.04);
-    }
-    .btn.primary{
-      border:none;
-      background: linear-gradient(135deg, var(--blue), #6aa9ff);
-    }
-    .btn.green{
-      border:none;
-      background: linear-gradient(135deg, var(--green), #88f0c2);
-      color:#062114;
-    }
-    .btn:hover{transform: translateY(-1px)}
-    .small{font-size:13px; color:var(--muted)}
-    .feature{
-      padding:16px; border-radius:16px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-    }
-    ul{margin:10px 0 0 18px; color:var(--muted)}
-    .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px}
-    .kpi{padding:14px; border-radius:16px; border:1px solid var(--border); background:rgba(255,255,255,.04)}
-    .kpi b{display:block; font-size:16px; color:var(--text)}
-    .section{margin-top:16px}
-    .contactGrid{display:grid; gap:12px}
-    @media(min-width:900px){ .contactGrid{grid-template-columns:1fr 1fr} }
-    input, textarea{
-      width:100%; padding:12px 12px; border-radius:14px;
-      border:1px solid var(--border); background:rgba(0,0,0,.25);
-      color:var(--text); outline:none;
-    }
-    textarea{min-height:120px; resize:vertical}
-    footer{padding:28px 16px; text-align:center; color:var(--muted); font-size:14px}
+
+    h1{font-size:42px;line-height:1.1;margin:12px 0}
+    h2{margin:0 0 10px}
+
     .logoBig{
-      width:100%; max-width:520px; height:auto;
-      display:block; margin:0 auto 8px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
+      max-width:420px;width:100%;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
       padding:10px;
-      border:1px solid var(--border);
+      margin-bottom:10px;
     }
+
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      font-size:13px;
+    }
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 16px;border-radius:14px;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--blue),#5b9dff);border:none}
+    .btn.green{background:linear-gradient(135deg,var(--green),#6ef0b8);border:none;color:#062b1b}
+    .btnRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+
+    select{width:100%;margin-top:6px;padding:10px;border-radius:10px;background:#0b1328;color:#fff;border:1px solid var(--border)}
+
+    footer{text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="nav">
-      <a class="brand" href="#top" aria-label="TECH+VAN">
-        <img src="logo.png" alt="TECH+VAN Logo" />
-        <strong>TECH+VAN</strong>
-      </a>
-      <nav>
-        <a href="#leistungen">Leistungen</a>
-        <a href="#ablauf">Ablauf</a>
-        <a href="#gebiet">Gebiet</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="wrap" id="top">
-    <div class="grid hero section">
-      <section class="card">
-       <img class="logoBig" src="logo.png" alt="TECH+VAN Logo groß" />
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <img src="logo.png" alt="TECH+VAN Logo">
+      TECH+VAN
+    </a>
+    <nav>
+      <a href="#rechner">Kosten</a>
+      <a href="#gebiet">Gebiet</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
 
-        <h1>Mobile Reparatur – wir kommen zu dir.</h1>
-        <p>
-          <b>TECH+VAN</b> repariert Smartphones, PCs, Laptops & Tablets
-          <b>im Van oder bei dir zuhause</b>. Schnell, transparent und zuverlässig.
-        </p>
+<main class="wrap" id="top">
 
-        <div class="badgeRow">
-          <span class="badge">📍 100 km um Frankfurt am Main</span>
-          <span class="badge">⚡ Same-Day (wenn verfügbar)</span>
-          <span class="badge">🔧 Reparieren • Aufrüsten • Optimieren</span>
-        </div>
+  <div class="grid">
+    <section class="card">
+      <img class="logoBig" src="logo.png" alt="TECH+VAN Logo groß">
 
-        <div class="ctaRow">
-          <a class="btn primary" href="tel:+4917641286003">📞 Jetzt anrufen</a>
-          <a class="btn green" href="sms:+4917641286003">💬 SMS senden</a>
-          <a class="btn" href="#kontakt">📩 Angebot anfragen</a>
-        </div>
-
-        <div class="kpis">
-          <div class="kpi"><b>Vor-Ort Service</b><span class="small">Du sparst Zeit & Wege</span></div>
-          <div class="kpi"><b>Klare Preise</b><span class="small">Transparenz vor Start</span></div>
-          <div class="kpi"><b>Schnelle Hilfe</b><span class="small">Same-Day wenn möglich</span></div>
-        </div>
-
-        <p class="small" style="margin-top:12px">
-          Hinweis: Für manche Reparaturen (z.B. bestimmte Display-Modelle) können Teile-Bestellungen nötig sein.
-        </p>
-      </section>
-
-      <aside class="card">
-        <h2>Was wir reparieren</h2>
-        <div class="grid cols2">
-          <div class="feature">
-            <b>📱 Smartphones</b>
-            <div class="small">Display, Akku, Ladebuchse, Lautsprecher, Kamera, Software</div>
-          </div>
-          <div class="feature">
-            <b>💻 Laptops</b>
-            <div class="small">Langsam, Akku, Tastatur, SSD/RAM-Aufrüstung, Windows/macOS</div>
-          </div>
-          <div class="feature">
-            <b>🖥️ PCs</b>
-            <div class="small">Startet nicht, Hitze/Laut, Viren, Aufrüsten, Einrichtung</div>
-          </div>
-          <div class="feature">
-            <b>📲 Tablets</b>
-            <div class="small">Display, Akku, Laden, Performance-Probleme</div>
-          </div>
-        </div>
-
-        <div style="height:12px"></div>
-        <div class="feature">
-          <b>Beliebte Services</b>
-          <ul>
-            <li>Display- & Akku-Wechsel</li>
-            <li>Diagnose / Fehleranalyse</li>
-            <li>Datenübertragung & Backup</li>
-            <li>Viren / Malware entfernen</li>
-            <li>PC/Laptop schneller machen (SSD/RAM)</li>
-          </ul>
-        </div>
-      </aside>
-    </div>
-
-    <section class="card section" id="leistungen">
-      <h2>Leistungen</h2>
+      <h1>Mobile Reparatur – wir kommen zu dir.</h1>
       <p>
-        Egal ob Hardware-Defekt oder Software-Problem: Wir prüfen dein Gerät, erklären die Optionen
-        und reparieren direkt vor Ort, wenn möglich.
+        <b>TECH+VAN</b> repariert Smartphones, PCs, Laptops & Tablets
+        <b>im Van oder bei dir zuhause</b>. Schnell, transparent & zuverlässig.
       </p>
 
-      <div class="grid cols3">
-        <div class="feature">
-          <b>Schnelle Diagnose</b>
-          <div class="small">Kurze Einschätzung + klare Empfehlung.</div>
-        </div>
-        <div class="feature">
-          <b>Reparatur vor Ort</b>
-          <div class="small">Im Van oder bei dir zuhause – je nach Fall.</div>
-        </div>
-        <div class="feature">
-          <b>Upgrades & Optimierung</b>
-          <div class="small">SSD/RAM, Setup, Performance-Tuning.</div>
-        </div>
+      <div class="badges">
+        <span class="badge">📍 100 km um Frankfurt am Main</span>
+        <span class="badge">⚡ Same-Day (wenn verfügbar)</span>
+      </div>
+
+      <div class="btnRow">
+        <a class="btn primary" href="tel:+4917641286003">📞 Jetzt anrufen</a>
+        <a class="btn green" href="sms:+4917641286003">💬 SMS senden</a>
       </div>
     </section>
 
-    <section class="card section" id="ablauf">
-      <h2>So läuft’s ab</h2>
-      <div class="grid cols3">
-        <div class="feature">
-          <b>1) Kontakt</b>
-          <div class="small">Anrufen/SMS mit Gerät + Problem + Ort.</div>
-        </div>
-        <div class="feature">
-          <b>2) Termin & Angebot</b>
-          <div class="small">Kurzcheck, Preisrahmen, Same-Day wenn verfügbar.</div>
-        </div>
-        <div class="feature">
-          <b>3) Reparatur & Test</b>
-          <div class="small">Fix + Funktionstest direkt vor Ort.</div>
-        </div>
+    <section class="card">
+      <h2>Kosten schnell berechnen</h2>
+      <p>Finde in wenigen Klicks heraus, was die Reparatur kostet.</p>
+
+      <button class="btn primary" onclick="startRechner()">💶 Preis berechnen</button>
+
+      <div id="rechner" style="display:none;margin-top:16px">
+        <label>Gerät:</label>
+        <select id="device" onchange="nextStep()">
+          <option value="">Bitte wählen</option>
+          <option value="phone">Smartphone</option>
+          <option value="laptop">Laptop / PC</option>
+        </select>
+
+        <div id="steps"></div>
+        <div id="result" style="margin-top:12px;font-weight:600"></div>
       </div>
     </section>
+  </div>
 
-    <section class="card section" id="gebiet">
-      <h2>Servicegebiet</h2>
-      <p>
-        Wir fahren <b>bis 100 km um Frankfurt am Main</b>. Wenn du unsicher bist, ob dein Ort dabei ist:
-        schreib uns kurz – wir sagen dir sofort Bescheid.
-      </p>
-      <div class="ctaRow">
-        <a class="btn primary" href="tel:+4917641286003">📞 0176 41286003</a>
-        <a class="btn" href="#kontakt">📩 Nachricht senden</a>
-      </div>
-    </section>
+  <section class="card" id="gebiet">
+    <h2>Servicegebiet</h2>
+    <p>Wir fahren <b>bis 100 km um Frankfurt am Main</b>. Unsicher? Schreib uns kurz.</p>
+  </section>
 
-    <section class="card section" id="kontakt">
-      <h2>Kontakt</h2>
-      <p class="small">
-        Am schnellsten geht’s per Anruf oder SMS. Alternativ kannst du hier eine Anfrage schicken
-        (öffnet deine Mail-App).
-      </p>
+  <section class="card" id="kontakt">
+    <h2>Kontakt</h2>
+    <p>📞 0176 41286003<br>✉️ techvanservice@gmail.com</p>
+  </section>
 
-      <div class="contactGrid">
-        <div class="feature">
-          <b>Direkt</b>
-          <div class="small">📞 Telefon: <a href="tel:+4917641286003">0176 41286003</a></div>
-          <div class="small">💬 SMS: <a href="sms:+4917641286003">Nachricht senden</a></div>
-          <div class="small">📍 100 km um Frankfurt am Main</div>
-        </div>
+</main>
 
-        <form class="feature" onsubmit="return sendEmail(event)">
-          <div class="small">Name</div>
-          <input id="name" required placeholder="Dein Name" />
-          <div style="height:10px"></div>
+<footer>
+  © 2026 TECH+VAN
+</footer>
 
-          <div class="small">Ort (Stadt/PLZ)</div>
-          <input id="place" required placeholder="z.B. Frankfurt 60311" />
-          <div style="height:10px"></div>
+<script>
+function startRechner(){
+  document.getElementById("rechner").style.display="block";
+}
 
-          <div class="small">Gerät & Problem</div>
-          <textarea id="message" required placeholder="z.B. iPhone 12 – Display gebrochen / Laptop langsam / PC startet nicht"></textarea>
+function nextStep(){
+  const steps=document.getElementById("steps");
+  const result=document.getElementById("result");
+  steps.innerHTML="";
+  result.innerHTML="";
 
-          <div style="height:12px"></div>
-          <button class="btn primary" type="submit">📩 Anfrage senden</button>
-          <div id="status" class="small" style="margin-top:8px"></div>
-        </form>
-      </div>
-    </section>
+  if(device.value==="phone"){
+    steps.innerHTML=`
+      <label>iPhone Modell:</label>
+      <select onchange="showPrice(this.value)">
+        <option value="">Bitte wählen</option>
+        <option value="12">iPhone 12 / Pro</option>
+        <option value="13">iPhone 13 / Pro</option>
+        <option value="15">iPhone 15 Pro Max</option>
+      </select>`;
+  }
 
-    <footer>
-      © <span id="year"></span> TECH+VAN • Reparieren • Aufrüsten • Optimieren
-    </footer>
-  </main>
+  if(device.value==="laptop"){
+    result.innerHTML="💻 Diagnose: <b>29 €</b> (kostenlos bei Reparatur)";
+  }
+}
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+function showPrice(model){
+  const prices={12:199,13:229,15:399};
+  document.getElementById("result").innerHTML=
+    "💰 Geschätzter Preis: <b>"+prices[model]+" €</b>";
+}
+</script>
 
-    function sendEmail(e){
-      e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const place = document.getElementById("place").value.trim();
-      const msg = document.getElementById("message").value.trim();
-
-      // TODO: Trage hier deine E-Mail ein (optional). Wenn du keine E-Mail willst, sag’s mir – dann entfernen wir das Formular.
-      const to = "techvan.service@gmail.com";
-
-      const subject = encodeURIComponent("TECH+VAN Anfrage – " + name);
-      const body = encodeURIComponent(
-        "Name: " + name + "\n" +
-        "Ort: " + place + "\n\n" +
-        msg + "\n\n" +
-        "Telefon (optional): "
-      );
-
-      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-      document.getElementById("status").textContent = "Mail-App wird geöffnet…";
-      return false;
-    }
-  </script>
 </body>
 </html>
