@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TECH+VAN – Mobile Reparatur & Aufrüstung | Frankfurt & Umgebung</title>
-  <meta name="description" content="TECH+VAN: Mobile Reparatur & Aufrüstung für Smartphones, Tablets, PCs, Laptops, Konsolen & Controller. Wir kommen zu dir – im Van oder bei dir zuhause (bis 100 km um Frankfurt am Main). Same-Day wenn verfügbar." />
+  <meta name="description" content="TECH+VAN: Mobile Reparatur & Aufrüstung für Smartphones, Tablets, PCs, Laptops, Konsolen & Controller. Wir kommen zu dir – im Van oder bei dir zuhause (bis 100 km um Frankfurt am Main).Schnelle Rückmeldung & Terminbestätigung" />
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <style>
@@ -203,7 +203,6 @@
 
       <div class="chips">
         <span class="chip">📍 bis 100 km um Frankfurt am Main</span>
-        <span class="chip">⚡ Same-Day (wenn verfügbar)</span>
         <span class="chip">✅ Klare Preise</span>
       </div>
 
@@ -229,7 +228,7 @@
         <li>Viren / Malware entfernen</li>
         <li>PC/Laptop schneller machen (SSD/RAM, Optimierung)</li>
         <li>Konsole: Reinigung, Überhitzung, HDMI/Bild, Controller-Drift</li>
-        <li><b>Maintenance Service</b> – komplette Innenreinigung, neue Wärmeleitpaste, System-Check <b>(ab 39 €)</b></li>
+        <li><b>Maintenance Service</b> – komplette Innenreinigung, neue Wärmeleitpaste, System-Check <b>( 29 €)</b></li>
 
       </ul>
 
@@ -246,7 +245,7 @@
         </div>
         <div class="kpi">
           <b>Schnelle Hilfe</b>
-          <span class="muted">Same-Day wenn möglich.</span>
+          <span class="muted">Schnelle Rückmeldung & Terminbestätigung.</span>
         </div>
       </div>
 
@@ -389,6 +388,58 @@
           <div id="out" class="note" style="margin-top:10px;">
             Wähle Gerät → Marke → Modell → Problem → Qualität.
           </div>
+          <!-- TERMIN & ORT -->
+<div class="card mini" id="appointmentBox" style="margin-top:12px; display:none;">
+  <div style="font-weight:800;">📅 Termin anfragen</div>
+
+  <div class="muted" style="margin-top:6px;">
+    Hinweis: Ersatzteile müssen ggf. erst bestellt werden und können etwas dauern.
+    Wir bestätigen den Termin nach kurzer Prüfung.
+  </div>
+
+  <div class="row cols2" style="margin-top:10px;">
+    <div>
+      <label>Datum</label>
+      <input id="apptDate" type="date">
+    </div>
+    <div>
+      <label>Uhrzeit</label>
+      <input id="apptTime" type="time">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Ort / Adresse</label>
+    <input id="apptAddress" placeholder="Straße, PLZ, Ort (oder: ‚im Van‘)">
+  </div>
+
+  <div class="ctaRow" style="margin-top:12px;">
+    <button class="btn primary" type="button" onclick="sendAppointment()">✅ Termin anfragen (WhatsApp)</button>
+  </div>
+
+  <div class="fine" style="margin-top:8px;">
+    Du bekommst eine Bestätigung per WhatsApp. Endpreis & Teileverfügbarkeit werden vorher abgestimmt.
+  </div>
+</div>
+
+<div class="card mini" id="warrantyBox" style="margin-top:12px; display:none;">
+  <div style="font-weight:800;">🛡️ Garantie & Rückgabe</div>
+
+  <div style="margin-top:6px;">
+    <b>6 Monate Garantie</b> auf Ersatzteile und Arbeitsleistung<br>
+    <span class="muted">
+      (ausgenommen Wasser- oder Sturzschäden nach der Reparatur)
+    </span>
+  </div>
+
+  <div style="margin-top:6px;">
+    <b>14 Tage kostenlose Rückgabe</b><br>
+    <span class="muted">
+      Falls Sie mit der Reparatur nicht zufrieden sind, erstatten wir den Reparaturpreis.
+    </span>
+  </div>
+</div>
+
 
           <div class="tagRow">
             <span class="tag">Diagnose ohne Reparatur: <b style="color:var(--amber)">29 €</b></span>
@@ -642,7 +693,7 @@
         "Linux installieren",
         "ReviOS installieren (Gaming/Performance)",
         "SSD/HDD Einbau + Setup",
-        "RAM Upgrade",
+        "RAM tauschen",
         "GPU tauschen",
         "CPU tauschen",
         "Mainboard/PSU/Komponenten prüfen",
@@ -686,73 +737,245 @@
     }
   };
 
-  // ====== Pricing: competitive "ab"-prices ======
-  // We'll estimate base price by device+issue; OEM adds premium multiplier.
-  const BASE = {
-    phone: {
-      "Display": 139,
-      "Akku": 69,
-      "Rückglas (Backcover)": 89,
-      "Ladebuchse / Laden": 79,
-      "Lautsprecher / Mikrofon": 59,
-      "Kamera / Kameralinse": 79,
-      "Frontkamera / Face-ID / Sensoren": 89,
-      "WLAN/Bluetooth/Empfang (Antenne)": 69,
-      "Systemfehler / Software": 59,
-      "Datenübertragung / Backup": 49,
-      "Weiß ich nicht (Diagnose)": 29
-    },
-    tablet: {
-      "Display": 149,
-      "Akku": 79,
-      "Ladebuchse / Laden": 79,
-      "Lautsprecher / Mikrofon": 59,
-      "Systemfehler / Software": 59,
-      "Datenübertragung / Backup": 49,
-      "Weiß ich nicht (Diagnose)": 29
-    },
-    laptop: {
-      "Diagnose / Fehleranalyse": 29,
-      "Windows neu installieren": 79,
-      "Linux installieren": 69,
-      "ReviOS installieren (Gaming/Performance)": 89,
-      "SSD Einbau + Setup": 99,
-      "RAM Upgrade": 59,
-      "Akku tauschen": 89,
-      "Display tauschen": 149,
-      "Tastatur / Touchpad": 79,
-      "Lüfter/Überhitzung (Reinigung/Wärmeleitpaste)": 79,
-      "Weiß ich nicht (Diagnose)": 29
-    },
-    pc: {
-      "Diagnose / Fehleranalyse": 29,
-      "Wartung/Service (Reinigung + Optimierung)": 79,
-      "Windows installieren (10/11)": 79,
-      "Linux installieren": 69,
-      "ReviOS installieren (Gaming/Performance)": 89,
-      "SSD/HDD Einbau + Setup": 99,
-      "RAM Upgrade": 59,
-      "GPU tauschen": 79,
-      "CPU tauschen": 99,
-      "Mainboard/PSU/Komponenten prüfen": 79,
-      "Weiß ich nicht (Diagnose)": 29
-    },
-    console: {
-      "Reinigung/Überhitzung": 69,
-      "HDMI/Bildproblem": 99,
-      "Laufwerk/Lesen (falls vorhanden)": 89,
-      "Software/Update/Setup": 59,
-      "Weiß ich nicht (Diagnose)": 29
-    },
-    controller: {
-      "Stick-Drift": 49,
-      "Tasten reagieren nicht": 39,
-      "Laden/Akku": 49,
-      "Verbindung/Pairing": 29,
-      "Hall-Sticks Upgrade": 79,
-      "Weiß ich nicht (Diagnose)": 29
+// ===== PREISE (Aftermarket = Fixpreise, OEM = Teilekosten-Schätzung + 39€ Arbeit) =====
+const OEM_LABOR_FEE = 39; // <- dein OEM-Gewinn (30–50€) = 39€
+
+function euroCharm(n){
+  // runde auf typische Preise: 39/49/59/69/79/89/99/109/119/129/139/149/169/189/199/209/229/249/269/289/299/329/349/389
+  const steps = [39,49,59,69,79,89,99,109,119,129,139,149,169,189,199,209,229,249,269,289,299,329,349,389,429,479];
+  let best = steps[0], diff = Math.abs(n - best);
+  for(const s of steps){
+    const d = Math.abs(n - s);
+    if(d < diff){ diff = d; best = s; }
+  }
+  return best;
+}
+
+function isIphone(model){
+  return /iphone/i.test(model || "");
+}
+function isProMax(model){
+  return /(pro\s*max|max)/i.test(model || "");
+}
+function isPro(model){
+  return /\bpro\b/i.test(model || "");
+}
+
+// iPhone Tier (nur für Display/Batterie/Ladebuchse/Kamera sinnvoll)
+function iphoneTier(model){
+  const m = (model || "").toLowerCase();
+
+  // SE 2020/2022, iPhone 6-8 Familie
+  if(m.includes("se") || /\b(6|6s|7|8)\b/.test(m)) return "T1_6_8_SE";
+
+  // X / XR / XS / XS Max
+  if(/\b(xr|xs|max|x)\b/.test(m)) return "T2_X_XS_XR";
+
+  // 11 / 11 pro / 11 pro max
+  if(/\b11\b/.test(m)) return "T3_11";
+
+  // 12 Familie
+  if(/\b12\b/.test(m)) return "T4_12";
+
+  // 13 Familie
+  if(/\b13\b/.test(m)) return "T5_13";
+
+  // 14 Familie
+  if(/\b14\b/.test(m)) return "T6_14";
+
+  // 15 Familie
+  if(/\b15\b/.test(m)) return "T7_15";
+
+  // 16/17 (falls du später einträgst)
+  if(/\b16\b/.test(m)) return "T8_16";
+  if(/\b17\b/.test(m)) return "T9_17";
+
+  return "T4_12"; // default Mitte
+}
+
+/**
+ * Aftermarket Fixpreise (das sind DEINE Servicepreise)
+ * (Pro Max: +20€ auf Display nur wenn du willst -> unten)
+ */
+const AFTERMARKET_PHONE = {
+  // Displaypreise nach Tier (Fix)
+  display: {
+    T1_6_8_SE: 89,
+    T2_X_XS_XR: 99,
+    T3_11: 119,
+    T4_12: 119,
+    T5_13: 139,
+    T6_14: 159,
+    T7_15: 179,
+    T8_16: 199,
+    T9_17: 209
+  },
+  battery: {
+    T1_6_8_SE: 69,
+    T2_X_XS_XR: 79,
+    T3_11: 89,
+    T4_12: 89,
+    T5_13: 99,
+    T6_14: 99,
+    T7_15: 109,
+    T8_16: 109,
+    T9_17: 119
+  },
+  charge: {
+    T1_6_8_SE: 69,
+    T2_X_XS_XR: 89,
+    T3_11: 99,
+    T4_12: 99,
+    T5_13: 109,
+    T6_14: 109,
+    T7_15: 109, // USB-C beim 15 bleibt 109 (wie du wolltest)
+    T8_16: 119,
+    T9_17: 119
+  },
+  camera: {
+    T1_6_8_SE: 69,
+    T2_X_XS_XR: 79,
+    T3_11: 89,
+    T4_12: 99,
+    T5_13: 99,
+    T6_14: 109,
+    T7_15: 109,
+    T8_16: 119,
+    T9_17: 119
+  },
+  speaker: 49,
+  earpiece: 49,
+  small: 39,
+  software: 59,
+  diagnose: 29
+};
+
+// OEM-Teilekosten-Schätzung auf Basis Aftermarket (nur als Näherung)
+// OEM_COST ≈ Aftermarket-Teilekosten höher -> wir nehmen Multiplikator
+const OEM_MULT = {
+  display: 1.9,
+  battery: 1.8,
+  charge: 1.7,
+  camera: 1.8,
+  speaker: 1.6,
+  earpiece: 1.6,
+  small: 1.5
+};
+
+// dafür brauchen wir eine grobe Teilekosten-Schätzung (nicht Verkaufspreis!)
+const PART_COST_EST = {
+  // grobe Teilekosten (Aftermarket) pro Tier
+  display: {
+    T1_6_8_SE: 55,
+    T2_X_XS_XR: 70,
+    T3_11: 75,
+    T4_12: 80,
+    T5_13: 95,
+    T6_14: 105,
+    T7_15: 115,
+    T8_16: 140,
+    T9_17: 150
+  },
+  battery: {
+    T1_6_8_SE: 30,
+    T2_X_XS_XR: 40,
+    T3_11: 50,
+    T4_12: 55,
+    T5_13: 50,
+    T6_14: 50,
+    T7_15: 50,
+    T8_16: 55,
+    T9_17: 60
+  },
+  charge: {
+    T1_6_8_SE: 25,
+    T2_X_XS_XR: 33,
+    T3_11: 60,
+    T4_12: 60,
+    T5_13: 70,
+    T6_14: 60,
+    T7_15: 63,
+    T8_16: 70,
+    T9_17: 75
+  },
+  camera: {
+    T1_6_8_SE: 35,
+    T2_X_XS_XR: 60,
+    T3_11: 95,
+    T4_12: 110,
+    T5_13: 140,
+    T6_14: 100,
+    T7_15: 90,
+    T8_16: 110,
+    T9_17: 120
+  },
+  speaker: 15,
+  earpiece: 12,
+  small: 10
+};
+
+function phonePrice(issueLabel, brand, model, quality){
+  const m = model || "";
+  const tier = isIphone(m) ? iphoneTier(m) : null;
+
+  // Diagnose / Software immer fix (egal OEM/Aftermarket)
+  if(issueLabel.includes("Diagnose") || issueLabel.includes("Weiß ich nicht")) return 29;
+  if(issueLabel.includes("Software") || issueLabel.includes("System")) return 59;
+
+  // Mapping von deinen Dropdown-Texten -> interne Keys
+  let key = null;
+  if(/display/i.test(issueLabel) || issueLabel.includes("Display")) key = "display";
+  else if(issueLabel.includes("Akku") || /battery/i.test(issueLabel)) key = "battery";
+  else if(issueLabel.includes("Ladebuchse") || issueLabel.includes("Laden")) key = "charge";
+  else if(issueLabel.includes("Kamera")) key = "camera";
+  else if(issueLabel.includes("Lautsprecher")) key = "speaker";
+  else if(issueLabel.includes("Mikrofon")) key = "speaker";
+  else if(issueLabel.includes("Hörmuschel")) key = "earpiece";
+  else key = "small";
+
+  // AFTERMARKET = feste Verkaufspreise
+  if(quality === "aftermarket"){
+    if(key === "speaker") return AFTERMARKET_PHONE.speaker;
+    if(key === "earpiece") return AFTERMARKET_PHONE.earpiece;
+    if(key === "small") return AFTERMARKET_PHONE.small;
+
+    // iPhone Tiers (wenn iPhone erkannt)
+    if(tier && AFTERMARKET_PHONE[key] && AFTERMARKET_PHONE[key][tier]){
+      let p = AFTERMARKET_PHONE[key][tier];
+      // optional: Pro Max Display +20
+      if(key === "display" && isProMax(m)) p += 20;
+      return p;
     }
-  };
+
+    // Android: pauschal (du kannst später detaillieren)
+    if(key === "display") return 199;
+    if(key === "battery") return 69;
+    if(key === "charge") return 89;
+    if(key === "camera") return 99;
+    if(key === "speaker" || key === "earpiece") return 49;
+    return 39;
+  }
+
+  // OEM = OEM-Teilekosten-Schätzung + 39€ Gewinn
+  // (Profit ist fix 39€, also zwischen 30–50€ ✅)
+  const labor = OEM_LABOR_FEE;
+
+  // OEM-Teilekosten aus Teilekosten-Schätzung * Multiplikator
+  let part = 0;
+  if(key === "speaker") part = PART_COST_EST.speaker * OEM_MULT.speaker;
+  else if(key === "earpiece") part = PART_COST_EST.earpiece * OEM_MULT.earpiece;
+  else if(key === "small") part = PART_COST_EST.small * OEM_MULT.small;
+  else if(tier && PART_COST_EST[key] && PART_COST_EST[key][tier]){
+    part = PART_COST_EST[key][tier] * (OEM_MULT[key] || 1.7);
+    if(key === "display" && isProMax(m)) part += 20; // Pro Max OEM etwas teurer
+    if(key === "camera" && isPro(m)) part += 15;     // Pro Kamera teurer
+  } else {
+    part = 80 * 1.7;
+  }
+
+  return euroCharm(part + labor);
+}
+
 
   function openCalc(){
     document.getElementById("calcBox").style.display = "block";
@@ -936,6 +1159,7 @@
     // If customer doesn't know: show diagnosis rule
     if(known === "no" || issue.includes("Weiß ich nicht")){
   byId("out").innerHTML = `
+  
     <div class="big">Preis ab: <b>29 €</b></div>
     <div class="muted">
       Diagnose nur wenn keine Reparatur erfolgt.
@@ -953,8 +1177,32 @@
   `;
   return;
 }
+if(known === "no" || issue.includes("Weiß ich nicht")){
+  byId("out").innerHTML = `
+    <div class="big">Preis ab: <b>29 €</b></div>
 
+    <div class="muted">
+      Diagnose nur wenn keine Reparatur erfolgt.<br>
+      Bei Reparatur wird die Diagnose angerechnet (0 €).
+    </div>
 
+    <div class="muted">
+      🚐 Anfahrt: bis <b>10 km kostenlos</b>, danach <b>0,30 € pro km</b>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="muted">
+      Auswahl: ${escapeHtml(d)} · ${escapeHtml(b)} · ${escapeHtml(m)}
+    </div>
+  `;
+
+  // ✅ Garantie + Termin sichtbar
+  byId("warrantyBox").style.display = "block";
+  byId("appointmentBox").style.display = "block";
+
+  return;
+}
     // Quality multiplier
     if(!quality && !issue.includes("Diagnose")){
       byId("out").innerHTML = "Bitte Qualität auswählen (Aftermarket oder OEM).";
@@ -1053,6 +1301,43 @@
     window.location.href = `mailto:techvanservice@gmail.com?subject=${subject}&body=${body}`;
     return false;
   }
+  function sendAppointment(){
+  const d = byId("c_device").value;
+  const b = byId("c_brand").value;
+  const m = byId("c_model").value.trim();
+  const issue = byId("c_issue").value;
+  const quality = byId("c_quality").value || "—";
+  const date = byId("apptDate").value;
+  const time = byId("apptTime").value;
+  const addr = byId("apptAddress").value.trim();
+
+  if(!date || !time){
+    alert("Bitte Datum und Uhrzeit auswählen.");
+    return;
+  }
+  if(!addr){
+    alert("Bitte Ort/Adresse eintragen (oder ‚im Van‘).");
+    return;
+  }
+
+  const msg =
+`Hallo TECH+VAN 👋
+Ich möchte einen Termin anfragen:
+
+Gerät: ${d}
+Marke: ${b}
+Modell: ${m}
+Service: ${issue}
+Qualität: ${quality}
+
+Wunschtermin: ${date} um ${time}
+Ort: ${addr}
+
+Hinweis: Mir ist bewusst, dass Ersatzteile ggf. bestellt werden müssen.`;
+
+  const url = "https://wa.me/4917641286003?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank", "noopener");
+}
 </script>
 
 </body>
