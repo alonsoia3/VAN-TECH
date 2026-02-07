@@ -134,7 +134,7 @@
     }
     .kpi b{display:block;margin-bottom:4px}
 
-    /* Trust block like your screenshot */
+    /* Trust block */
     .trustGrid{display:grid;gap:12px}
     @media(min-width:900px){.trustGrid{grid-template-columns:repeat(3,1fr)}}
     .trustBox{
@@ -184,9 +184,7 @@
     }
     textarea{min-height:110px;resize:vertical}
 
-    .calcShell{
-      display:grid; gap:16px;
-    }
+    .calcShell{display:grid; gap:16px}
     @media(min-width:980px){.calcShell{grid-template-columns:1.15fr .85fr}}
 
     .row{display:grid;gap:12px}
@@ -214,9 +212,10 @@
       white-space:nowrap;
     }
     .finalPrice{
-      font-size:28px;
+      font-size:30px;
       font-weight:1000;
       letter-spacing:.2px;
+      color: var(--green);
     }
     .saveLine{
       margin-top:6px;
@@ -300,6 +299,7 @@
       <a href="#ankauf">Ankauf</a>
       <a href="#faq">FAQ</a>
       <a href="#kontakt">Kontakt</a>
+      <a href="#datenschutz">Datenschutz</a>
     </nav>
   </div>
 </header>
@@ -323,7 +323,6 @@
         <span class="chip">⚡ Express / Same-Day (wenn möglich)</span>
       </div>
 
-      <!-- Trust blocks -->
       <div class="trustGrid" style="margin-top:10px">
         <div class="trustBox">
           <b>🛡️ 6 Monate Garantie</b>
@@ -401,7 +400,6 @@
         Wenn Teile bestellt werden müssen, informieren wir dich vorab über Lieferzeit (meist <b>1–3 Werktage</b>, modellabhängig).
       </div>
 
-      <!-- 🌿 donation block BACK -->
       <section class="card soft" style="margin-top:14px;border:1px solid rgba(57,217,138,.20);background:rgba(57,217,138,.08)">
         <h3 style="margin:0 0 8px;">🌿 12% unseres Gewinns gehen an Natur & Tierschutz</h3>
         <p class="muted" style="margin:0">
@@ -425,7 +423,7 @@
     <h2>Leistungen</h2>
     <p class="muted">
       Smartphones/Tablets/Konsolen: <b>OEM</b> oder <b>Aftermarket</b> möglich (OEM evtl. Lieferzeit).<br>
-      PC/Laptop: Austausch transparent als <b>29 € Arbeit + Teile</b>. Installation Windows/Linux/ReviOS: <b>29 € (inkl. Aktivierung)</b>.
+      PC/Laptop: transparent als <b>29 € Arbeit + Teile</b>. Windows/Linux/ReviOS Installation: <b>29 € (inkl. Aktivierung)</b>.
     </p>
 
     <div class="grid cols3" style="margin-top:14px">
@@ -444,7 +442,285 @@
     </div>
   </section>
 
-  <!-- TERMIN (immer sichtbar) -->
+  <!-- KOSTENRECHNER -->
+  <section class="card" id="rechner" style="margin-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <h2 style="margin:0">Kostenrechner</h2>
+      <button class="btn ghost" type="button" onclick="resetCalc()">↩️ Zurücksetzen</button>
+    </div>
+
+    <p class="muted" style="margin-top:10px">
+      Preis ist <b>inkl. Einbau</b>. Kein „ab“. Bei PC/Laptop = <b>29 € Arbeit + Teile</b>.
+      OEM kann je nach Modell Lieferzeit haben.
+    </p>
+
+    <div class="calcShell">
+      <!-- LEFT: Auswahl -->
+      <div class="card soft">
+        <div class="row cols2">
+          <div>
+            <label>1) Gerät</label>
+            <select id="c_device" onchange="onDevice()">
+              <option value="">Bitte wählen…</option>
+              <option value="phone">Smartphone</option>
+              <option value="tablet">Tablet</option>
+              <option value="laptop">Laptop</option>
+              <option value="pc">PC</option>
+              <option value="console">Konsole</option>
+              <option value="controller">Controller</option>
+            </select>
+
+            <div id="brandWrap" style="display:none;margin-top:10px">
+              <label>2) Marke</label>
+              <select id="c_brand" onchange="onBrand()"></select>
+            </div>
+
+            <div id="modelWrap" style="display:none;margin-top:10px">
+              <label>3) Modell (tippen/suchen)</label>
+              <input id="c_model" list="modelList" placeholder="z.B. iPhone 14 Pro, Galaxy S23, Switch OLED…" oninput="onModel()" />
+              <datalist id="modelList"></datalist>
+              <div class="fine" style="margin-top:6px">
+                Tipp: Wenn dein Modell nicht in der Liste ist, einfach eintippen – wir bestätigen kurz.
+              </div>
+            </div>
+
+            <div id="qualityWrap" style="display:none;margin-top:10px">
+              <label>4) Teile-Qualität (nur Smartphone/Tablet/Konsole)</label>
+              <select id="c_quality" onchange="recalc()">
+                <option value="">Bitte wählen…</option>
+                <option value="aftermarket">Aftermarket (preiswert)</option>
+                <option value="oem">OEM (Premium)</option>
+              </select>
+              <div id="oemWarn" class="note info" style="display:none">
+                <b style="color:var(--text)">OEM Verfügbarkeit</b><br>
+                OEM kann je nach Gerät kurzfristig nicht bestellbar sein. Wir melden uns vor Bestellung mit Preis & Lieferzeit.
+              </div>
+            </div>
+
+            <div id="expressWrap" style="display:none;margin-top:10px">
+              <label>Notfall / Express</label>
+              <div class="chk">
+                <input type="checkbox" id="c_express" onchange="recalc()">
+                <div>
+                  <b>⚡ Express-Bearbeitung</b>
+                  <div class="muted">Priorität im Ablauf (wenn möglich). Zuschlag: <b>15 €</b></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="err" class="errorLine"></div>
+          </div>
+
+          <div>
+            <!-- PHONE/TABLET -->
+            <div id="partsMultiWrap" style="display:none">
+              <label>5) Was soll gemacht werden?</label>
+              <div class="fine">Mehrere Teile auswählen = automatische Bundle-Rabatte.</div>
+
+              <div class="chkGrid" style="margin-top:10px">
+                <div class="chk"><input type="checkbox" class="part" value="display" onchange="recalc()">
+                  <div><b>Display</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="battery" onchange="recalc()">
+                  <div><b>Akku</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="backglass" onchange="recalc()">
+                  <div><b>Rückglas</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="rearcam" onchange="recalc()">
+                  <div><b>Hintere Kamera</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="frontcam" onchange="recalc()">
+                  <div><b>Vordere Kamera / Face-ID</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="charge" onchange="recalc()">
+                  <div><b>Ladebuchse</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="speaker" onchange="recalc()">
+                  <div><b>Lautsprecher</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="part" value="wlan" onchange="recalc()">
+                  <div><b>WLAN/Bluetooth (Antenne)</b><div class="muted">inkl. Einbau</div></div>
+                </div>
+
+                <div class="chk"><input type="checkbox" class="svc" value="backup" onchange="recalc()">
+                  <div><b>Backup / Datenübertragung</b><div class="muted">29 €</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" class="svc" value="diagnose" onchange="recalc()">
+                  <div><b>Weiß ich nicht (Diagnose)</b><div class="muted">29 € (nur wenn keine Reparatur)</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PC/Laptop -->
+            <div id="pcWrap" style="display:none">
+              <label>5) Leistung auswählen</label>
+
+              <select id="c_pc_issue" onchange="onPcIssue()"></select>
+
+              <div id="pcPartsPriceWrap" style="display:none;margin-top:10px">
+                <label>Teile-Preis (wir bestellen) – in €</label>
+                <input id="c_parts_price" type="number" min="0" step="1" placeholder="z.B. 199" oninput="recalc()">
+              </div>
+
+              <div class="chk" style="margin-top:10px">
+                <input type="checkbox" id="c_pc_backup" onchange="recalc()">
+                <div>
+                  <b>Backup / Datenübertragung</b>
+                  <div class="muted">29 €</div>
+                  <div class="fine">Bundle: Windows + Backup = 5% (wird automatisch erkannt)</div>
+                </div>
+              </div>
+
+              <div class="chk" style="margin-top:10px">
+                <input type="checkbox" id="c_maint" onchange="recalc()">
+                <div>
+                  <b>Maintenance (Reinigung + Wärmeleitpaste)</b>
+                  <div class="muted">29 €</div>
+                  <div class="fine">Bundle: Austausch + Maintenance = 5% (automatisch)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Console -->
+            <div id="consoleWrap" style="display:none">
+              <label>5) Konsole Service</label>
+              <select id="c_console_issue" onchange="onConsoleIssue()"></select>
+
+              <div id="switchWrap" style="display:none;margin-top:10px">
+                <label>Switch: Was soll gemacht werden?</label>
+
+                <div class="chkGrid" style="margin-top:10px">
+                  <div class="chk">
+                    <input type="checkbox" id="sw_display" onchange="recalc()">
+                    <div>
+                      <b>Display</b>
+                      <div class="muted">inkl. Einbau</div>
+                      <div style="margin-top:6px">
+                        <select id="c_switch_variant" onchange="recalc()">
+                          <option value="">Variante wählen…</option>
+                          <option value="switch_lcd">Switch (LCD)</option>
+                          <option value="switch_oled">Switch (OLED)</option>
+                          <option value="switch_lite">Switch Lite</option>
+                          <option value="switch2">Switch 2</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="chk">
+                    <input type="checkbox" id="sw_batt" onchange="recalc()">
+                    <div>
+                      <b>Akku</b>
+                      <div class="muted">inkl. Einbau</div>
+                    </div>
+                  </div>
+
+                  <div class="chk">
+                    <input type="checkbox" id="sw_charge" onchange="recalc()">
+                    <div>
+                      <b>Ladebuchse</b>
+                      <div class="muted">inkl. Einbau</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fine" style="margin-top:8px">
+                  Switch-Bundles: Akku+Display (5%) · Akku+Display+Ladebuchse (10%)
+                </div>
+              </div>
+
+              <div class="chk" style="margin-top:10px">
+                <input type="checkbox" id="c_console_maint" onchange="recalc()">
+                <div>
+                  <b>Maintenance (Reinigung + Wärmeleitpaste)</b>
+                  <div class="muted">29 €</div>
+                  <div class="fine">Bundle: HDMI + Maintenance = 5% (automatisch)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controller -->
+            <div id="controllerWrap" style="display:none">
+              <label>5) Controller Service</label>
+              <div class="chkGrid" style="margin-top:10px">
+                <div class="chk"><input type="checkbox" id="ctl_drift" onchange="recalc()">
+                  <div><b>Stick-Drift (beide Sticks)</b><div class="muted">19 €</div><div class="fine">Wir tauschen den Stick komplett.</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" id="ctl_buttons" onchange="recalc()">
+                  <div><b>Buttons-Austausch (alle)</b><div class="muted">19 €</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" id="ctl_hall" onchange="recalc()">
+                  <div><b>Aufrüsten auf Hall-Effect Sticks</b><div class="muted">29 €</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" id="ctl_batt" onchange="recalc()">
+                  <div><b>Akku / Laden</b><div class="muted">19 €</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" id="ctl_conn" onchange="recalc()">
+                  <div><b>Verbindung / Pairing</b><div class="muted">19 €</div></div>
+                </div>
+                <div class="chk"><input type="checkbox" id="ctl_diag" onchange="recalc()">
+                  <div><b>Weiß ich nicht (Diagnose)</b><div class="muted">29 €</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="fine">
+          ✅ Preis inkl. Einbau · 🚐 Anfahrt: 10 km kostenlos, danach 0,30 €/km · ⏱ Teile-Lieferzeit: meist 1–3 Werktage (modellabhängig)
+        </div>
+      </div>
+
+      <!-- RIGHT: Ergebnis -->
+      <div class="card soft">
+        <div class="resultTop">
+          <div>
+            <div style="font-weight:1000;font-size:20px">Ergebnis</div>
+            <div class="fine">Original klein rechts oben · Endpreis groß</div>
+          </div>
+          <div id="ogPrice" class="ogPrice" style="visibility:hidden">0 €</div>
+        </div>
+
+        <div class="priceCard" style="margin-top:12px">
+          <div id="finalPrice" class="finalPrice">Preis: –</div>
+          <div id="saveLine" class="saveLine" style="display:none">Du sparst 0 €</div>
+
+          <div id="breakdown" class="note" style="margin-top:10px">
+            Wähle Gerät → Marke → Modell → Service/Teile.
+          </div>
+
+          <div id="bundleBox" class="bundleBox">
+            <b>💡 Passende Bundles (automatisch)</b>
+            <ul id="bundleList" class="bundleList"></ul>
+            <div class="bundleHint">Bundles werden automatisch erkannt, sobald die passenden Optionen ausgewählt sind.</div>
+          </div>
+
+          <div class="tagRow">
+            <span class="tag">Diagnose ohne Reparatur: <b>29 €</b></span>
+            <span class="tag">Diagnose mit Reparatur: <b style="color:var(--green)">0 €</b></span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="muted">Termin & Auswahl senden:</div>
+        <div class="ctaRow" style="margin-top:10px">
+          <a id="btnWA" class="btn green" href="#" target="_blank" rel="noopener">💬 WhatsApp senden</a>
+          <a id="btnMail" class="btn primary" href="#">📩 E-Mail senden</a>
+          <a class="btn ghost" href="tel:+4917641286003">📞 Anrufen</a>
+        </div>
+
+        <div class="fine" style="margin-top:10px">
+          Hinweis: WhatsApp/E-Mail wird mit allen Infos automatisch vorbefüllt.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMIN (nach Rechner) -->
   <section class="card" id="termin" style="margin-top:18px">
     <h2>📅 Termin & Anfrage</h2>
     <p class="muted">
@@ -505,387 +781,150 @@
     </form>
   </section>
 
-  <!-- KOSTENRECHNER -->
-  <section class="card" id="rechner" style="margin-top:18px">
-    <h2>Kostenrechner</h2>
-    <p class="muted">
-      Preis ist <b>inkl. Einbau</b>. Kein „ab“. Bei PC/Laptop = <b>29 € Arbeit + Teile</b>.
-      OEM kann je nach Modell Lieferzeit haben.
-    </p>
-
-    <div class="calcShell">
-      <!-- LEFT: Auswahl -->
-      <div class="card soft">
-        <div class="row cols2">
-          <div>
-            <label>1) Gerät</label>
-            <select id="c_device" onchange="onDevice()">
-              <option value="">Bitte wählen…</option>
-              <option value="phone">Smartphone</option>
-              <option value="tablet">Tablet</option>
-              <option value="laptop">Laptop</option>
-              <option value="pc">PC</option>
-              <option value="console">Konsole</option>
-              <option value="controller">Controller</option>
-            </select>
-
-            <div id="brandWrap" style="display:none;margin-top:10px">
-              <label>2) Marke</label>
-              <select id="c_brand" onchange="onBrand()"></select>
-            </div>
-
-            <div id="modelWrap" style="display:none;margin-top:10px">
-              <label>3) Modell (tippen/suchen)</label>
-              <input id="c_model" list="modelList" placeholder="z.B. iPhone 14 Pro, Galaxy S23, Switch OLED…" oninput="onModel()" />
-              <datalist id="modelList"></datalist>
-              <div class="fine" style="margin-top:6px">
-                Tipp: Wenn dein Modell nicht in der Liste ist, einfach eintippen – wir bestätigen kurz.
-              </div>
-            </div>
-
-            <!-- quality only for phone/tablet/console -->
-            <div id="qualityWrap" style="display:none;margin-top:10px">
-              <label>4) Teile-Qualität</label>
-              <select id="c_quality" onchange="recalc()">
-                <option value="">Bitte wählen…</option>
-                <option value="aftermarket">Aftermarket (preiswert)</option>
-                <option value="oem">OEM (Premium)</option>
-              </select>
-              <div class="fine" style="margin-top:6px">
-                OEM kann je nach Modell nicht sofort verfügbar sein (1–3 Werktage, modellabhängig).
-              </div>
-
-              <div id="oemWarn" class="note info" style="display:none">
-                <b style="color:var(--text)">OEM Verfügbarkeit</b><br>
-                OEM kann je nach Gerät kurzfristig nicht bestellbar sein. Wir melden uns vor Bestellung mit Preis & Lieferzeit.
-              </div>
-            </div>
-
-            <!-- Express -->
-            <div id="expressWrap" style="display:none;margin-top:10px">
-              <label>Notfall / Express</label>
-              <div class="chk">
-                <input type="checkbox" id="c_express" onchange="recalc()">
-                <div>
-                  <b>⚡ Express-Bearbeitung</b>
-                  <div class="muted">Priorität im Ablauf (wenn möglich). Zuschlag: <b>15 €</b></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="ctaRow" style="margin-top:12px">
-              <button class="btn ghost" type="button" onclick="resetCalc()">↩️ Zurücksetzen</button>
-            </div>
-
-            <div id="err" class="errorLine"></div>
-          </div>
-
-          <!-- RIGHT inside left card: Auswahl -->
-          <div>
-            <!-- PHONE/TABLET multi -->
-            <div id="partsMultiWrap" style="display:none">
-              <label>5) Was soll gemacht werden?</label>
-              <div class="fine">Mehrere Teile auswählen = automatische Bundle-Rabatte.</div>
-
-              <div class="chkGrid" style="margin-top:10px">
-                <div class="chk"><input type="checkbox" class="part" value="display" onchange="recalc()">
-                  <div><b>Display</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="battery" onchange="recalc()">
-                  <div><b>Akku</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="backglass" onchange="recalc()">
-                  <div><b>Rückglas</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="rearcam" onchange="recalc()">
-                  <div><b>Hintere Kamera</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="frontcam" onchange="recalc()">
-                  <div><b>Vordere Kamera / Face-ID</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="charge" onchange="recalc()">
-                  <div><b>Ladebuchse</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="speaker" onchange="recalc()">
-                  <div><b>Lautsprecher</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="part" value="wlan" onchange="recalc()">
-                  <div><b>WLAN/Bluetooth (Antenne)</b><div class="muted">inkl. Einbau</div></div>
-                </div>
-
-                <div class="chk"><input type="checkbox" class="svc" value="backup" onchange="recalc()">
-                  <div><b>Backup / Datenübertragung</b><div class="muted">29 €</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" class="svc" value="diagnose" onchange="recalc()">
-                  <div><b>Weiß ich nicht (Diagnose)</b><div class="muted">29 € (nur wenn keine Reparatur)</div></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- PC/Laptop -->
-            <div id="pcWrap" style="display:none">
-              <label>5) Was soll gemacht werden?</label>
-              <select id="c_pc_issue" onchange="recalc()"></select>
-
-              <div id="pcPartsPriceWrap" style="display:none;margin-top:10px">
-                <label>Teile-Preis (wir bestellen) – in €</label>
-                <input id="c_parts_price" type="number" min="0" step="1" placeholder="z.B. 199" oninput="recalc()">
-                <div class="fine" style="margin-top:6px">
-                  PC/Laptop Austausch: <b>29 € Arbeit + Teile</b> (transparent). Installation Windows/Linux/ReviOS: <b>29 € inkl. Aktivierung</b>.
-                </div>
-              </div>
-
-              <div class="chk" style="margin-top:10px">
-                <input type="checkbox" id="c_maint" onchange="recalc()">
-                <div>
-                  <b>Maintenance (Reinigung + Wärmeleitpaste)</b>
-                  <div class="muted">29 €</div>
-                  <div class="fine">Bundle: Austausch + Maintenance = 5% Rabatt (auf Arbeitsanteil)</div>
-                </div>
-              </div>
-
-              <div class="chk" style="margin-top:10px">
-                <input type="checkbox" id="c_pc_backup" onchange="recalc()">
-                <div>
-                  <b>Backup / Datenübertragung</b>
-                  <div class="muted">29 €</div>
-                  <div class="fine">Bundle: Backup + Windows/ReviOS = 5%</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Console -->
-            <div id="consoleWrap" style="display:none">
-              <label>5) Konsole Service</label>
-              <select id="c_console_issue" onchange="recalc()"></select>
-
-              <div id="switchDisplayWrap" style="display:none;margin-top:10px">
-                <label>Switch Display-Variante</label>
-                <select id="c_switch_variant" onchange="recalc()">
-                  <option value="">Bitte wählen…</option>
-                  <option value="switch_lcd">Switch (LCD)</option>
-                  <option value="switch_oled">Switch (OLED)</option>
-                  <option value="switch_lite">Switch Lite</option>
-                  <option value="switch2">Switch 2</option>
-                </select>
-                <div class="fine" style="margin-top:6px">
-                  Preise inkl. Einbau. Teilekosten variieren leicht – wir bestätigen kurz vor Start.
-                </div>
-              </div>
-
-              <div class="chk" style="margin-top:10px">
-                <input type="checkbox" id="c_console_maint" onchange="recalc()">
-                <div>
-                  <b>Maintenance (Reinigung + Wärmeleitpaste)</b>
-                  <div class="muted">29 €</div>
-                  <div class="fine">Bundle: Maintenance + HDMI-Port = 5%</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Controller -->
-            <div id="controllerWrap" style="display:none">
-              <label>5) Controller Service</label>
-              <div class="chkGrid" style="margin-top:10px">
-                <div class="chk"><input type="checkbox" id="ctl_drift" onchange="recalc()">
-                  <div><b>Stick-Drift (beide Sticks)</b><div class="muted">19 €</div><div class="fine">Wir tauschen den Stick komplett.</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" id="ctl_buttons" onchange="recalc()">
-                  <div><b>Buttons-Austausch (alle)</b><div class="muted">19 €</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" id="ctl_hall" onchange="recalc()">
-                  <div><b>Aufrüsten auf Hall-Effect Sticks</b><div class="muted">29 €</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" id="ctl_batt" onchange="recalc()">
-                  <div><b>Akku / Laden</b><div class="muted">19 €</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" id="ctl_conn" onchange="recalc()">
-                  <div><b>Verbindung / Pairing</b><div class="muted">19 €</div></div>
-                </div>
-                <div class="chk"><input type="checkbox" id="ctl_diag" onchange="recalc()">
-                  <div><b>Weiß ich nicht (Diagnose)</b><div class="muted">29 €</div></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="fine">
-          ✅ Preis inkl. Einbau · 🚐 Anfahrt: 10 km kostenlos, danach 0,30 €/km · ⏱ Teile-Lieferzeit: meist 1–3 Werktage (modellabhängig)
-        </div>
-      </div>
-
-      <!-- RIGHT: Ergebnis -->
-      <div class="card soft">
-        <div class="resultTop">
-          <div>
-            <div style="font-weight:1000;font-size:20px">Ergebnis</div>
-            <div class="fine">Original klein rechts oben · Endpreis groß</div>
-          </div>
-          <div id="ogPrice" class="ogPrice" style="visibility:hidden">0 €</div>
-        </div>
-
-        <div class="priceCard" style="margin-top:12px">
-          <div id="finalPrice" class="finalPrice">Preis: –</div>
-          <div id="saveLine" class="saveLine" style="display:none">Du sparst 0 €</div>
-
-          <div id="breakdown" class="note" style="margin-top:10px">
-            Wähle Gerät → Marke → Modell → Service/Teile.
-          </div>
-
-          <div id="bundleBox" class="bundleBox">
-            <b>💡 Passende Bundles (automatisch)</b>
-            <ul id="bundleList" class="bundleList"></ul>
-            <div class="bundleHint">Bundles werden automatisch erkannt, sobald die passenden Teile ausgewählt sind.</div>
-          </div>
-
-          <div class="tagRow">
-            <span class="tag">Diagnose ohne Reparatur: <b>29 €</b></span>
-            <span class="tag">Diagnose mit Reparatur: <b style="color:var(--green)">0 €</b></span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="muted">Termin & Auswahl senden:</div>
-        <div class="ctaRow" style="margin-top:10px">
-          <a id="btnWA" class="btn green" href="#" target="_blank" rel="noopener">💬 WhatsApp senden</a>
-          <a id="btnMail" class="btn primary" href="#">📩 E-Mail senden</a>
-          <a class="btn ghost" href="tel:+4917641286003">📞 Anrufen</a>
-        </div>
-
-        <div class="fine" style="margin-top:10px">
-          Hinweis: WhatsApp/E-Mail wird mit allen Infos automatisch vorbefüllt.
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ANKAUF -->
   <section class="card" id="ankauf" style="margin-top:18px">
     <h2>Gerät verkaufen (Ankauf) – Smartphone, Konsole, Controller</h2>
     <p class="muted">
       Du willst dein Gerät verkaufen – auch defekt? Wir machen dir ein faires Angebot. Versand per <b>DHL</b> möglich.
-      Der Preis ist eine <b>Schätzung</b>, final nach Prüfung bei Ankunft.
+      Der Preis ist eine <b>Schätzung</b> und wird final nach Prüfung bei Ankunft bestätigt.
     </p>
 
     <div class="note info">
-      <b style="color:var(--text)">Wie wir rechnen (transparent)</b><br>
-      Marktwert (Zustand/GB) − Reparaturkosten − <b>30 € Sicherheitsmarge</b> = Ankaufpreis (Schätzung).
+      <b style="color:var(--text)">Wichtig</b><br>
+      Der Rechner gibt einen ungefähren Ankaufpreis. Für 100% Genauigkeit braucht es immer eine kurze menschliche Prüfung (Zustand/Tests).
     </div>
 
     <div class="row cols2" style="margin-top:12px">
       <div class="card soft">
-        <h3 style="margin-top:0">Beispiele (ungefähr)</h3>
-        <ul style="margin:10px 0 0;padding-left:18px;color:var(--muted)">
-          <li><b>iPhone 12 Pro Max 256 GB</b> (sehr gut, alles OK): ca. <b>230 €</b></li>
-          <li>gleiches Gerät, <b>Display kaputt</b>: 230 € − (70 € Reparatur) − 30 € → ca. <b>130 €</b></li>
-          <li><b>Nintendo Switch OLED</b> (gut): ca. <b>140 €</b></li>
-          <li>Switch OLED, <b>Display defekt</b>: 140 € − (120 €) − 30 € → ca. <b>-10 €</b> (meist nur als Teilegerät sinnvoll)</li>
-        </ul>
-        <div class="fine" style="margin-top:10px">
-          Hinweis: Das sind Beispiele. Endpreis hängt von Zustand/Tests/Markt ab.
+        <h3 style="margin-top:0">Ankauf-Rechner</h3>
+
+        <label>Geräte-Typ</label>
+        <select id="buy_type" onchange="onBuyType()">
+          <option value="">Bitte wählen…</option>
+          <option value="phone">Smartphone</option>
+          <option value="console">Konsole</option>
+          <option value="controller">Controller</option>
+        </select>
+
+        <div id="buy_brandWrap" style="display:none;margin-top:10px">
+          <label>Marke</label>
+          <select id="buy_brand" onchange="onBuyBrand()"></select>
+        </div>
+
+        <div id="buy_modelWrap" style="display:none;margin-top:10px">
+          <label>Modell</label>
+          <input id="buy_model" list="buyModelList" placeholder="z.B. iPhone 12 Pro Max, PS5, Switch OLED…" oninput="calcBuyPrice()" />
+          <datalist id="buyModelList"></datalist>
+        </div>
+
+        <div class="row cols2" style="margin-top:10px">
+          <div>
+            <label>Speicher (Smartphone)</label>
+            <select id="buy_storage" onchange="calcBuyPrice()">
+              <option value="">–</option>
+              <option>64 GB</option>
+              <option>128 GB</option>
+              <option>256 GB</option>
+              <option>512 GB</option>
+              <option>1 TB</option>
+            </select>
+          </div>
+          <div>
+            <label>Zustand</label>
+            <select id="buy_condition" onchange="calcBuyPrice()">
+              <option value="">Bitte wählen…</option>
+              <option value="schlecht">Schlecht</option>
+              <option value="okay">Okay</option>
+              <option value="gut">Gut</option>
+              <option value="sehrgut">Sehr gut</option>
+              <option value="wieneu">Wie neu</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <label>Check: Funktioniert alles?</label>
+        <div class="chkGrid" style="margin-top:10px">
+          <div class="chk"><input type="checkbox" class="buy_def" value="display" onchange="calcBuyPrice()"><div><b>Display/Touch</b><div class="muted">wenn kaputt → Abzug</div></div></div>
+          <div class="chk"><input type="checkbox" class="buy_def" value="battery" onchange="calcBuyPrice()"><div><b>Akku / Laden</b><div class="muted">wenn schlecht → Abzug</div></div></div>
+          <div class="chk"><input type="checkbox" class="buy_def" value="camera" onchange="calcBuyPrice()"><div><b>Kamera</b><div class="muted">wenn defekt → Abzug</div></div></div>
+          <div class="chk"><input type="checkbox" class="buy_def" value="speaker" onchange="calcBuyPrice()"><div><b>Lautsprecher/Mikro</b><div class="muted">wenn defekt → Abzug</div></div></div>
+          <div class="chk"><input type="checkbox" class="buy_def" value="wlan" onchange="calcBuyPrice()"><div><b>WLAN/Bluetooth</b><div class="muted">wenn defekt → Abzug</div></div></div>
+          <div class="chk"><input type="checkbox" class="buy_def" value="noscreen" onchange="calcBuyPrice()"><div><b>Kein Bild / startet nicht</b><div class="muted">starker Abzug</div></div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="priceCard">
+          <div style="font-weight:1000">Geschätzter Ankaufpreis</div>
+          <div id="buy_price" class="finalPrice" style="margin-top:8px">–</div>
+          <div class="fine" style="margin-top:8px">
+            Formel: Marktwert (geschätzt) − Defekt-Abzüge − <b>20 €</b> Sicherheitsmarge.
+          </div>
         </div>
       </div>
 
       <div class="card soft">
-        <h3 style="margin-top:0">Ablauf (Versand)</h3>
-        <ol style="margin:10px 0 0;padding-left:18px;color:var(--muted)">
-          <li>Du schickst <b>Fotos</b> (Front/Back/Seiten + Seriennummer wenn möglich)</li>
-          <li>Du setzt das Gerät auf <b>Werkseinstellungen</b> zurück</li>
-          <li>Du versendest per <b>DHL</b> (Tracking)</li>
-          <li>Nach Ankunft prüfen wir Funktion & Zustand</li>
-          <li>Wenn OK: Auszahlung per Überweisung</li>
-        </ol>
+        <h3 style="margin-top:0">Versand & Bestätigung</h3>
+
+        <div class="chk" style="margin-top:10px">
+          <input type="checkbox" id="b_reset" required>
+          <div>
+            <b>Ich bestätige: Gerät wird vor Versand zurückgesetzt</b>
+            <div class="muted">Werkseinstellungen / iCloud/Google entfernt</div>
+          </div>
+        </div>
+
+        <div class="chk" style="margin-top:10px">
+          <input type="checkbox" id="b_photos" required>
+          <div>
+            <b>Ich bestätige: Ich sende Fotos vor Versand</b>
+            <div class="muted">Front/Back/Seiten + Defekte sichtbar</div>
+          </div>
+        </div>
+
+        <div class="chk" style="margin-top:10px">
+          <input type="checkbox" id="b_check" required>
+          <div>
+            <b>Ich verstehe: Endpreis nach Prüfung bei Ankunft</b>
+            <div class="muted">Wenn Zustand abweicht, melden wir uns zuerst.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin:0 0 8px">Ankauf anfragen</h3>
+        <form onsubmit="return sendBuyMail();">
+          <div class="row cols2">
+            <div>
+              <label>Name</label>
+              <input id="b_name" placeholder="Vorname Nachname" required>
+            </div>
+            <div>
+              <label>E-Mail</label>
+              <input id="b_email" type="email" placeholder="deinname@gmail.com" required>
+            </div>
+          </div>
+
+          <label style="margin-top:10px;display:block">Gerät (aus dem Rechner übernehmen)</label>
+          <input id="b_device" placeholder="z.B. iPhone 12 Pro Max / Switch OLED / PS5…" required>
+
+          <label style="margin-top:10px;display:block">Zusatzinfo</label>
+          <textarea id="b_msg" placeholder="Optional: Zubehör, Rechnung, Akku-Zustand, Seriennummer…"></textarea>
+
+          <div class="ctaRow">
+            <button class="btn primary" type="submit">📩 Ankauf per E-Mail anfragen</button>
+            <a class="btn green" id="btnWA_buy" href="#" target="_blank" rel="noopener">💬 Ankauf per WhatsApp</a>
+          </div>
+
+          <div class="fine" style="margin-top:10px">
+            Hinweis: Anfrage wird per Mail/WhatsApp gesendet (statische Website).
+          </div>
+        </form>
+
       </div>
     </div>
-
-    <div class="divider"></div>
-
-    <h3 style="margin:0 0 8px">Jetzt Ankauf anfragen</h3>
-    <form onsubmit="return sendBuyMail();">
-      <div class="row cols3">
-        <div>
-          <label>Name</label>
-          <input id="b_name" placeholder="Vorname Nachname" required>
-        </div>
-        <div>
-          <label>E-Mail</label>
-          <input id="b_email" type="email" placeholder="deinname@gmail.com" required>
-        </div>
-        <div>
-          <label>Telefon (optional)</label>
-          <input id="b_phone" placeholder="+49 …">
-        </div>
-      </div>
-
-      <div class="row cols2" style="margin-top:10px">
-        <div>
-          <label>Gerät</label>
-          <input id="b_device" placeholder="z.B. iPhone 12 Pro Max / Switch OLED / PS5…" required>
-        </div>
-        <div>
-          <label>Speicher / Version</label>
-          <input id="b_storage" placeholder="z.B. 128 GB / 256 GB / Disc / Digital">
-        </div>
-      </div>
-
-      <div class="row cols2" style="margin-top:10px">
-        <div>
-          <label>Zustand</label>
-          <select id="b_state" required>
-            <option value="">Bitte wählen…</option>
-            <option>Schlecht (viele Kratzer/Risse, starke Nutzung)</option>
-            <option>Okay (sichtbare Nutzung, kleine Schäden möglich)</option>
-            <option>Gut (normale Nutzung, leichte Spuren)</option>
-            <option>Sehr gut (max. kleiner Kratzer, kaum sichtbar)</option>
-            <option>Wie neu (keine Kratzer, funktioniert wie neu)</option>
-          </select>
-        </div>
-        <div>
-          <label>Defekt / Problem (falls vorhanden)</label>
-          <input id="b_defect" placeholder="z.B. Display kaputt / drift / kein Bild / lädt nicht">
-        </div>
-      </div>
-
-      <div class="chk" style="margin-top:10px">
-        <input type="checkbox" id="b_reset" required>
-        <div>
-          <b>Ich bestätige: Gerät wird vor Versand zurückgesetzt</b>
-          <div class="muted">Werkseinstellungen / iCloud/Google entfernt</div>
-        </div>
-      </div>
-
-      <div class="chk" style="margin-top:10px">
-        <input type="checkbox" id="b_photos" required>
-        <div>
-          <b>Ich bestätige: Ich sende Fotos vor Versand</b>
-          <div class="muted">Front/Back/Seiten + Defekte sichtbar</div>
-        </div>
-      </div>
-
-      <div class="chk" style="margin-top:10px">
-        <input type="checkbox" id="b_check" required>
-        <div>
-          <b>Ich verstehe: Endpreis nach Prüfung bei Ankunft</b>
-          <div class="muted">Wenn Zustand abweicht, melden wir uns zuerst.</div>
-        </div>
-      </div>
-
-      <label style="margin-top:10px;display:block">Zusatzinfo</label>
-      <textarea id="b_msg" placeholder="Optional: Zubehör, Rechnung, Akku-Zustand, Seriennummer…"></textarea>
-
-      <div class="ctaRow">
-        <button class="btn primary" type="submit">📩 Ankauf per E-Mail anfragen</button>
-        <a class="btn green" id="btnWA_buy" href="#" target="_blank" rel="noopener">💬 Ankauf per WhatsApp</a>
-      </div>
-
-      <div class="fine" style="margin-top:10px">
-        Hinweis: Anfrage wird per Mail/WhatsApp gesendet (statische Website).
-      </div>
-    </form>
   </section>
 
   <!-- FAQ -->
@@ -901,7 +940,7 @@
       <details>
         <summary>Was heißt „Same-Day“ genau?</summary>
         <div class="muted">
-          Same-Day ist nur möglich, wenn der Auftrag schnell machbar ist und Teile vorhanden sind (oder keine Teile nötig sind).
+          Same-Day ist nur möglich, wenn der Auftrag schnell machbar ist und Teile verfügbar sind (oder keine Teile nötig sind).
         </div>
       </details>
       <details>
@@ -933,21 +972,56 @@
     </div>
   </section>
 
+  <!-- Datenschutz -->
+  <section class="card" id="datenschutz" style="margin-top:18px">
+    <h2>Datenschutz (Kurz)</h2>
+    <p class="muted">
+      Diese Website ist eine statische GitHub-Pages Seite. Wir verwenden keine versteckten Tracker.
+      Wenn du uns kontaktierst (Telefon/SMS/WhatsApp/E-Mail), erhalten wir die Daten, die du uns sendest.
+    </p>
+
+    <details style="margin-top:10px">
+      <summary>Datenschutzerklärung (Kurztext)</summary>
+      <div class="note">
+        <b style="color:var(--text)">Welche Daten?</b><br>
+        Nur Daten, die du freiwillig sendest (z. B. Name, E-Mail, Nachricht, Modell/Problem).<br><br>
+        <b style="color:var(--text)">Wofür?</b><br>
+        Zur Bearbeitung deiner Anfrage und Terminabstimmung.<br><br>
+        <b style="color:var(--text)">Weitergabe?</b><br>
+        Keine Weitergabe an Dritte, außer wenn es für die Leistung nötig ist (z. B. Teile-Bestellung/Versand) oder gesetzlich erforderlich.<br><br>
+        <b style="color:var(--text)">Deine Rechte:</b><br>
+        Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung. Kontakt: <a href="mailto:techvanservice@gmail.com">techvanservice@gmail.com</a>
+      </div>
+    </details>
+
+    <details style="margin-top:10px">
+      <summary>Impressum (Platzhalter)</summary>
+      <div class="note">
+        <b style="color:var(--danger)">Wichtig:</b> Bitte ergänze hier deine vollständigen Impressumsdaten (Name, Anschrift, Kontakt, ggf. USt-ID), bevor du offiziell startest.
+      </div>
+    </details>
+
+    <div class="fine" style="margin-top:10px;">
+      Hinweis: Das ist ein Kurztext. Für ein professionelles Impressum/DSGVO können wir die Texte vollständig ausformulieren.
+    </div>
+  </section>
+
 </main>
 
 <footer>
   © 2026 TECH+VAN — <span style="color:var(--muted)">Reparieren · Aufrüsten · Optimieren</span>
   <div class="legalLinks">
+    <a class="btn small ghost" href="#leistungen">Leistungen</a>
     <a class="btn small ghost" href="#rechner">Rechner</a>
     <a class="btn small ghost" href="#termin">Termin</a>
     <a class="btn small ghost" href="#ankauf">Ankauf</a>
-    <a class="btn small ghost" href="#kontakt">Kontakt</a>
+    <a class="btn small ghost" href="#datenschutz">Datenschutz</a>
   </div>
 </footer>
 
 <script>
 /* =========================
-   DATA: Brands/Models (2017+)
+   DATA
 ========================= */
 const DATA = {
   phone: {
@@ -1036,86 +1110,45 @@ const DATA = {
 };
 
 /* =========================
-   PRICES (wie davor, fix & konkurrenzfähig)
-   - Kein "ab"
-   - Einbau NUR 1x pro Auftrag (bei Smartphone/Tablet):
-       Gesamt = Summe(Teilpreise) - Bundle-Rabatt + Express
+   PRICES (fix, ohne "ab")
 ========================= */
 const EXPRESS_FEE = 15;
-
-// Diagnose / Backup
 const PRICE_DIAG = 29;
 const PRICE_BACKUP = 29;
 
-// PC/Laptop fixed
-const PC_LABOR = 29;  // Arbeit pro Austausch
-const OS_INSTALL = 29; // Windows/Linux/ReviOS (inkl Aktivierung)
+// PC/Laptop
+const PC_LABOR = 29;       // Arbeit pro Austausch (wenn Austausch gewählt)
+const OS_INSTALL = 29;     // Windows/Linux/ReviOS (inkl Aktivierung)
+const MAINT = 29;
 
-// Console
+// Konsole
 const CONSOLE_HDMI = 39;
 const CONSOLE_MAINT = 29;
 
-// Controller fixed
-const CTL = {
-  drift:19,
-  buttons:19,
-  hall:29,
-  batt:19,
-  conn:19,
-  diag:29
+// Controller fix
+const CTL = { drift:19, buttons:19, hall:29, batt:19, conn:19, diag:29 };
+
+// Switch (inkl. Einbau)
+const SWITCH = {
+  display: { switch_lcd: 89, switch_oled: 159, switch_lite: 99, switch2: 109 },
+  battery: { switch_lcd: 79, switch_oled: 79, switch_lite: 69, switch2: 79 },
+  charge:  79
 };
 
-// Switch Display: Aftermarket (du wolltest)
-const SWITCH_DISPLAY = {
-  switch_lcd: 89,   // 20€ LCD + Profit + Einbau -> konkurrenzfähig
-  switch_oled: 159, // 90€ OLED + Profit + Einbau
-  switch_lite: 99,  // 25€ + Profit + Einbau
-  switch2: 99       // placeholder
-};
-
-// Smartphone/Tablet: Aftermarket/OEM (wie davor)
+// Smartphone/Tablet Aftermarket & OEM (wie davor)
 const PHONE_AM = {
-  display: (tier, isProMax)=> {
-    const map = {T2:99,T3:119,T4:119,T5:139,T6:159,T7:179,T8:199,T9:209,T1:89};
-    let p = map[tier] ?? 119;
-    if(isProMax) p += 20;
-    return p;
-  },
-  battery: (tier)=> {
-    const map = {T1:69,T2:79,T3:89,T4:89,T5:99,T6:99,T7:109,T8:109,T9:119};
-    return map[tier] ?? 89;
-  },
-  charge: (tier)=> {
-    const map = {T1:79,T2:89,T3:99,T4:99,T5:109,T6:109,T7:109,T8:119,T9:119};
-    return map[tier] ?? 99;
-  },
-  backglass: (tier, isProMax)=> {
-    const base = {T1:99,T2:109,T3:119,T4:129,T5:139,T6:149,T7:159,T8:169,T9:179}[tier] ?? 129;
-    return isProMax ? base+10 : base;
-  },
-  rearcam: (tier, isProOrMax)=> {
-    const base = {T1:89,T2:99,T3:109,T4:119,T5:129,T6:129,T7:139,T8:149,T9:159}[tier] ?? 119;
-    return isProOrMax ? base+10 : base;
-  },
-  frontcam: (tier)=> {
-    const base = {T1:69,T2:69,T3:79,T4:79,T5:79,T6:89,T7:89,T8:99,T9:99}[tier] ?? 79;
-    return base;
-  },
+  display: (tier, isPM)=> ({T1:89,T2:99,T3:119,T4:119,T5:139,T6:159,T7:179,T8:199,T9:209}[tier] + (isPM?20:0)),
+  battery: (tier)=> ({T1:69,T2:79,T3:89,T4:89,T5:99,T6:99,T7:109,T8:109,T9:119}[tier] ?? 89),
+  charge:  (tier)=> ({T1:79,T2:89,T3:99,T4:99,T5:109,T6:109,T7:109,T8:119,T9:119}[tier] ?? 99),
+  backglass:(tier, isPM)=> (({T1:99,T2:109,T3:119,T4:129,T5:139,T6:149,T7:159,T8:169,T9:179}[tier] ?? 129) + (isPM?10:0)),
+  rearcam: (tier, isProOrMax)=> (({T1:89,T2:99,T3:109,T4:119,T5:129,T6:129,T7:139,T8:149,T9:159}[tier] ?? 119) + (isProOrMax?10:0)),
+  frontcam:(tier)=> ({T1:69,T2:69,T3:79,T4:79,T5:79,T6:89,T7:89,T8:99,T9:99}[tier] ?? 79),
   speaker: 49,
   wlan: 49
 };
-
 const PHONE_OEM = {
-  display: (tier, isProMax)=> {
-    const map = {T1:129,T2:169,T3:199,T4:229,T5:249,T6:269,T7:299,T8:329,T9:349};
-    let p = map[tier] ?? 229;
-    if(isProMax) p += 20;
-    return p;
-  },
-  battery: (tier)=> {
-    const map = {T1:109,T2:119,T3:129,T4:129,T5:139,T6:139,T7:149,T8:149,T9:159};
-    return map[tier] ?? 129;
-  },
+  display: (tier, isPM)=> ({T1:129,T2:169,T3:199,T4:229,T5:249,T6:269,T7:299,T8:329,T9:349}[tier] + (isPM?20:0)),
+  battery: (tier)=> ({T1:109,T2:119,T3:129,T4:129,T5:139,T6:139,T7:149,T8:149,T9:159}[tier] ?? 129),
   charge: 129,
   backglass: 189,
   rearcam: 199,
@@ -1125,7 +1158,7 @@ const PHONE_OEM = {
 };
 
 /* =========================
-   BUNDLES (angepasst je Thema)
+   BUNDLES (auto)
 ========================= */
 const BUNDLES_PHONE_TABLET = [
   { name:"Display + Akku", parts:["display","battery"], pct:0.05 },
@@ -1145,8 +1178,18 @@ const BUNDLES_CONTROLLER = [
 ];
 
 const BUNDLES_SWITCH = [
-  { name:"Akku + Display", keys:["batt","display"], pct:0.05 },
-  { name:"Akku + Display + Ladebuchse", keys:["batt","display","charge"], pct:0.10 }
+  { name:"Akku + Display", keys:["battery","display"], pct:0.05 },
+  { name:"Akku + Display + Ladebuchse", keys:["battery","display","charge"], pct:0.10 }
+];
+
+const BUNDLES_PC = [
+  { name:"Windows + Backup", rule:"win+backup", pct:0.05 },
+  { name:"ReviOS + Backup", rule:"revios+backup", pct:0.05 },
+  { name:"Austausch + Maintenance", rule:"swap+maint", pct:0.05 }
+];
+
+const BUNDLES_CONSOLE = [
+  { name:"HDMI + Maintenance", rule:"hdmi+maint", pct:0.05 }
 ];
 
 /* =========================
@@ -1159,25 +1202,6 @@ function escapeHtml(str){
   }[s]));
 }
 function money(n){ return `${Math.round(n)} €`; }
-
-function isIphone(model){ return /iphone/i.test(model||""); }
-function isProMax(model){ return /(pro\s*max)/i.test(model||""); }
-function isPro(model){ return /\bpro\b/i.test(model||"") && !isProMax(model); }
-
-function iphoneTier(model){
-  const m=(model||"").toLowerCase();
-  if(m.includes("se") || /\b(6|6s|7|8)\b/.test(m)) return "T1";
-  if(/\b(xr|xs|x)\b/.test(m)) return "T2";
-  if(/\b11\b/.test(m)) return "T3";
-  if(/\b12\b/.test(m)) return "T4";
-  if(/\b13\b/.test(m)) return "T5";
-  if(/\b14\b/.test(m)) return "T6";
-  if(/\b15\b/.test(m)) return "T7";
-  if(/\b16\b/.test(m)) return "T8";
-  if(/\b17\b/.test(m)) return "T9";
-  return "T4";
-}
-
 function dLabel(d){
   return ({phone:"Smartphone",tablet:"Tablet",laptop:"Laptop",pc:"PC",console:"Konsole",controller:"Controller"})[d]||d;
 }
@@ -1193,13 +1217,12 @@ function partLabel(k){
     wlan:"WLAN/Bluetooth (Antenne)"
   })[k] || k;
 }
-function labelSwitch(v){
-  return ({
-    switch_lcd:"Switch (LCD)",
-    switch_oled:"Switch (OLED)",
-    switch_lite:"Switch Lite",
-    switch2:"Switch 2"
-  })[v] || v;
+function show(id, yes){ $(id).style.display = yes ? "block" : "none"; }
+function showErr(msg){
+  const e=$("err");
+  if(!msg){ e.style.display="none"; e.textContent=""; return; }
+  e.style.display="block";
+  e.textContent=msg;
 }
 
 function setOptions(selectEl, placeholder, arr){
@@ -1221,245 +1244,28 @@ function setDatalist(listEl, arr){
     listEl.appendChild(o);
   });
 }
-function show(id, yes){ $(id).style.display = yes ? "block" : "none"; }
-function showErr(msg){
-  const e=$("err");
-  if(!msg){ e.style.display="none"; e.textContent=""; return; }
-  e.style.display="block";
-  e.textContent=msg;
+
+function isIphone(model){ return /iphone/i.test(model||""); }
+function isProMax(model){ return /(pro\s*max)/i.test(model||""); }
+function isPro(model){ return /\bpro\b/i.test(model||"") && !isProMax(model); }
+function iphoneTier(model){
+  const m=(model||"").toLowerCase();
+  if(m.includes("se") || /\b(6|6s|7|8)\b/.test(m)) return "T1";
+  if(/\b(xr|xs|x)\b/.test(m)) return "T2";
+  if(/\b11\b/.test(m)) return "T3";
+  if(/\b12\b/.test(m)) return "T4";
+  if(/\b13\b/.test(m)) return "T5";
+  if(/\b14\b/.test(m)) return "T6";
+  if(/\b15\b/.test(m)) return "T7";
+  if(/\b16\b/.test(m)) return "T8";
+  if(/\b17\b/.test(m)) return "T9";
+  return "T4";
 }
 
-/* =========================
-   Appointment: Mo–Fr 09:00–17:30, earliest tomorrow, max 2 months
-========================= */
-function initTimes(){
-  const sel = $("t_time");
-  sel.innerHTML = "";
-  const start = 9*60, end = 17*60+30;
-  for(let m=start; m<=end; m+=30){
-    const hh = String(Math.floor(m/60)).padStart(2,"0");
-    const mm = String(m%60).padStart(2,"0");
-    const opt = document.createElement("option");
-    opt.value = `${hh}:${mm}`;
-    opt.textContent = `${hh}:${mm}`;
-    sel.appendChild(opt);
-  }
-}
-function toISODate(d){
-  const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
-  return z.toISOString().slice(0,10);
-}
-function addMonths(date, months){
-  const d = new Date(date);
-  d.setMonth(d.getMonth()+months);
-  return d;
-}
-function isWeekday(dateObj){
-  const day = dateObj.getDay();
-  return day >= 1 && day <= 5;
-}
-function nextValidDateFrom(dateObj){
-  const d = new Date(dateObj);
-  d.setDate(d.getDate()+1); // earliest tomorrow
-  while(!isWeekday(d)) d.setDate(d.getDate()+1);
-  return d;
-}
-function validateAppointment(){
-  const today = new Date();
-  const min = nextValidDateFrom(today);
-  const max = addMonths(today, 2);
-
-  const input = $("t_date");
-  input.min = toISODate(min);
-  input.max = toISODate(max);
-
-  if(!input.value){
-    input.value = toISODate(min);
-  }
-
-  const picked = new Date(input.value+"T00:00:00");
-  let fixed = picked;
-
-  if(picked < min) fixed = min;
-  if(picked > max) fixed = max;
-
-  if(!isWeekday(fixed)){
-    let temp = new Date(fixed);
-    while(!isWeekday(temp) && temp<=max) temp.setDate(temp.getDate()+1);
-    fixed = temp<=max ? temp : max;
-  }
-
-  input.value = toISODate(fixed);
-  $("dateHint").textContent =
-    `Frühester Termin: ${toISODate(min)} · Spätester Termin: ${toISODate(max)} (nur Mo–Fr)`;
-}
-
-/* =========================
-   UI flow
-========================= */
-function resetAllParts(){
-  document.querySelectorAll(".part, .svc").forEach(x=>x.checked=false);
-  ["c_express","c_maint","c_pc_backup","c_console_maint","ctl_drift","ctl_buttons","ctl_hall","ctl_batt","ctl_conn","ctl_diag"].forEach(id=>{
-    const el=$(id); if(el) el.checked=false;
-  });
-  $("c_parts_price").value="";
-  $("c_pc_issue").innerHTML="";
-  $("c_console_issue").innerHTML="";
-  $("c_switch_variant").value="";
-}
-function resetCalc(){
-  $("c_device").value="";
-  $("c_brand").innerHTML="";
-  $("c_model").value="";
-  $("modelList").innerHTML="";
-  $("c_quality").value="";
-  resetAllParts();
-  show("brandWrap", false);
-  show("modelWrap", false);
-  show("qualityWrap", false);
-  show("expressWrap", false);
-  show("partsMultiWrap", false);
-  show("pcWrap", false);
-  show("consoleWrap", false);
-  show("controllerWrap", false);
-  show("switchDisplayWrap", false);
-  showErr("");
-  setResult({final:null});
-  updateShareLinks();
-}
-
-function onDevice(){
-  const d = $("c_device").value;
-
-  resetAllParts();
-  showErr("");
-
-  show("brandWrap", !!d);
-  show("modelWrap", false);
-  show("qualityWrap", false);
-  show("expressWrap", !!d);
-  show("partsMultiWrap", false);
-  show("pcWrap", false);
-  show("consoleWrap", false);
-  show("controllerWrap", false);
-  show("switchDisplayWrap", false);
-
-  if(!d){
-    $("c_brand").innerHTML="";
-    $("c_model").value="";
-    $("modelList").innerHTML="";
-    recalc();
-    return;
-  }
-
-  setOptions($("c_brand"), "Bitte wählen…", DATA[d].brands);
-  $("c_model").value="";
-  $("modelList").innerHTML="";
-
-  // quality only for phone/tablet/console
-  if(d==="phone" || d==="tablet" || d==="console"){
-    show("qualityWrap", true);
-  } else {
-    show("qualityWrap", false);
-    $("c_quality").value="";
-  }
-
-  recalc();
-}
-
-function onBrand(){
-  const d = $("c_device").value;
-  const b = $("c_brand").value;
-  showErr("");
-
-  if(!d) return;
-
-  show("modelWrap", !!b);
-  $("c_model").value="";
-  resetAllParts();
-
-  // suggestions
-  const sugg = (DATA[d].models[b] || []);
-  setDatalist($("modelList"), sugg);
-
-  recalc();
-}
-
-function onModel(){
-  const d = $("c_device").value;
-  const b = $("c_brand").value;
-  const m = $("c_model").value.trim();
-  showErr("");
-
-  if(!d){
-    setResult({final:null});
-    return;
-  }
-  if(!b){
-    showErr("Bitte eine Marke auswählen.");
-    setResult({final:null});
-    return;
-  }
-  if(!m){
-    setResult({final:null});
-    return;
-  }
-
-  // show correct UI
-  if(d==="phone" || d==="tablet"){
-    show("partsMultiWrap", true);
-    show("pcWrap", false);
-    show("consoleWrap", false);
-    show("controllerWrap", false);
-  } else if(d==="pc" || d==="laptop"){
-    show("pcWrap", true);
-    show("partsMultiWrap", false);
-    show("consoleWrap", false);
-    show("controllerWrap", false);
-    setOptions($("c_pc_issue"), "Bitte wählen…", [
-      "Diagnose / Fehleranalyse",
-      "Windows installieren (inkl. Aktivierung)",
-      "Linux installieren",
-      "ReviOS installieren",
-      "SSD/HDD Einbau + Setup",
-      "RAM Austausch",
-      "GPU Austausch",
-      "CPU Austausch",
-      "Mainboard Austausch",
-      "PSU Austausch",
-      "Weiß ich nicht (Diagnose)"
-    ]);
-  } else if(d==="console"){
-    show("consoleWrap", true);
-    show("partsMultiWrap", false);
-    show("pcWrap", false);
-    show("controllerWrap", false);
-    setOptions($("c_console_issue"), "Bitte wählen…", [
-      "Maintenance (Reinigung + Wärmeleitpaste)",
-      "HDMI-Port Austausch",
-      "PSU Problem (Netzteil) – Arbeit + Teile",
-      "Switch Display Austausch",
-      "Weiß ich nicht (Diagnose)"
-    ]);
-  } else if(d==="controller"){
-    show("controllerWrap", true);
-    show("consoleWrap", false);
-    show("pcWrap", false);
-    show("partsMultiWrap", false);
-  }
-
-  recalc();
-}
-
-/* =========================
-   Selection helpers
-========================= */
 function selectedParts(){ return Array.from(document.querySelectorAll(".part:checked")).map(x=>x.value); }
 function selectedSvcs(){ return Array.from(document.querySelectorAll(".svc:checked")).map(x=>x.value); }
+function containsAll(setArr, neededArr){ return neededArr.every(p=>setArr.includes(p)); }
 
-function containsAll(setArr, neededArr){
-  return neededArr.every(p=>setArr.includes(p));
-}
 function bestBundlePhoneTablet(parts){
   let best=null;
   for(const b of BUNDLES_PHONE_TABLET){
@@ -1469,14 +1275,7 @@ function bestBundlePhoneTablet(parts){
   }
   return best;
 }
-function bestBundleController(){
-  const keys=[];
-  if($("ctl_drift").checked) keys.push("drift");
-  if($("ctl_buttons").checked) keys.push("buttons");
-  if($("ctl_hall").checked) keys.push("hall");
-  if($("ctl_batt").checked) keys.push("batt");
-  if($("ctl_conn").checked) keys.push("conn");
-
+function bestBundleController(keys){
   let best=null;
   for(const b of BUNDLES_CONTROLLER){
     if(b.keys.every(k=>keys.includes(k))){
@@ -1538,7 +1337,185 @@ function setResult({og, final, savings, breakdownHtml, bundlesHtml, showBundles}
 }
 
 /* =========================
-   Price calculation
+   Reset + Flow
+========================= */
+function resetAllParts(){
+  document.querySelectorAll(".part, .svc").forEach(x=>x.checked=false);
+  ["c_express","c_maint","c_pc_backup","c_console_maint","ctl_drift","ctl_buttons","ctl_hall","ctl_batt","ctl_conn","ctl_diag","sw_display","sw_batt","sw_charge"].forEach(id=>{
+    const el=$(id); if(el) el.checked=false;
+  });
+  $("c_parts_price").value="";
+  $("c_pc_issue").innerHTML="";
+  $("c_console_issue").innerHTML="";
+  $("c_switch_variant").value="";
+}
+
+function resetCalc(){
+  $("c_device").value="";
+  $("c_brand").innerHTML="";
+  $("c_model").value="";
+  $("modelList").innerHTML="";
+  $("c_quality").value="";
+  resetAllParts();
+
+  show("brandWrap", false);
+  show("modelWrap", false);
+  show("qualityWrap", false);
+  show("expressWrap", false);
+  show("partsMultiWrap", false);
+  show("pcWrap", false);
+  show("consoleWrap", false);
+  show("controllerWrap", false);
+  show("switchWrap", false);
+
+  showErr("");
+  setResult({final:null});
+  updateShareLinks();
+}
+
+/* =========================
+   Device selection
+========================= */
+function onDevice(){
+  const d = $("c_device").value;
+  resetAllParts();
+  showErr("");
+
+  show("brandWrap", !!d);
+  show("modelWrap", false);
+
+  show("expressWrap", !!d);
+  show("partsMultiWrap", false);
+  show("pcWrap", false);
+  show("consoleWrap", false);
+  show("controllerWrap", false);
+  show("switchWrap", false);
+
+  if(!d){
+    $("c_brand").innerHTML="";
+    $("c_model").value="";
+    $("modelList").innerHTML="";
+    show("qualityWrap", false);
+    recalc();
+    return;
+  }
+
+  setOptions($("c_brand"), "Bitte wählen…", DATA[d].brands);
+  $("c_model").value="";
+  $("modelList").innerHTML="";
+
+  // quality only for phone/tablet/console
+  if(d==="phone" || d==="tablet" || d==="console"){
+    show("qualityWrap", true);
+  } else {
+    show("qualityWrap", false);
+    $("c_quality").value="";
+    $("oemWarn").style.display="none";
+  }
+
+  recalc();
+}
+
+function onBrand(){
+  const d = $("c_device").value;
+  const b = $("c_brand").value;
+  showErr("");
+
+  if(!d) return;
+  show("modelWrap", !!b);
+  $("c_model").value="";
+  resetAllParts();
+
+  const sugg = (DATA[d].models[b] || []);
+  setDatalist($("modelList"), sugg);
+
+  recalc();
+}
+
+function onModel(){
+  const d = $("c_device").value;
+  const b = $("c_brand").value;
+  const m = $("c_model").value.trim();
+  showErr("");
+
+  if(!d){
+    setResult({final:null});
+    return;
+  }
+  if(!b){
+    showErr("Bitte eine Marke auswählen.");
+    setResult({final:null});
+    return;
+  }
+  if(!m){
+    setResult({final:null});
+    return;
+  }
+
+  if(d==="phone" || d==="tablet"){
+    show("partsMultiWrap", true);
+    show("pcWrap", false);
+    show("consoleWrap", false);
+    show("controllerWrap", false);
+  } else if(d==="pc" || d==="laptop"){
+    show("pcWrap", true);
+    show("partsMultiWrap", false);
+    show("consoleWrap", false);
+    show("controllerWrap", false);
+
+    setOptions($("c_pc_issue"), "Bitte wählen…", [
+      "Diagnose / Fehleranalyse",
+      "Windows installieren (inkl. Aktivierung)",
+      "Linux installieren",
+      "ReviOS installieren",
+      "Austausch: SSD/HDD",
+      "Austausch: RAM",
+      "Austausch: GPU",
+      "Austausch: CPU",
+      "Austausch: Mainboard",
+      "Austausch: PSU",
+      "Weiß ich nicht (Diagnose)"
+    ]);
+
+    $("pcPartsPriceWrap").style.display = "none";
+  } else if(d==="console"){
+    show("consoleWrap", true);
+    show("partsMultiWrap", false);
+    show("pcWrap", false);
+    show("controllerWrap", false);
+    setOptions($("c_console_issue"), "Bitte wählen…", [
+      "Maintenance (Reinigung + Wärmeleitpaste)",
+      "HDMI-Port Austausch",
+      "PSU Problem (Netzteil) – Arbeit + Teile",
+      "Nintendo Switch Reparatur (Display/Akku/Ladebuchse)",
+      "Weiß ich nicht (Diagnose)"
+    ]);
+    show("switchWrap", false);
+  } else if(d==="controller"){
+    show("controllerWrap", true);
+    show("consoleWrap", false);
+    show("pcWrap", false);
+    show("partsMultiWrap", false);
+  }
+
+  recalc();
+}
+
+function onPcIssue(){
+  const issue = $("c_pc_issue").value;
+  const needsParts = issue.startsWith("Austausch:");
+  $("pcPartsPriceWrap").style.display = needsParts ? "block" : "none";
+  recalc();
+}
+
+function onConsoleIssue(){
+  const issue = $("c_console_issue").value;
+  show("switchWrap", issue.includes("Nintendo Switch"));
+  recalc();
+}
+
+/* =========================
+   Main calc
 ========================= */
 function recalc(){
   const d = $("c_device").value;
@@ -1553,7 +1530,7 @@ function recalc(){
   if(!b){ showErr("Bitte eine Marke auswählen."); setResult({final:null}); return; }
   if(!m){ setResult({final:null}); return; }
 
-  // OEM warning visible if OEM selected
+  // OEM warning
   if(d==="phone" || d==="tablet" || d==="console"){
     if(!q){ showErr("Bitte OEM oder Aftermarket auswählen."); setResult({final:null}); return; }
     $("oemWarn").style.display = (q==="oem") ? "block" : "none";
@@ -1566,13 +1543,12 @@ function recalc(){
     const parts = selectedParts();
     const svcs = selectedSvcs();
 
-    // If nothing selected
     if(parts.length===0 && svcs.length===0){
       setResult({final:null, breakdownHtml:"Bitte mindestens ein Teil oder einen Service auswählen."});
       return;
     }
 
-    // diagnosis-only
+    // Diagnosis-only
     const onlyDiag = svcs.includes("diagnose") && parts.length===0 && svcs.length===1;
     if(onlyDiag){
       const total = PRICE_DIAG + expressAdd;
@@ -1587,7 +1563,6 @@ function recalc(){
       return;
     }
 
-    // price each selected part using fixed list (NOT adding labor multiple times)
     const tier = isIphone(m) ? iphoneTier(m) : "T4";
     const pm = isProMax(m);
     const pOrMax = isPro(m) || pm;
@@ -1597,15 +1572,14 @@ function recalc(){
     let items = [];
     let subtotal = 0;
 
-    // parts
     for(const k of parts){
       let pr=0;
       if(k==="display") pr = PRICE.display(tier, pm);
       else if(k==="battery") pr = PRICE.battery(tier);
-      else if(k==="charge") pr = (PRICE.charge.length ? PRICE.charge(tier) : PRICE.charge);
-      else if(k==="backglass") pr = (PRICE.backglass.length ? PRICE.backglass(tier, pm) : PRICE.backglass);
-      else if(k==="rearcam") pr = (PRICE.rearcam.length ? PRICE.rearcam(tier, pOrMax) : PRICE.rearcam);
-      else if(k==="frontcam") pr = (PRICE.frontcam.length ? PRICE.frontcam(tier) : PRICE.frontcam);
+      else if(k==="charge") pr = (typeof PRICE.charge === "function") ? PRICE.charge(tier) : PRICE.charge;
+      else if(k==="backglass") pr = (typeof PRICE.backglass === "function") ? PRICE.backglass(tier, pm) : PRICE.backglass;
+      else if(k==="rearcam") pr = (typeof PRICE.rearcam === "function") ? PRICE.rearcam(tier, pOrMax) : PRICE.rearcam;
+      else if(k==="frontcam") pr = (typeof PRICE.frontcam === "function") ? PRICE.frontcam(tier) : PRICE.frontcam;
       else if(k==="speaker") pr = PRICE.speaker;
       else if(k==="wlan") pr = PRICE.wlan;
       else pr = 49;
@@ -1614,7 +1588,6 @@ function recalc(){
       subtotal += pr;
     }
 
-    // services
     for(const s of svcs){
       if(s==="backup"){
         items.push({name:"Backup / Datenübertragung", price:PRICE_BACKUP});
@@ -1625,17 +1598,12 @@ function recalc(){
       }
     }
 
-    // bundle discount
     const best = bestBundlePhoneTablet(parts);
-    let discount = 0;
-    if(best){
-      discount = Math.round(subtotal * best.pct);
-    }
+    let discount = best ? Math.round(subtotal * best.pct) : 0;
 
     const og = subtotal + expressAdd;
     const final = Math.max(0, subtotal - discount + expressAdd);
 
-    // bundle list shown ONLY for phone/tablet
     const bundlesHtml = BUNDLES_PHONE_TABLET.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
 
     const lines = items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("");
@@ -1669,76 +1637,74 @@ function recalc(){
   if(d==="pc" || d==="laptop"){
     const issue = $("c_pc_issue").value;
     if(!issue){
-      setResult({final:null, breakdownHtml:"Bitte eine PC/Laptop Leistung auswählen."});
+      setResult({final:null, breakdownHtml:"Bitte eine Leistung auswählen."});
       return;
     }
 
-    const needsParts = /Austausch|Einbau/i.test(issue);
-    $("pcPartsPriceWrap").style.display = needsParts ? "block" : "none";
-
-    let total = 0;
-    let lines = [];
-
-    if(issue.includes("Diagnose") || issue.includes("Weiß ich nicht")){
-      total += PRICE_DIAG;
-      lines.push(`Diagnose: <b>${money(PRICE_DIAG)}</b>`);
-    } else if(issue.includes("Windows") || issue.includes("Linux") || issue.includes("ReviOS")){
-      total += OS_INSTALL;
-      lines.push(`${escapeHtml(issue)}: <b>${money(OS_INSTALL)}</b>`);
-      lines.push(`<span class="muted">Windows wird aktiviert. Installation ist kostenlos enthalten.</span>`);
-    } else if(needsParts){
-      const partsPrice = parseFloat($("c_parts_price").value || "0");
-      total += PC_LABOR + Math.max(0, partsPrice);
-      lines.push(`Arbeit/Austausch: <b>${money(PC_LABOR)}</b>`);
-      lines.push(`Teile (wir bestellen): <b>${money(partsPrice)}</b>`);
-    } else {
-      total += PC_LABOR;
-      lines.push(`${escapeHtml(issue)}: <b>${money(PC_LABOR)}</b>`);
-    }
-
-    // optional Maintenance
-    const maint = $("c_maint").checked;
-    if(maint){
-      total += 29;
-      lines.push(`Maintenance: <b>${money(29)}</b>`);
-    }
-
-    // optional Backup
     const backup = $("c_pc_backup").checked;
+    const maint  = $("c_maint").checked;
+
+    let subtotal=0;
+    let items=[];
+    let rules=[];
+
+    if(issue.includes("Weiß") || issue.includes("Diagnose")){
+      subtotal += PRICE_DIAG;
+      items.push({name:"Diagnose", price:PRICE_DIAG});
+    } else if(issue.includes("Windows")){
+      subtotal += OS_INSTALL;
+      items.push({name:"Windows Installation (inkl. Aktivierung)", price:OS_INSTALL});
+      if(backup){ rules.push("win+backup"); }
+    } else if(issue.includes("Linux")){
+      subtotal += OS_INSTALL;
+      items.push({name:"Linux Installation", price:OS_INSTALL});
+    } else if(issue.includes("ReviOS")){
+      subtotal += OS_INSTALL;
+      items.push({name:"ReviOS Installation", price:OS_INSTALL});
+      if(backup){ rules.push("revios+backup"); }
+    } else if(issue.startsWith("Austausch:")){
+      const partsPrice = parseFloat($("c_parts_price").value || "0");
+      subtotal += PC_LABOR + Math.max(0, partsPrice);
+      items.push({name:"Arbeit/Austausch", price:PC_LABOR});
+      items.push({name:"Teile (wir bestellen)", price:Math.max(0, partsPrice)});
+      if(maint){ rules.push("swap+maint"); }
+    }
+
     if(backup){
-      total += PRICE_BACKUP;
-      lines.push(`Backup / Datenübertragung: <b>${money(PRICE_BACKUP)}</b>`);
+      subtotal += PRICE_BACKUP;
+      items.push({name:"Backup / Datenübertragung", price:PRICE_BACKUP});
+    }
+    if(maint){
+      subtotal += MAINT;
+      items.push({name:"Maintenance (Reinigung + Wärmeleitpaste)", price:MAINT});
     }
 
-    // bundles
-    let discount=0;
-    let notes=[];
-
-    if(needsParts && maint){
-      const dsc = Math.round(PC_LABOR*0.05);
-      discount += dsc;
-      notes.push(`Bundle (Austausch + Maintenance) −${money(dsc)}`);
+    // bundle best (max pct)
+    let best=null;
+    for(const bdl of BUNDLES_PC){
+      if(rules.includes(bdl.rule)){
+        if(!best || bdl.pct>best.pct) best=bdl;
+      }
     }
-    if(backup && (issue.includes("Windows") || issue.includes("ReviOS"))){
-      const dsc = Math.round((PRICE_BACKUP + OS_INSTALL)*0.05);
-      discount += dsc;
-      notes.push(`Bundle (Backup + ${issue.includes("Windows")?"Windows":"ReviOS"}) −${money(dsc)}`);
-    }
+    let discount = best ? Math.round(subtotal * best.pct) : 0;
 
-    const express = $("c_express").checked;
-    if(express) total += EXPRESS_FEE;
+    const og = subtotal + expressAdd;
+    const final = Math.max(0, subtotal - discount + expressAdd);
 
-    const og = total + discount;
-    const final = Math.max(0, total - discount);
+    const bundlesHtml = BUNDLES_PC.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
+
+    const lines = items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("");
+    const bundleApplied = best ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">Bundle (${escapeHtml(best.name)}) −${money(discount)}</div>` : "";
+    const expressLine = express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : "";
 
     const html = `
       <div class="muted">Auswahl: ${escapeHtml(dLabel(d))} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
       <div class="divider"></div>
-      <div>${lines.join("<br>")}</div>
-      ${notes.length ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">${notes.join("<br>")}</div>` : ""}
-      ${express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : ""}
+      ${lines}
+      ${bundleApplied}
+      ${expressLine}
       <div class="divider"></div>
-      <div class="muted">Hinweis: PC/Laptop Austausch = 29 € Arbeit + Teile. Teile werden transparent vorab bestätigt.</div>
+      <div class="muted">Hinweis: Bei Austausch = 29 € Arbeit + Teile (transparent vorab bestätigt).</div>
     `;
 
     setResult({
@@ -1746,13 +1712,13 @@ function recalc(){
       final,
       savings: og-final,
       breakdownHtml: html,
-      bundlesHtml:"",
-      showBundles:false
+      bundlesHtml,
+      showBundles:true
     });
     return;
   }
 
-  // Console
+  // Konsole
   if(d==="console"){
     const issue = $("c_console_issue").value;
     if(!issue){
@@ -1762,7 +1728,7 @@ function recalc(){
 
     let subtotal=0;
     let items=[];
-    let keysSwitch=[];
+    let rules=[];
 
     if(issue.includes("Weiß") || issue.includes("Diagnose")){
       subtotal += PRICE_DIAG;
@@ -1777,106 +1743,170 @@ function recalc(){
       subtotal += PC_LABOR;
       items.push({name:"PSU Problem – Arbeit", price:PC_LABOR});
       items.push({name:"Teile (PSU) – vorab bestätigt", price:0});
-    } else if(issue.includes("Switch Display")){
-      show("switchDisplayWrap", true);
-      const v = $("c_switch_variant").value;
-      if(!v){
+    } else if(issue.includes("Nintendo Switch")){
+      // Switch selections
+      const wantDisplay = $("sw_display").checked;
+      const wantBatt    = $("sw_batt").checked;
+      const wantCharge  = $("sw_charge").checked;
+
+      const variant = $("c_switch_variant").value;
+
+      if(wantDisplay && !variant){
         setResult({final:null, breakdownHtml:"Bitte Switch Display-Variante auswählen."});
         return;
       }
-      const pr = SWITCH_DISPLAY[v] ?? 129;
-      subtotal += pr;
-      items.push({name:`${labelSwitch(v)} Display`, price:pr});
-      keysSwitch.push("display");
-    } else {
-      show("switchDisplayWrap", false);
+
+      let keys=[];
+      if(wantDisplay){
+        subtotal += (SWITCH.display[variant] ?? 0);
+        items.push({name:`Switch Display (${variant.replaceAll("_"," ")})`, price:(SWITCH.display[variant] ?? 0)});
+        keys.push("display");
+      }
+      if(wantBatt){
+        const bp = (SWITCH.battery[variant] ?? 79);
+        subtotal += bp;
+        items.push({name:"Switch Akku", price:bp});
+        keys.push("battery");
+      }
+      if(wantCharge){
+        subtotal += SWITCH.charge;
+        items.push({name:"Switch Ladebuchse", price:SWITCH.charge});
+        keys.push("charge");
+      }
+
+      if(keys.length===0){
+        setResult({final:null, breakdownHtml:"Bitte bei Switch mindestens eine Option auswählen (Display/Akku/Ladebuchse)."});
+        return;
+      }
+
+      const best = bestBundleSwitch(keys);
+      if(best) rules.push(best.name);
+
+      // apply best bundle
+      let bestB = bestBundleSwitch(keys);
+      let discount = bestB ? Math.round(subtotal * bestB.pct) : 0;
+
+      // optional maintenance
+      const maint = $("c_console_maint").checked;
+      if(maint){
+        subtotal += CONSOLE_MAINT;
+        items.push({name:"Maintenance (Reinigung + Wärmeleitpaste)", price:CONSOLE_MAINT});
+      }
+
+      const og = subtotal + expressAdd;
+      const final = Math.max(0, subtotal - discount + expressAdd);
+
+      const bundlesHtml = BUNDLES_SWITCH.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
+
+      const lines = items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("");
+      const bundleApplied = bestB ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">Bundle (${escapeHtml(bestB.name)}) −${money(discount)}</div>` : "";
+      const expressLine = express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : "";
+
+      const html = `
+        <div class="muted">Auswahl: ${escapeHtml(dLabel(d))} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
+        <div class="divider"></div>
+        ${lines}
+        ${bundleApplied}
+        ${expressLine}
+        <div class="divider"></div>
+        <div class="muted">Hinweis: Endpreis nach kurzer Prüfung/Teileverfügbarkeit.</div>
+      `;
+
+      setResult({
+        og: (discount>0 ? og : null),
+        final,
+        savings: og-final,
+        breakdownHtml: html,
+        bundlesHtml,
+        showBundles:true
+      });
+      return;
     }
 
-    // optional maintenance checkbox (if not already selected)
+    // optional maintenance + HDMI bundle
     const maint = $("c_console_maint").checked;
     if(maint && !issue.includes("Maintenance")){
       subtotal += CONSOLE_MAINT;
       items.push({name:"Maintenance (Reinigung + Wärmeleitpaste)", price:CONSOLE_MAINT});
     }
+    if(issue.includes("HDMI") && maint){
+      rules.push("hdmi+maint");
+    }
 
-    // Switch-specific bundles (only if Nintendo Switch AND user selects add-ons)
-    // (simple: if switch display selected + we allow optional “Akku / Ladebuchse” by checking parts? not present here)
-    // We'll offer these bundles in bundleBox only when Switch chosen in model name:
-    let discount=0;
     let best=null;
-    const isSwitch = /switch/i.test(m);
+    for(const bdl of BUNDLES_CONSOLE){
+      if(rules.includes(bdl.rule)){
+        if(!best || bdl.pct>best.pct) best=bdl;
+      }
+    }
+    let discount = best ? Math.round(subtotal * best.pct) : 0;
 
-    // For switch: if they selected display, and also choose maintenance? not in your bundle list—bundle is Akku+Display etc.
-    // Here we implement the bundle display (info) & automatic only if keys exist:
-    // We add "virtual" keys if model includes "Lite" and they do battery? (not selected) -> kept minimal.
-    // We'll still show the Switch bundles list as "available".
-    const bundlesHtml = BUNDLES_SWITCH.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
+    const og = subtotal + expressAdd;
+    const final = Math.max(0, subtotal - discount + expressAdd);
 
-    const express = $("c_express").checked;
-    const og = subtotal + (express ? EXPRESS_FEE : 0);
-    const final = subtotal + (express ? EXPRESS_FEE : 0) - discount;
+    const bundlesHtml = BUNDLES_CONSOLE.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
+
+    const lines = items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("");
+    const bundleApplied = best ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">Bundle (${escapeHtml(best.name)}) −${money(discount)}</div>` : "";
+    const expressLine = express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : "";
 
     const html = `
       <div class="muted">Auswahl: ${escapeHtml(dLabel(d))} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
       <div class="divider"></div>
-      ${items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("")}
-      ${express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : ""}
+      ${lines}
+      ${bundleApplied}
+      ${expressLine}
       <div class="divider"></div>
       <div class="muted">Hinweis: Endpreis nach kurzer Prüfung/Teileverfügbarkeit.</div>
     `;
 
-    // show switch bundles table only if switch model
     setResult({
-      og: null,
-      final: Math.round(final),
-      savings: 0,
+      og: (discount>0 ? og : null),
+      final,
+      savings: og-final,
       breakdownHtml: html,
-      bundlesHtml: isSwitch ? bundlesHtml : "",
-      showBundles: isSwitch
+      bundlesHtml,
+      showBundles:true
     });
     return;
   }
 
   // Controller
   if(d==="controller"){
-    const diag = $("ctl_diag").checked;
-    const drift = $("ctl_drift").checked;
-    const buttons = $("ctl_buttons").checked;
-    const hall = $("ctl_hall").checked;
-    const batt = $("ctl_batt").checked;
-    const conn = $("ctl_conn").checked;
+    const keys=[];
+    let subtotal=0;
+    let items=[];
 
-    if(!diag && !drift && !buttons && !hall && !batt && !conn){
+    if($("ctl_diag").checked){ subtotal += CTL.diag; items.push({name:"Diagnose", price:CTL.diag}); }
+    if($("ctl_drift").checked){ subtotal += CTL.drift; items.push({name:"Stick-Drift (beide Sticks, kompletter Tausch)", price:CTL.drift}); keys.push("drift"); }
+    if($("ctl_buttons").checked){ subtotal += CTL.buttons; items.push({name:"Buttons-Austausch (alle)", price:CTL.buttons}); keys.push("buttons"); }
+    if($("ctl_hall").checked){ subtotal += CTL.hall; items.push({name:"Hall-Effect Sticks Upgrade", price:CTL.hall}); keys.push("hall"); }
+    if($("ctl_batt").checked){ subtotal += CTL.batt; items.push({name:"Akku / Laden", price:CTL.batt}); keys.push("batt"); }
+    if($("ctl_conn").checked){ subtotal += CTL.conn; items.push({name:"Verbindung / Pairing", price:CTL.conn}); keys.push("conn"); }
+
+    if(items.length===0){
       setResult({final:null, breakdownHtml:"Bitte mindestens eine Controller-Leistung auswählen."});
       return;
     }
 
-    let subtotal=0;
-    let items=[];
+    const best = bestBundleController(keys);
+    let discount = best ? Math.round(subtotal * best.pct) : 0;
 
-    if(diag){ subtotal += CTL.diag; items.push({name:"Diagnose", price:CTL.diag}); }
-    if(drift){ subtotal += CTL.drift; items.push({name:"Stick-Drift (beide Sticks, kompletter Tausch)", price:CTL.drift}); }
-    if(buttons){ subtotal += CTL.buttons; items.push({name:"Buttons-Austausch (alle)", price:CTL.buttons}); }
-    if(hall){ subtotal += CTL.hall; items.push({name:"Hall-Effect Sticks Upgrade", price:CTL.hall}); }
-    if(batt){ subtotal += CTL.batt; items.push({name:"Akku / Laden", price:CTL.batt}); }
-    if(conn){ subtotal += CTL.conn; items.push({name:"Verbindung / Pairing", price:CTL.conn}); }
-
-    const best = bestBundleController();
-    let discount=0;
-    if(best) discount = Math.round(subtotal * best.pct);
-
-    const express = $("c_express").checked;
-    const og = subtotal + (express ? EXPRESS_FEE : 0);
-    const final = Math.max(0, subtotal - discount + (express ? EXPRESS_FEE : 0));
+    const og = subtotal + expressAdd;
+    const final = Math.max(0, subtotal - discount + expressAdd);
 
     const bundlesHtml = BUNDLES_CONTROLLER.map(x=>`<li>${escapeHtml(x.name)} · <b>${Math.round(x.pct*100)}%</b></li>`).join("");
+
+    const lines = items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("");
+    const bundleApplied = best ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">Bundle (${escapeHtml(best.name)}) −${money(discount)}</div>` : "";
+    const expressLine = express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : "";
 
     const html = `
       <div class="muted">Auswahl: ${escapeHtml(dLabel(d))} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
       <div class="divider"></div>
-      ${items.map(it=>`<div>${escapeHtml(it.name)}: <b>${money(it.price)}</b></div>`).join("")}
-      ${best ? `<div style="margin-top:10px;color:rgba(66,230,224,.95);font-weight:1000">Bundle (${escapeHtml(best.name)}) −${money(discount)}</div>` : ""}
-      ${express ? `<div style="margin-top:10px"><b>Express:</b> +${money(EXPRESS_FEE)}</div>` : ""}
+      ${lines}
+      ${bundleApplied}
+      ${expressLine}
       <div class="divider"></div>
       <div class="muted">Hinweis: Diagnose ist kostenlos bei Reparatur (sonst 29 €).</div>
     `;
@@ -1911,47 +1941,9 @@ function buildSummaryText(){
   let selInfo = `Auswahl: ${dLabel(d)} · ${b} · ${m}`;
   if(q) selInfo += `\nQualität: ${q==="oem"?"OEM":"Aftermarket"}`;
 
-  let details = "";
-  if(d==="phone" || d==="tablet"){
-    const parts = selectedParts().map(partLabel);
-    const svcs = selectedSvcs().map(s=>{
-      if(s==="backup") return "Backup/Datenübertragung";
-      if(s==="diagnose") return "Diagnose";
-      return s;
-    });
-    if(parts.length) details += `\nTeile: ${parts.join(", ")}`;
-    if(svcs.length) details += `\nServices: ${svcs.join(", ")}`;
-  }
-  if(d==="pc" || d==="laptop"){
-    const issue = $("c_pc_issue").value;
-    if(issue) details += `\nService: ${issue}`;
-    const p = $("c_parts_price").value;
-    if(p) details += `\nTeile (geschätzt): ${p} €`;
-    if($("c_maint").checked) details += `\n+ Maintenance`;
-    if($("c_pc_backup").checked) details += `\n+ Backup/Datenübertragung`;
-  }
-  if(d==="console"){
-    const issue = $("c_console_issue").value;
-    if(issue) details += `\nService: ${issue}`;
-    if(issue && issue.includes("Switch Display")){
-      details += `\nVariante: ${labelSwitch($("c_switch_variant").value||"")}`;
-    }
-    if($("c_console_maint").checked) details += `\n+ Maintenance`;
-  }
-  if(d==="controller"){
-    const a=[];
-    if($("ctl_drift").checked) a.push("Stick-Drift (beide)");
-    if($("ctl_buttons").checked) a.push("Buttons");
-    if($("ctl_hall").checked) a.push("Hall-Effect");
-    if($("ctl_batt").checked) a.push("Akku/Laden");
-    if($("ctl_conn").checked) a.push("Verbindung");
-    if($("ctl_diag").checked) a.push("Diagnose");
-    if(a.length) details += `\nService: ${a.join(", ")}`;
-  }
-
   const appointment = (date && time) ? `\nTermin: ${date} · ${time} (Mo–Fr 09:00–17:30)` : "";
 
-  return `TECH+VAN Termin/Anfrage\n${selInfo}${details}${appointment}\nPreis: ${priceText}\n\nAnfahrt: 10 km kostenlos, danach 0,30 €/km`;
+  return `TECH+VAN Termin/Anfrage\n${selInfo}${appointment}\nPreis: ${priceText}\n\nAnfahrt: 10 km kostenlos, danach 0,30 €/km`;
 }
 
 function updateShareLinks(){
@@ -1976,65 +1968,324 @@ function sendCustomMail(){
   return false;
 }
 
+/* =========================
+   Appointment: Mo–Fr 09:00–17:30, earliest tomorrow, max 2 months
+========================= */
+function initTimes(){
+  const sel = $("t_time");
+  sel.innerHTML = "";
+  const start = 9*60, end = 17*60+30;
+  for(let m=start; m<=end; m+=30){
+    const hh = String(Math.floor(m/60)).padStart(2,"0");
+    const mm = String(m%60).padStart(2,"0");
+    const opt = document.createElement("option");
+    opt.value = `${hh}:${mm}`;
+    opt.textContent = `${hh}:${mm}`;
+    sel.appendChild(opt);
+  }
+}
+function toISODate(d){
+  const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+  return z.toISOString().slice(0,10);
+}
+function addMonths(date, months){
+  const d = new Date(date);
+  d.setMonth(d.getMonth()+months);
+  return d;
+}
+function isWeekday(dateObj){
+  const day = dateObj.getDay();
+  return day >= 1 && day <= 5;
+}
+function nextValidDateFrom(dateObj){
+  const d = new Date(dateObj);
+  d.setDate(d.getDate()+1);
+  while(!isWeekday(d)) d.setDate(d.getDate()+1);
+  return d;
+}
+function validateAppointment(){
+  const today = new Date();
+  const min = nextValidDateFrom(today);
+  const max = addMonths(today, 2);
+
+  const input = $("t_date");
+  input.min = toISODate(min);
+  input.max = toISODate(max);
+
+  if(!input.value) input.value = toISODate(min);
+
+  const picked = new Date(input.value+"T00:00:00");
+  let fixed = picked;
+
+  if(picked < min) fixed = min;
+  if(picked > max) fixed = max;
+
+  if(!isWeekday(fixed)){
+    let temp = new Date(fixed);
+    while(!isWeekday(temp) && temp<=max) temp.setDate(temp.getDate()+1);
+    fixed = temp<=max ? temp : max;
+  }
+
+  input.value = toISODate(fixed);
+  $("dateHint").textContent =
+    `Frühester Termin: ${toISODate(min)} · Spätester Termin: ${toISODate(max)} (nur Mo–Fr)`;
+}
+
+/* =========================
+   Ankauf calculator (geschätzt)
+========================= */
+const BUY_MARKET = {
+  phone: {
+    "Apple (iPhone)": {
+      "iPhone 11": 180,
+      "iPhone 11 Pro": 220,
+      "iPhone 11 Pro Max": 240,
+      "iPhone 12": 210,
+      "iPhone 12 Pro": 240,
+      "iPhone 12 Pro Max": 270,
+      "iPhone 13": 260,
+      "iPhone 13 Pro": 310,
+      "iPhone 13 Pro Max": 340,
+      "iPhone 14": 320,
+      "iPhone 14 Pro": 420,
+      "iPhone 14 Pro Max": 460,
+      "iPhone 15": 420,
+      "iPhone 15 Pro": 550,
+      "iPhone 15 Pro Max": 620
+    },
+    "Samsung": {
+      "Galaxy S21": 180,
+      "Galaxy S22": 240,
+      "Galaxy S23": 340,
+      "Galaxy S24": 460
+    }
+  },
+  console: {
+    "Nintendo": {
+      "Switch": 120,
+      "Switch OLED": 160,
+      "Switch Lite": 90,
+      "Switch 2": 180
+    },
+    "PlayStation": {
+      "PS4": 110,
+      "PS4 Pro": 140,
+      "PS5": 320,
+      "PS5 Slim": 360
+    },
+    "Xbox": {
+      "Xbox One": 90,
+      "Xbox One S": 110,
+      "Xbox One X": 140,
+      "Xbox Series S": 170,
+      "Xbox Series X": 280
+    }
+  },
+  controller: {
+    "PlayStation Controller": {
+      "DualShock 4 (PS4)": 25,
+      "DualSense (PS5)": 40
+    },
+    "Xbox Controller": {
+      "Xbox One Controller": 25,
+      "Xbox Series Controller": 35
+    },
+    "Switch Joy-Con": {
+      "Joy-Con (Links/Rechts)": 20,
+      "Pro Controller": 35
+    }
+  }
+};
+
+const STORAGE_BONUS = {
+  "64 GB": 0,
+  "128 GB": 10,
+  "256 GB": 20,
+  "512 GB": 35,
+  "1 TB": 55
+};
+
+const COND_MULT = {
+  schlecht: 0.65,
+  okay: 0.78,
+  gut: 0.88,
+  sehrgut: 0.95,
+  wieneu: 1.00
+};
+
+// Defekt-Abzüge (einfach & fair) + Sicherheitsmarge -20€
+const BUY_DEF_DEDUCT = {
+  display: 70,
+  battery: 40,
+  camera: 50,
+  speaker: 25,
+  wlan: 30,
+  noscreen: 110
+};
+const BUY_MARGIN = 20;
+
+function onBuyType(){
+  const t = $("buy_type").value;
+  $("buy_brandWrap").style.display = t ? "block" : "none";
+  $("buy_modelWrap").style.display = "none";
+  $("buy_price").textContent = "–";
+
+  $("buy_brand").innerHTML = "";
+  $("buy_model").value = "";
+  $("buyModelList").innerHTML = "";
+
+  if(!t) return;
+
+  const brands = Object.keys(BUY_MARKET[t] || {});
+  setOptions($("buy_brand"), "Bitte wählen…", brands);
+  calcBuyPrice();
+}
+
+function onBuyBrand(){
+  const t = $("buy_type").value;
+  const b = $("buy_brand").value;
+  $("buy_modelWrap").style.display = !!b;
+
+  $("buy_model").value = "";
+  $("buyModelList").innerHTML = "";
+
+  const models = Object.keys((BUY_MARKET[t]||{})[b] || {});
+  setDatalist($("buyModelList"), models);
+
+  calcBuyPrice();
+}
+
+function calcBuyPrice(){
+  const t = $("buy_type").value;
+  const b = $("buy_brand").value;
+  const m = $("buy_model").value.trim();
+  const cond = $("buy_condition").value;
+
+  if(!t || !b || !m || !cond){
+    $("buy_price").textContent = "–";
+    return;
+  }
+
+  let base = ((BUY_MARKET[t]||{})[b]||{})[m];
+  if(!base){
+    // unknown model fallback:
+    base = (t==="phone") ? 180 : (t==="console" ? 120 : 25);
+  }
+
+  // storage bonus only meaningful for phone
+  const storage = $("buy_storage").value;
+  if(t==="phone" && storage && STORAGE_BONUS[storage]!=null){
+    base += STORAGE_BONUS[storage];
+  }
+
+  // condition multiplier
+  base = Math.round(base * (COND_MULT[cond] || 0.88));
+
+  // defect deductions
+  let ded = 0;
+  document.querySelectorAll(".buy_def:checked").forEach(ch=>{
+    ded += (BUY_DEF_DEDUCT[ch.value] || 0);
+  });
+
+  // safety margin
+  const offer = Math.max(0, base - ded - BUY_MARGIN);
+
+  $("buy_price").textContent = money(offer);
+
+  // sync into form
+  const devText = `${t==="phone"?"Smartphone":t==="console"?"Konsole":"Controller"} · ${b} · ${m}${(t==="phone" && storage)?(" · "+storage):""}`;
+  $("b_device").value = devText;
+
+  updateBuyWhatsApp();
+}
+
+function updateBuyWhatsApp(){
+  const price = $("buy_price").textContent;
+  const name = $("b_name").value.trim();
+  const email= $("b_email").value.trim();
+  const dev  = $("b_device").value.trim();
+  const msg  = $("b_msg").value.trim();
+
+  const text = `TECH+VAN Ankauf Anfrage\n\nName: ${name}\nE-Mail: ${email}\nGerät: ${dev}\nGeschätzter Ankaufpreis: ${price}\n\nHinweis: Endpreis nach Prüfung bei Ankunft.\n\n${msg}`;
+  $("btnWA_buy").href = "https://wa.me/4917641286003?text=" + encodeURIComponent(text);
+}
+
 function sendBuyMail(){
+  if(!$("b_reset").checked || !$("b_photos").checked || !$("b_check").checked){
+    alert("Bitte bestätige alle 3 Checkboxen (Zurücksetzen/Fotos/Prüfung).");
+    return false;
+  }
+
   const name=$("b_name").value.trim();
   const email=$("b_email").value.trim();
-  const phone=$("b_phone").value.trim();
   const device=$("b_device").value.trim();
-  const storage=$("b_storage").value.trim();
-  const state=$("b_state").value;
-  const defect=$("b_defect").value.trim();
+  const price=$("buy_price").textContent;
   const msg=$("b_msg").value.trim();
 
   const subject = encodeURIComponent("TECH+VAN Ankauf Anfrage");
   const body = encodeURIComponent(
-    `Name: ${name}\nE-Mail: ${email}\nTelefon: ${phone}\n\nGerät: ${device}\nSpeicher/Version: ${storage}\nZustand: ${state}\nDefekt: ${defect}\n\nZusatzinfo:\n${msg}\n\nBestätigungen:\n- Gerät zurückgesetzt: JA\n- Fotos vor Versand: JA\n- Endpreis nach Prüfung: JA\n`
+    `Name: ${name}\nE-Mail: ${email}\nGerät: ${device}\nGeschätzter Ankaufpreis: ${price}\n\nBestätigungen:\n- Gerät zurückgesetzt: JA\n- Fotos vor Versand: JA\n- Endpreis nach Prüfung: JA\n\nZusatzinfo:\n${msg}\n`
   );
   window.location.href = `mailto:techvanservice@gmail.com?subject=${subject}&body=${body}`;
   return false;
 }
 
-/* WhatsApp buttons for forms */
-function updateFormWhatsApps(){
-  // custom
+/* Custom WhatsApp */
+function updateCustomWhatsApp(){
   const name=$("f_name").value.trim();
   const place=$("f_place").value.trim();
   const email=$("f_email").value.trim();
   const msg=$("f_msg").value.trim();
   const date=$("t_date").value;
   const time=$("t_time").value;
+
   const t = `TECH+VAN Custom/Aufrüstung\nName: ${name}\nOrt/PLZ: ${place}\nE-Mail: ${email}\nTerminwunsch: ${date} ${time}\n\n${msg}`;
   $("btnWA_custom").href = "https://wa.me/4917641286003?text=" + encodeURIComponent(t);
-
-  // buy
-  const bn=$("b_name").value.trim();
-  const be=$("b_email").value.trim();
-  const bp=$("b_phone").value.trim();
-  const bd=$("b_device").value.trim();
-  const bs=$("b_storage").value.trim();
-  const st=$("b_state").value;
-  const df=$("b_defect").value.trim();
-  const bm=$("b_msg").value.trim();
-
-  const tb = `TECH+VAN Ankauf Anfrage\nName: ${bn}\nE-Mail: ${be}\nTelefon: ${bp}\nGerät: ${bd}\nSpeicher/Version: ${bs}\nZustand: ${st}\nDefekt: ${df}\n\nBestätigt: Zurückgesetzt + Fotos + Prüfung OK\n\n${bm}`;
-  $("btnWA_buy").href = "https://wa.me/4917641286003?text=" + encodeURIComponent(tb);
 }
 
-/* Keep WhatsApp links fresh */
-["f_name","f_place","f_email","f_msg","b_name","b_email","b_phone","b_device","b_storage","b_state","b_defect","b_msg"].forEach(id=>{
-  const el=$(id);
-  if(el) el.addEventListener("input", updateFormWhatsApps);
-  if(el) el.addEventListener("change", updateFormWhatsApps);
-});
+/* =========================
+   Share links for calculator
+========================= */
+function updateShareLinks(){
+  const txt = buildSummaryText();
+  $("btnWA").href = "https://wa.me/4917641286003?text=" + encodeURIComponent(txt);
+  $("btnMail").href = `mailto:techvanservice@gmail.com?subject=${encodeURIComponent("TECH+VAN Termin/Anfrage")}&body=${encodeURIComponent(txt)}`;
+}
 
 /* =========================
    Init
 ========================= */
+function initTimes(){
+  const sel = $("t_time");
+  sel.innerHTML = "";
+  const start = 9*60, end = 17*60+30;
+  for(let m=start; m<=end; m+=30){
+    const hh = String(Math.floor(m/60)).padStart(2,"0");
+    const mm = String(m%60).padStart(2,"0");
+    const opt = document.createElement("option");
+    opt.value = `${hh}:${mm}`;
+    opt.textContent = `${hh}:${mm}`;
+    sel.appendChild(opt);
+  }
+}
+
 initTimes();
 validateAppointment();
+resetCalc();
 updateShareLinks();
-updateFormWhatsApps();
-resetCalc(); // keeps clean first view
+
+["f_name","f_place","f_email","f_msg"].forEach(id=>{
+  const el=$(id); if(!el) return;
+  el.addEventListener("input", updateCustomWhatsApp);
+  el.addEventListener("change", updateCustomWhatsApp);
+});
+["b_name","b_email","b_msg"].forEach(id=>{
+  const el=$(id); if(!el) return;
+  el.addEventListener("input", updateBuyWhatsApp);
+  el.addEventListener("change", updateBuyWhatsApp);
+});
+updateCustomWhatsApp();
+updateBuyWhatsApp();
 </script>
 </body>
 </html>
