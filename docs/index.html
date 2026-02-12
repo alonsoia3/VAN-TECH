@@ -510,147 +510,160 @@
   </section>
 
   <!-- ANKAUF -->
-  <section class="card section" id="ankauf">
-    <div class="priceTop">
-      <div>
-        <h2 style="margin:0">Ankauf / Verkauf (fair & transparent)</h2>
-        <p class="muted" style="margin:6px 0 0">
-          Wir kaufen Smartphones, Tablets, PCs/Laptops, Konsolen & Controller an. Preis ist immer eine Schätzung – finale Prüfung nach Eingang.
-        </p>
-      </div>
-      <div class="ctaRow" style="margin:0">
-        <button class="btn ghost" type="button" onclick="resetForm('ankaufForm'); resetAnkaufUI();">Zurücksetzen</button>
-      </div>
+<section class="card section" id="ankauf">
+  <div class="priceTop">
+    <div>
+      <h2 style="margin:0">Ankauf / Verkauf (fair & transparent)</h2>
+      <p class="muted" style="margin:6px 0 0">
+        Wir kaufen Smartphones, Tablets, PCs/Laptops, Konsolen & Controller an. Preis ist immer eine Schätzung – finale Prüfung nach Eingang.
+      </p>
     </div>
+    <div class="ctaRow" style="margin:0">
+      <button class="btn ghost" type="button" onclick="resetForm('ankaufForm'); resetAnkaufUI();">Zurücksetzen</button>
+    </div>
+  </div>
 
-    <div class="priceBox" style="margin-top:14px;">
-      <form id="ankaufForm" onsubmit="return submitForm('ankaufForm','Ankauf');">
-        <div class="row cols2">
-          <div>
-            <label>Gerätetyp</label>
-            <select id="a_type" name="geraet" onchange="onAnkaufType()" required>
-              <option value="">Bitte wählen…</option>
-              <option value="smartphone">Smartphone</option>
-              <option value="tablet">Tablet</option>
-              <option value="pc">PC</option>
-              <option value="laptop">Laptop</option>
-              <option value="konsole">Konsole</option>
-              <option value="controller">Controller</option>
-            </select>
+  <div class="priceBox" style="margin-top:14px;">
+    <!-- ✅ EIN FORMULAR: Ankauf + Anfragebox zusammen -->
+    <form id="ankaufForm" onsubmit="return submitForm('ankaufForm','Ankauf');">
+      <div class="row cols2">
 
-            <div class="field" id="a_brandWrap" style="display:none;">
-              <label>Marke</label>
-              <select id="a_brand" name="marke" onchange="onAnkaufBrand()" required></select>
-            </div>
+        <!-- LINKS: Ankauf-Schätzung -->
+        <div>
+          <label>Gerätetyp</label>
+          <select id="a_type" name="geraet" onchange="onAnkaufType()" required>
+            <option value="">Bitte wählen…</option>
+            <option value="smartphone">Smartphone</option>
+            <option value="tablet">Tablet</option>
+            <option value="pc">PC</option>
+            <option value="laptop">Laptop</option>
+            <option value="konsole">Konsole</option>
+            <option value="controller">Controller</option>
+          </select>
 
-            <div class="field" id="a_modelWrap" style="display:none;">
-              <label>Modell (tippen/suchen)</label>
-              <input id="a_model" name="modell" list="a_modelList" placeholder="z.B. iPhone 12 Pro Max, Galaxy S21, PS5…" oninput="calcAnkauf()" required>
-              <datalist id="a_modelList"></datalist>
-            </div>
-
-            <div class="field" id="a_storageWrap" style="display:none;">
-              <label>Speicher</label>
-              <select id="a_storage" name="speicher" onchange="calcAnkauf()">
-                <option value="">Unbekannt</option>
-                <option value="64">64 GB</option>
-                <option value="128">128 GB</option>
-                <option value="256">256 GB</option>
-                <option value="512">512 GB</option>
-                <option value="1024">1 TB</option>
-              </select>
-            </div>
-
-            <div class="field" id="a_condWrap" style="display:none;">
-              <label>Zustand</label>
-              <select id="a_condition" name="zustand" onchange="calcAnkauf()" required>
-                <option value="">Bitte wählen…</option>
-                <option value="schlecht">Schlecht</option>
-                <option value="okay">Okay</option>
-                <option value="gut">Gut</option>
-                <option value="sehrgut">Sehr gut</option>
-                <option value="wieneu">Wie neu</option>
-              </select>
-              <div class="fine" id="condHint" style="margin-top:6px"></div>
-            </div>
-
-            <div class="checks" style="margin-top:12px">
-              <div class="checkItem">
-                <input id="a_reset" type="checkbox" name="werkeinstellung" required>
-                <div>
-                  <b>Ich bestätige, dass das Gerät auf Werkseinstellungen zurückgesetzt ist.</b>
-                  <div class="muted">Ohne Reset können wir den Ankauf nicht abschließen.</div>
-                </div>
-              </div>
-              <div class="checkItem">
-                <input id="a_photos" type="checkbox" name="fotos" required>
-                <div>
-                  <b>Ich sende Fotos vor dem Versand.</b>
-                  <div class="muted">Front, Rückseite, Rahmen, Display (nah), ggf. Schaden.</div>
-                </div>
-              </div>
-              <div class="checkItem">
-                <input id="a_dhl" type="checkbox" name="versand" required>
-                <div>
-                  <b>Versand per DHL möglich.</b>
-                  <div class="muted">Finale Prüfung nach Eingang. Preis kann leicht abweichen.</div>
-                </div>
-              </div>
-            </div>
-
+          <div class="field" id="a_brandWrap" style="display:none;">
+            <label>Marke</label>
+            <select id="a_brand" name="marke" onchange="onAnkaufBrand()" required></select>
           </div>
 
-          <div>
-            <div class="big" style="font-weight:900;font-size:18px;">Geschätzter Ankaufpreis</div>
-            <div id="ankaufOut" class="note" style="margin-top:10px;">
-              Bitte Gerätetyp wählen.
-            </div>
+          <div class="field" id="a_modelWrap" style="display:none;">
+            <label>Modell (tippen/suchen)</label>
+            <input id="a_model" name="modell" list="a_modelList"
+                   placeholder="z.B. iPhone 12 Pro Max, Galaxy S21, PS5…" oninput="calcAnkauf()" required>
+            <datalist id="a_modelList"></datalist>
+          </div>
 
-            <div class="note" style="margin-top:10px;">
-              <b style="color:var(--text)">Wichtig:</b><br>
-              PC/Laptop/Mac: Ankauf hängt stark von Komponenten (CPU/GPU/RAM/SSD) ab – bitte Anfrage senden.<br>
-              Endgültiger Preis nach kurzer Prüfung & Bestätigung.
-            </div>
+          <div class="field" id="a_storageWrap" style="display:none;">
+            <label>Speicher</label>
+            <select id="a_storage" name="speicher" onchange="calcAnkauf()">
+              <option value="">Unbekannt</option>
+              <option value="64">64 GB</option>
+              <option value="128">128 GB</option>
+              <option value="256">256 GB</option>
+              <option value="512">512 GB</option>
+              <option value="1024">1 TB</option>
+            </select>
+          </div>
 
-            <div class="divider"></div>
+          <div class="field" id="a_condWrap" style="display:none;">
+            <label>Zustand</label>
+            <select id="a_condition" name="zustand" onchange="calcAnkauf()" required>
+              <option value="">Bitte wählen…</option>
+              <option value="schlecht">Schlecht</option>
+              <option value="okay">Okay</option>
+              <option value="gut">Gut</option>
+              <option value="sehrgut">Sehr gut</option>
+              <option value="wieneu">Wie neu</option>
+            </select>
+            <div class="fine" id="condHint" style="margin-top:6px"></div>
+          </div>
 
-            <h3 style="margin:0 0 8px;">Ankauf / Aufrüstung / konkrete Fragen</h3>
-            <p class="muted" style="margin:0 0 10px;">
-              Schreibe uns hier deine genaue Frage (z.B. seltene Modelle, Spezial-Upgrades, Ankaufpreis verhandeln).
-              Das wird <b>direkt</b> an <b>techvanservice@gmail.com</b> gesendet.
-            </p>
-
-            <div class="row cols2">
+          <div class="checks" style="margin-top:12px">
+            <div class="checkItem">
+              <input id="a_reset" type="checkbox" name="werkeinstellung" required>
               <div>
-                <label>Name</label>
-                <input name="kontakt_name" placeholder="Vorname Nachname" required>
-              </div>
-              <div>
-                <label>E-Mail</label>
-                <input name="kontakt_email" type="email" placeholder="deinname@gmail.com" required>
+                <b>Ich bestätige, dass das Gerät auf Werkseinstellungen zurückgesetzt ist.</b>
+                <div class="muted">Ohne Reset können wir den Ankauf nicht abschließen.</div>
               </div>
             </div>
-            <div class="row cols2">
+            <div class="checkItem">
+              <input id="a_photos" type="checkbox" name="fotos" required>
               <div>
-                <label>Telefon (WhatsApp)</label>
-                <input name="kontakt_tel" placeholder="+49 ..." required>
-              </div>
-              <div>
-                <label>Ort / PLZ</label>
-                <input name="kontakt_ort" placeholder="z.B. 60311 Frankfurt" required>
+                <b>Ich sende Fotos/Videos vor dem Versand.</b>
+                <div class="muted">Front, Back, Seiten + sichtbare Defekte.</div>
               </div>
             </div>
-            <label style="margin-top:10px;display:block">Nachricht</label>
-            <textarea name="kontakt_msg" placeholder="Schreibe hier deine Anfrage..." required></textarea>
+            <div class="checkItem">
+              <input id="a_dhl" type="checkbox" name="versand" required>
+              <div>
+                <b>Versand per DHL möglich.</b>
+                <div class="muted">Finale Prüfung nach Eingang. Preis kann leicht abweichen.</div>
+              </div>
+            </div>
+          </div>
 
-            <div class="ctaRow">
-              <button class="btn primary" type="submit">📩 Anfrage senden</button>
-            </div>
+          <div class="divider"></div>
+
+          <div class="big" style="font-weight:900;font-size:18px;">Geschätzter Ankaufpreis</div>
+          <div id="ankaufOut" class="note" style="margin-top:10px;">
+            Bitte Gerätetyp wählen.
+          </div>
+
+          <div class="note" style="margin-top:10px;">
+            <b style="color:var(--text)">Wichtig:</b><br>
+            PC/Laptop/Mac: Preis hängt stark von Komponenten ab (CPU/GPU/RAM/SSD) – daher nur nach Anfrage/Prüfung.<br>
+            Endgültiger Preis nach kurzer Prüfung & Bestätigung.
           </div>
         </div>
-      </form>
-    </div>
-  </section>
+
+        <!-- RECHTS: Anfrage (im gleichen Formular!) -->
+        <div>
+          <h3 style="margin:0 0 8px;">Ankauf / Aufrüstung / konkrete Fragen</h3>
+          <p class="muted" style="margin:0 0 10px;">
+            Schreib uns hier deine genaue Frage (z.B. seltene Modelle, Spezial-Upgrades, Ankaufpreis verhandeln).
+            Wird direkt an <b>techvanservice@gmail.com</b> gesendet.
+          </p>
+
+          <div class="row cols2">
+            <div>
+              <label>Name</label>
+              <input name="kontakt_name" placeholder="Vorname Nachname" required>
+            </div>
+            <div>
+              <label>E-Mail</label>
+              <input name="kontakt_email" type="email" placeholder="deinname@gmail.com" required>
+            </div>
+          </div>
+
+          <div class="row cols2">
+            <div>
+              <label>Telefon (WhatsApp)</label>
+              <input name="kontakt_tel" placeholder="+49 ..." required>
+            </div>
+            <div>
+              <label>Ort / PLZ</label>
+              <input name="kontakt_ort" placeholder="z.B. 60311 Frankfurt" required>
+            </div>
+          </div>
+
+          <label style="margin-top:10px;display:block">Nachricht</label>
+          <textarea name="kontakt_msg" placeholder="Schreibe hier deine Anfrage..." required></textarea>
+
+          <div class="ctaRow">
+            <button class="btn primary" type="submit">📩 Anfrage senden</button>
+            <button class="btn ghost" type="button" onclick="resetForm('ankaufForm'); resetAnkaufUI();">Zurücksetzen</button>
+          </div>
+
+          <div class="note" style="margin-top:10px">
+            Hinweis: Ankaufpreise sind Richtwerte. Nach Eingang prüfen wir Zustand/Funktion und bestätigen final.
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</section>
+
 
   <!-- GEBIET -->
   <section class="card section" id="gebiet">
