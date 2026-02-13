@@ -763,6 +763,17 @@
               <input id="q_street" placeholder="z.B. Musterstraße 12">
             </div>
           </div>
+          <div class="row cols2" style="margin-top:10px;">
+  <div>
+    <label>Gerät</label>
+    <input id="q_device" placeholder="z.B. iPhone, iPad, PS5, Laptop…">
+  </div>
+  <div>
+    <label>Modell</label>
+    <input id="q_model" placeholder="z.B. iPhone 13 Pro Max, Switch OLED…">
+  </div>
+</div>
+
 
           <div class="field">
             <label>Nachricht</label>
@@ -2198,6 +2209,8 @@
       phone: byId("q_phone").value.trim(),
       place: byId("q_place").value.trim(),
       street: byId("q_street").value.trim(),
+      device: byId("q_device").value.trim(),
+model: byId("q_model").value.trim(),
       message: byId("q_msg").value.trim(),
       date: byId("q_date").value,
       time: byId("q_time").value,
