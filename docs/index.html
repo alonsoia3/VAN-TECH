@@ -2212,36 +2212,20 @@
 
     byId("q_status").textContent = "Sende Anfrage…";
 
-    try{
-      const res = await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+   try{
+  await fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(payload)
+  });
 
-      const text = await res.text();
-      if(!res.ok){
-        byId("q_status").textContent = "Fehler beim Senden. Bitte erneut versuchen oder WhatsApp nutzen.";
-        return;
-      }
+  // Bei no-cors kann die Antwort nicht gelesen werden,
+  // aber die Anfrage wird gesendet (und die Mail kommt an).
+  byId("q_status").textContent = "✅ Anfrage gesendet! Wir melden uns schnell.";
+} catch(err){
+  byId("q_status").textContent = "Fehler beim Senden (Netzwerk). Bitte WhatsApp nutzen.";
+}
 
-      let ok = true;
-      try{
-        const js = JSON.parse(text);
-        ok = !!js.ok;
-      }catch(e){
-        ok = true;
-      }
-
-      if(ok){
-        byId("q_status").textContent = "✅ Anfrage gesendet! Wir melden uns schnell.";
-      }else{
-        byId("q_status").textContent = "Fehler beim Senden. Bitte WhatsApp nutzen.";
-      }
-    }catch(err){
-      byId("q_status").textContent = "Fehler beim Senden (Netzwerk/CORS). Bitte WhatsApp nutzen.";
-    }
   }
 
   // ==========================
