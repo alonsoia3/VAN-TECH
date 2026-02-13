@@ -1168,145 +1168,221 @@
   }
   function isProMax(m){ return /(pro\s*max|max)/i.test(m||""); }
   function isPro(m){ return /\bpro\b/i.test(m||""); }
-  function mid(r){ return Math.round((r[0]+r[1])/2); }
+  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
 
-  // Part ranges (used as base piece cost reference)
-  const PART_RANGES_IPHONE = {
-    display: {
-      F_6S_8:    {am:[40,70], oem:[80,110]},
-      F_X_XR_XS: {am:[60,90], oem:[110,140]},
-      F_11:      {am:[80,120], oem:[140,180]},
-      F_12:      {am:[80,120], oem:[140,180]},
-      F_13:      {am:[90,130], oem:[160,200]},
-      F_14:      {am:[100,140], oem:[180,220]},
-      F_15:      {am:[120,160], oem:[200,250]},
-      F_16:      {am:[140,200], oem:[220,280]},
-      F_17:      {am:[160,220], oem:[240,320]}
-    },
-    battery: {
-      F_6S_8:    {am:[25,35], oem:[50,70]},
-      F_X_XR_XS: {am:[35,45], oem:[70,90]},
-      F_11:      {am:[40,50], oem:[90,110]},
-      F_12:      {am:[40,50], oem:[90,110]},
-      F_13:      {am:[45,60], oem:[100,120]},
-      F_14:      {am:[45,60], oem:[100,120]},
-      F_15:      {am:[50,70], oem:[110,140]},
-      F_16:      {am:[50,70], oem:[110,140]},
-      F_17:      {am:[60,80], oem:[130,160]}
-    },
-    cameraRearStd: {am:[60,100], oem:[120,160]},
-    cameraRearPro: {am:[90,140], oem:[160,220]},
-    cameraFront:   {am:[25,45],  oem:[60,90]},
-    charge:        {am:[20,50],  oem:[60,90]},
-    speaker:       {am:[10,30],  oem:[40,60]},
-    sensor:        {am:[10,25],  oem:[30,50]}
-  };
+  // Segment: Mid/Low (40–70) / High (70–120)
+  function isHighEndModel(model){
+    const s = (model||"").toLowerCase();
+    if(/\bpro\b/.test(s)) return true;
+    if(/\b15\b|\b16\b|\b17\b/.test(s)) return true;
+    return false;
+  }
+  function profitTarget(model, kind){
+    const hi = isHighEndModel(model);
+    const loRange = [40,70];
+    const hiRange = [70,120];
 
-  // Margins
-  function marginFor(kind, quality, model){
-    const lowEnd = !/15|16|17|pro/i.test((model||"").toLowerCase());
-    const hiEnd = /15|16|17|pro/i.test((model||"").toLowerCase());
-    const baseLow = {aftermarket:55, aftermarket_plus:60, oem:55};
-    const baseHi  = {aftermarket:75, aftermarket_plus:85, oem:85}; // high-end more profit allowed
-    const pick = hiEnd ? baseHi : baseLow;
+    const tweak = ({
+      display:  +8,
+      battery:  +0,
+      backglass:+0,
+      rearcam: +10,
+      frontcam:+4,
+      charge:  +4,
+      speaker: +0,
+      wlan:    +0
+    })[kind] ?? 0;
 
-    const map = {
-      display: pick,
-      battery: {aftermarket:45, aftermarket_plus:50, oem:50},
-      backglass:{aftermarket:55, aftermarket_plus:55, oem:55}, // Rückglas bleibt Aftermarket-Logik
-      frontcam:{aftermarket:45, aftermarket_plus:50, oem:50},
-      rearcam: {aftermarket:55, aftermarket_plus:70, oem:70},
-      charge:  {aftermarket:50, aftermarket_plus:55, oem:55},
-      speaker: {aftermarket:35, aftermarket_plus:40, oem:40},
-      wlan:    {aftermarket:40, aftermarket_plus:45, oem:45},
-      switch_display:{aftermarket:55, aftermarket_plus:55, oem:55},
-      usb:     {aftermarket:45, aftermarket_plus:45, oem:45}
-    };
-    const v = (map[kind] && map[kind][quality]) || (quality==="oem" ? 50 : 50);
-    return v;
+    const r = hi ? hiRange : loRange;
+    const base = Math.round((r[0] + r[1]) / 2);
+    const pm = isProMax(model) ? 8 : 0;
+
+    return clamp(base + tweak + pm, r[0], r[1]);
   }
 
-  // Translate quality to pricing tier
-  function tier(quality){
-    // aftermarket_plus is a middle between am and oem
-    if(quality === "aftermarket_plus") return "plus";
-    if(quality === "oem") return "oem";
-    return "am";
+  // Einkaufspreise (Aftermarket = AliExpress Ø)
+  const ALI_IPHONE_COST = {
+    displayBase: {
+      F_6S_8: 10,
+      F_X_XR_XS: 20,
+      F_11: 25,
+      F_12: 30,
+      F_13: 35,
+      F_14: 40,
+      F_15: 50,
+      F_16: 55,
+      F_17: 60
+    },
+    batteryBase: {
+      F_6S_8: 12,
+      F_X_XR_XS: 18,
+      F_11: 22,
+      F_12: 28,
+      F_13: 32,
+      F_14: 38,
+      F_15: 45,
+      F_16: 48,
+      F_17: 52
+    },
+    backglassBase: {
+      F_6S_8: 6,
+      F_X_XR_XS: 7,
+      F_11: 8,
+      F_12: 9,
+      F_13: 10,
+      F_14: 11,
+      F_15: 12,
+      F_16: 13,
+      F_17: 14
+    },
+    frontCamBase: 14,
+    rearCamStdBase: 24,
+    rearCamProBase: 34,
+    chargeBase: 12,
+    speakerBase: 8,
+    wlanBase: 10
+  };
+
+  function aliDisplayCost(model){
+    const fam = iphoneFamily(model);
+    let c = ALI_IPHONE_COST.displayBase[fam] ?? 35;
+    if(isPro(model)) c += 20;      // iPhone 13 Pro -> 55
+    if(isProMax(model)) c += 10;   // iPhone 15 Pro Max -> 80
+    return c;
+  }
+  function aliBatteryCost(model){
+    const fam = iphoneFamily(model);
+    let c = ALI_IPHONE_COST.batteryBase[fam] ?? 30;
+    if(isPro(model)) c += 3;
+    if(isProMax(model)) c += 5;
+
+    // fixe EK-Beispiele
+    const s = (model||"").toLowerCase();
+    if(s.includes("12 pro max")) c = 30;
+    if(s.includes("15 pro max")) c = 50;
+
+    return c;
+  }
+  function aliBackglassCost(model){
+    const fam = iphoneFamily(model);
+    return (ALI_IPHONE_COST.backglassBase[fam] ?? 10);
+  }
+  function aliOtherCost(kind, model){
+    const fam = iphoneFamily(model);
+    const famFactor = ({
+      F_6S_8: 0.90,
+      F_X_XR_XS: 1.00,
+      F_11: 1.05,
+      F_12: 1.10,
+      F_13: 1.15,
+      F_14: 1.20,
+      F_15: 1.30,
+      F_16: 1.35,
+      F_17: 1.40
+    })[fam] ?? 1.15;
+
+    let base = 12;
+    if(kind==="frontcam") base = ALI_IPHONE_COST.frontCamBase;
+    if(kind==="rearcam")  base = (isPro(model)||isProMax(model)) ? ALI_IPHONE_COST.rearCamProBase : ALI_IPHONE_COST.rearCamStdBase;
+    if(kind==="charge")   base = ALI_IPHONE_COST.chargeBase;
+    if(kind==="speaker")  base = ALI_IPHONE_COST.speakerBase;
+    if(kind==="wlan")     base = ALI_IPHONE_COST.wlanBase;
+
+    return Math.round(base * famFactor);
+  }
+
+  // Tier-Einkauf (Aftermarket / Aftermarket+ / OEM)
+  function tierCostPhoneTablet(kind, model, quality){
+    let base = 0;
+
+    if(kind==="display") base = aliDisplayCost(model);
+    else if(kind==="battery") base = aliBatteryCost(model);
+    else if(kind==="backglass") base = aliBackglassCost(model);
+    else base = aliOtherCost(kind, model);
+
+    if(quality === "aftermarket_plus"){
+      const mult = ({
+        display: 2.0,
+        battery: 1.8,
+        backglass: 1.6,
+        rearcam: 1.9,
+        frontcam: 1.8,
+        charge: 1.7,
+        speaker: 1.7,
+        wlan: 1.7
+      })[kind] ?? 1.8;
+
+      const minAdd = ({
+        display: 35,
+        battery: 20,
+        backglass: 15,
+        rearcam: 25,
+        frontcam: 20,
+        charge: 18,
+        speaker: 12,
+        wlan: 12
+      })[kind] ?? 20;
+
+      return Math.round(Math.max(base * mult, base + minAdd));
+    }
+
+    if(quality === "oem"){
+      const mult = ({
+        display: 2.7,
+        battery: 2.3,
+        backglass: 2.0,
+        rearcam: 2.6,
+        frontcam: 2.4,
+        charge: 2.3,
+        speaker: 2.3,
+        wlan: 2.3
+      })[kind] ?? 2.4;
+
+      const minAdd = ({
+        display: 70,
+        battery: 35,
+        backglass: 20,
+        rearcam: 55,
+        frontcam: 35,
+        charge: 30,
+        speaker: 20,
+        wlan: 20
+      })[kind] ?? 35;
+
+      return Math.round(Math.max(base * mult, base + minAdd));
+    }
+
+    return Math.round(base);
   }
 
   function phoneTabletPrice(kind, brand, model, quality){
     if(kind==="backup") return 29;
     if(kind==="diagnose") return 29;
 
-    const fam = iphoneFamily(model);
-    const tq = tier(quality);
-
-    // iPhone
+    // iPhone: AliExpress / Aftermarket+ / OEM Logik
     if(isIphone(model)){
-      if(kind==="display"){
-        const amR = PART_RANGES_IPHONE.display[fam].am;
-        const oR  = PART_RANGES_IPHONE.display[fam].oem;
-        const part = tq==="oem" ? mid(oR)
-                   : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2)
-                   : mid(amR);
-        return part + marginFor("display", quality, model);
+      // Rückglas/Panel: kein Aftermarket+ (wird zusätzlich in calcPrice geblockt)
+      if(kind==="backglass" && quality==="aftermarket_plus"){
+        quality = "aftermarket";
       }
-      if(kind==="battery"){
-        const amR = PART_RANGES_IPHONE.battery[fam].am;
-        const oR  = PART_RANGES_IPHONE.battery[fam].oem;
-        const part = tq==="oem" ? mid(oR)
-                   : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2)
-                   : mid(amR);
-        return part + marginFor("battery", quality, model);
-      }
-      if(kind==="frontcam"){
-        const amR = PART_RANGES_IPHONE.cameraFront.am;
-        const oR  = PART_RANGES_IPHONE.cameraFront.oem;
-        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
-        return part + marginFor("frontcam", quality, model);
-      }
-      if(kind==="rearcam"){
-        const src = (isPro(model)||isProMax(model)) ? PART_RANGES_IPHONE.cameraRearPro : PART_RANGES_IPHONE.cameraRearStd;
-        const amR = src.am, oR = src.oem;
-        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
-        return part + marginFor("rearcam", quality, model);
-      }
-      if(kind==="charge"){
-        const amR = PART_RANGES_IPHONE.charge.am, oR = PART_RANGES_IPHONE.charge.oem;
-        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
-        return part + marginFor("charge", quality, model);
-      }
-      if(kind==="speaker"){
-        const amR = PART_RANGES_IPHONE.speaker.am, oR = PART_RANGES_IPHONE.speaker.oem;
-        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
-        return part + marginFor("speaker", quality, model);
-      }
-      if(kind==="wlan"){
-        const amR = PART_RANGES_IPHONE.sensor.am, oR = PART_RANGES_IPHONE.sensor.oem;
-        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
-        return part + marginFor("wlan", quality, model);
-      }
-      if(kind==="backglass"){
-        // Rückglas: immer Aftermarket-Basis (wie gewünscht)
-        const base = (fam==="F_6S_8") ? 70 : (fam==="F_X_XR_XS") ? 90 : (fam==="F_11") ? 95 : (fam==="F_12") ? 110 :
-                     (fam==="F_13") ? 120 : (fam==="F_14") ? 130 : (fam==="F_15") ? 140 : (fam==="F_16") ? 150 : 160;
-        const part = base; // no OEM/plus differentiation for backglass
-        return part + marginFor("backglass", "aftermarket", model);
-      }
+      const partCost = tierCostPhoneTablet(kind, model, quality);
+      const profit = profitTarget(model, kind);
+      return partCost + profit;
     }
 
-    // Generic smartphone/tablet fallback
-    const baseMap = {
-      display: quality==="oem" ? 260 : (quality==="aftermarket_plus" ? 220 : 180),
-      battery: quality==="oem" ? 130 : (quality==="aftermarket_plus" ? 110 : 90),
-      backglass: 150,
-      frontcam: quality==="oem" ? 95 : (quality==="aftermarket_plus" ? 85 : 75),
-      rearcam: quality==="oem" ? 180 : (quality==="aftermarket_plus" ? 150 : 130),
-      charge: quality==="oem" ? 120 : (quality==="aftermarket_plus" ? 105 : 90),
-      speaker: quality==="oem" ? 75 : (quality==="aftermarket_plus" ? 65 : 55),
-      wlan: quality==="oem" ? 90 : (quality==="aftermarket_plus" ? 80 : 65)
-    };
-    return baseMap[kind] || 29;
+    // Fallback (andere Marken)
+    const genericCost = {
+      display:  quality==="oem" ? 180 : (quality==="aftermarket_plus" ? 140 : 95),
+      battery:  quality==="oem" ? 70  : (quality==="aftermarket_plus" ? 55  : 35),
+      backglass:quality==="oem" ? 55  : 25,
+      frontcam: quality==="oem" ? 65  : (quality==="aftermarket_plus" ? 50  : 35),
+      rearcam:  quality==="oem" ? 110 : (quality==="aftermarket_plus" ? 85  : 60),
+      charge:   quality==="oem" ? 70  : (quality==="aftermarket_plus" ? 55  : 35),
+      speaker:  quality==="oem" ? 45  : (quality==="aftermarket_plus" ? 35  : 20),
+      wlan:     quality==="oem" ? 45  : (quality==="aftermarket_plus" ? 35  : 20)
+    }[kind] ?? 20;
+
+    return genericCost + profitTarget(model, kind);
   }
 
   // Other devices: labor / fixed
@@ -1483,8 +1559,6 @@
     setShow("saveLine", false);
     byId("out").innerHTML = "Bitte wähle zuerst <b>Gerät</b>.";
     setShow("bundleBox", false);
-
-    // keep visible box open when reset pressed (as you want)
   }
 
   function setQualityOptionsForDevice(d){
@@ -1501,9 +1575,10 @@
         <option value="aftermarket_plus">Aftermarket+ (bessere Qualität)</option>
         <option value="oem">OEM (Original / Premium)</option>
       `;
+      // ✅ Updated wording + Lieferzeit 2–3 Wochen bei Aftermarket
       qInfo.innerHTML =
-        `<b>Aftermarket:</b> repariert den Schaden zuverlässig, aber nicht OEM-Niveau.<br>
-         <b>Aftermarket+:</b> bessere Qualität als Standard-Aftermarket, jedoch nicht original.<br>
+        `<b>Aftermarket:</b> preiswert (AliExpress-Teile) – funktional, aber nicht OEM-Niveau. <b>Lieferzeit bei Bestellung: ca. 2–3 Wochen.</b><br>
+         <b>Aftermarket+:</b> bessere Qualität als Standard-Aftermarket (orientiert an iFixit/eBay-Niveau), jedoch nicht original.<br>
          <b>OEM:</b> Originalteile – <b>nicht immer sofort verfügbar</b> (wir informieren dich vorab).`;
       setShow("qualityWrap", true);
       return;
@@ -1633,6 +1708,12 @@
       }
     }
 
+    // ✅ Rückglas/Panel-Regel: nur Aftermarket (AliExpress) oder OEM — kein Aftermarket+
+    if((d==="phone" || d==="tablet") && keys.includes("backglass") && quality==="aftermarket_plus"){
+      byId("out").innerHTML = "Für <b>Rückglas/Panel</b> bieten wir <b>Aftermarket (AliExpress)</b> oder <b>OEM</b> an. Bitte passe die Teile-Qualität an.";
+      return;
+    }
+
     // OS key virtual for bundles
     let osKey = null;
     let osLine = "";
@@ -1739,6 +1820,13 @@
       ? `<div class="muted" style="margin-top:6px;">OEM-Hinweis: Je nach Modell kann OEM <b>nicht sofort verfügbar</b> sein (wir sagen dir das vorab).</div>`
       : "";
 
+    // ✅ Professional Aftermarket delivery note (2–3 Wochen)
+    const aftermarketDeliveryNote = ((d==="phone"||d==="tablet") && quality==="aftermarket")
+      ? `<div class="muted" style="margin-top:6px;">
+           Transparenzhinweis: Aftermarket-Komponenten werden auftragsbezogen beschafft. Die Lieferzeit kann je nach Teil/Modell ca. <b>2–3 Wochen</b> betragen.
+         </div>`
+      : "";
+
     byId("out").innerHTML = `
       <div class="muted"><b>Auswahl:</b> ${escapeHtml(labelDevice(d))} · ${escapeHtml(b)} · ${escapeHtml(m)}</div>
       <div class="muted"><b>Qualität:</b> ${escapeHtml(qualityLabel)} · <b>inkl. Einbau</b></div>
@@ -1748,8 +1836,13 @@
       <div class="divider"></div>
       <div class="muted">
         Diagnose-Regel: 29 € nur wenn keine Reparatur erfolgt. Bei Reparatur wird Diagnose angerechnet (0 €).<br>
-        Teile-Lieferzeit: falls Bestellung nötig, meist <b>1–3 Werktage</b> (modellabhängig).
+        Teile-Lieferzeit: ${
+          ((d==="phone"||d==="tablet") && quality==="aftermarket")
+            ? `Bei <b>Aftermarket</b> kann die Beschaffung je nach Teil/Modell ca. <b>2–3 Wochen</b> dauern (auftragsbezogene Bestellung).`
+            : `falls Bestellung nötig, meist <b>1–3 Werktage</b> (modellabhängig).`
+        }
       </div>
+      ${aftermarketDeliveryNote}
       ${oemWarn}
     `;
   }
@@ -2003,10 +2096,6 @@
 
   // ==========================
   // Mini-Kalender (Datumsauswahl ohne Monat/Jahr-Steuerung)
-  // - ab morgen
-  // - bis Ende aktueller Monat
-  // - wenn Monatsende nahe: zusätzlich erste Woche nächster Monat
-  // - Wochenende sichtbar, aber klickbar bleibt (du bestätigst später); wenn du willst, kann ich Sa/So deaktivieren
   // ==========================
   function addDays(d, n){
     const x = new Date(d);
@@ -2025,7 +2114,6 @@
     return day===0 || day===6;
   }
   function mondayIndex(d){
-    // return 0..6 where Monday=0
     const day = d.getDay(); // 0..6 (Sun=0)
     return (day + 6) % 7;
   }
@@ -2037,10 +2125,9 @@
     const endOfMonth = new Date(start.getFullYear(), start.getMonth()+1, 0);
     const daysLeft = Math.round((endOfMonth - start) / (1000*60*60*24));
 
-    // extend to next month first week if close to month end
     let end = endOfMonth;
     if(daysLeft <= 7){
-      end = addDays(endOfMonth, 8); // show up to +8 days
+      end = addDays(endOfMonth, 8);
     }
     return {start, end};
   }
@@ -2048,7 +2135,6 @@
   function buildCalendar(){
     const {start, end} = allowedDateRange();
 
-    // Title: show months if range crosses month
     const crosses = start.getMonth() !== end.getMonth() || start.getFullYear() !== end.getFullYear();
     const title = crosses
       ? `${monthName(start.getMonth())} ${start.getFullYear()} → ${monthName(end.getMonth())} ${end.getFullYear()}`
@@ -2057,17 +2143,14 @@
 
     byId("calRangeHint").textContent = `ab ${iso(start)}`;
 
-    // Create list of allowed dates
     const dates = [];
     for(let d = new Date(start); d <= end; d = addDays(d,1)){
       dates.push(new Date(d));
     }
 
-    // Build grid with leading blanks from Monday alignment
     const grid = byId("calGrid");
     grid.innerHTML = "";
 
-    // Determine first cell offset
     const first = dates[0];
     const offset = mondayIndex(first);
     for(let i=0;i<offset;i++){
@@ -2077,7 +2160,6 @@
       grid.appendChild(sp);
     }
 
-    // default selection = first non-weekend (or first)
     let defaultSel = dates.find(d => !isWeekend(d)) || dates[0];
     const currentVal = byId("q_date").value;
     if(currentVal){
@@ -2092,16 +2174,11 @@
       btn.textContent = String(d.getDate());
       btn.dataset.iso = iso(d);
 
-      // You can disable weekends if you want:
-      // if(isWeekend(d)) btn.classList.add("disabled");
-      // For now: not disabled, only visible as weekend.
-
       if(iso(d) === byId("q_date").value){
         btn.classList.add("selected");
       }
 
       btn.onclick = () => {
-        // if(btn.classList.contains("disabled")) return;
         byId("q_date").value = btn.dataset.iso;
         [...grid.querySelectorAll(".calDay")].forEach(x=>x.classList.remove("selected"));
         btn.classList.add("selected");
@@ -2110,7 +2187,6 @@
       grid.appendChild(btn);
     });
 
-    // build time options 09:00..17:30 step 30
     const timeSel = byId("q_time");
     timeSel.innerHTML = "";
     for(let h=9; h<=17; h++){
@@ -2144,14 +2220,12 @@
     byId("q_req_final").checked=false;
     setShow("ankaufReqWrap", false);
     byId("q_status").textContent="";
-    // keep calendar/time as is
   }
 
   async function submitQuestion(){
     const topic = byId("q_topic").value;
     if(!topic){ byId("q_status").textContent = "Bitte Thema auswählen."; return; }
 
-    // If Ankauf: require 3 checkboxes
     if(topic==="ankauf"){
       if(!byId("q_req_reset").checked || !byId("q_req_photos").checked || !byId("q_req_final").checked){
         byId("q_status").textContent = "Bitte alle Ankauf-Bestätigungen anhaken.";
@@ -2189,20 +2263,18 @@
         body: JSON.stringify(payload)
       });
 
-      // Some Apps Script deployments return text
       const text = await res.text();
       if(!res.ok){
         byId("q_status").textContent = "Fehler beim Senden. Bitte erneut versuchen oder WhatsApp nutzen.";
         return;
       }
 
-      // try parse
       let ok = true;
       try{
         const js = JSON.parse(text);
         ok = !!js.ok;
       }catch(e){
-        ok = true; // if it's "OK"
+        ok = true;
       }
 
       if(ok){
@@ -2218,23 +2290,9 @@
   // ==========================
   // Init
   // ==========================
-  function openBuyIfHash(){
-    // optional
-  }
-
-  // Build time + calendar now
   buildCalendar();
-
-  // Cost calculator starts closed
   resetCalc();
   resetBuy();
-
-  // ==========================
-  // Wiring for calc flow
-  // ==========================
-  function openIfNeeded(){
-    // placeholder
-  }
 </script>
 
 </body>
