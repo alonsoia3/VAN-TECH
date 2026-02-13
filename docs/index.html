@@ -566,7 +566,7 @@
 
           <div class="tagRow">
             <span class="tag">🚐 10 km kostenlos, danach <b>0,30 € / km</b></span>
-            <span class="tag">🕒 Teile-Lieferzeit: meist <b>1–3 Werktage</b> (modellabhängig)</span>
+            <span class="tag">🕒 Teile-Lieferzeit: OEM/Aftermarket+ meist <b>1–3 Werktage</b> · Aftermarket bei Bestellung <b>ca. 2–3 Wochen</b></span>
           </div>
 
           <div class="divider"></div>
@@ -950,6 +950,13 @@
   }
   function scrollToEl(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
 
+  // ✅ Preise sollen immer auf 9 enden (z. B. 109, 79, 49)
+  function endWith9(n){
+    const x = Math.max(0, Math.round(Number(n) || 0));
+    if(x === 0) return 0;
+    return (Math.round(x / 10) * 10) - 1;
+  }
+
   // ==========================
   // DATA: Brands & Models
   // ==========================
@@ -1041,7 +1048,7 @@
     phone: [
       {k:"display",  t:"Display", sub:"inkl. Einbau"},
       {k:"battery",  t:"Akku", sub:"inkl. Einbau"},
-      {k:"backglass",t:"Rückglas", sub:"inkl. Einbau (Aftermarket)"},
+      {k:"backglass",t:"Rückglas", sub:"inkl. Einbau"},
       {k:"frontcam", t:"Vordere Kamera / Face-ID", sub:"inkl. Einbau"},
       {k:"rearcam",  t:"Hintere Kamera", sub:"inkl. Einbau"},
       {k:"charge",   t:"Ladebuchse", sub:"inkl. Einbau"},
@@ -1053,7 +1060,7 @@
     tablet: [
       {k:"display",  t:"Display", sub:"inkl. Einbau"},
       {k:"battery",  t:"Akku", sub:"inkl. Einbau"},
-      {k:"backglass",t:"Rückglas", sub:"inkl. Einbau (Aftermarket)"},
+      {k:"backglass",t:"Rückglas", sub:"inkl. Einbau"},
       {k:"frontcam", t:"Vordere Kamera", sub:"inkl. Einbau"},
       {k:"rearcam",  t:"Hintere Kamera", sub:"inkl. Einbau"},
       {k:"charge",   t:"Ladebuchse", sub:"inkl. Einbau"},
@@ -1063,7 +1070,6 @@
       {k:"diagnose", t:"Weiß ich nicht (Diagnose)", sub:"29 € (nur wenn keine Reparatur)"}
     ],
     laptop: [
-      {k:"maintenance", t:"Maintenance (Reinigung + Wärmeleitpaste)", sub:"29 €"},
       {k:"ssd",         t:"SSD/HDD Austausch", sub:"29 € + Teile"},
       {k:"ram",         t:"RAM Austausch", sub:"29 € + Teile"},
       {k:"battery",     t:"Akku Austausch", sub:"29 € + Teile"},
@@ -1074,7 +1080,6 @@
       {k:"diagnose",    t:"Weiß ich nicht (Diagnose)", sub:"29 € (nur wenn keine Reparatur)"}
     ],
     pc: [
-      {k:"maintenance", t:"Maintenance (Reinigung + Optimierung)", sub:"29 €"},
       {k:"ssd",         t:"SSD/HDD Austausch", sub:"29 € + Teile"},
       {k:"ram",         t:"RAM Austausch", sub:"29 € + Teile"},
       {k:"gpu",         t:"GPU Austausch", sub:"29 € + Teile"},
@@ -1085,10 +1090,10 @@
       {k:"diagnose",    t:"Weiß ich nicht (Diagnose)", sub:"29 € (nur wenn keine Reparatur)"}
     ],
     console: [
-      {k:"maintenance", t:"Maintenance (Reinigung + Wärmeleitpaste)", sub:"29 €"},
-      {k:"hdmi",        t:"HDMI-Port Austausch", sub:"39 € + Teile"},
-      {k:"psu",         t:"PSU/Netzteil Problem", sub:"29 € + Teile"},
-      {k:"usb",         t:"USB-C Port (Nintendo)", sub:"29 € + Teile"},
+      {k:"hdmi",        t:"HDMI-Port Austausch", sub:"inkl. Einbau"},
+      {k:"psu",         t:"PSU/Netzteil Problem", sub:"inkl. Einbau"},
+      {k:"battery",     t:"Akku (Nintendo Switch)", sub:"inkl. Einbau"},
+      {k:"usb",         t:"USB-C Port (Nintendo)", sub:"inkl. Einbau"},
       {k:"switch_display", t:"Nintendo Display (LCD/OLED)", sub:"inkl. Einbau"},
       {k:"diagnose",    t:"Weiß ich nicht (Diagnose)", sub:"29 € (nur wenn keine Reparatur)"}
     ],
@@ -1123,7 +1128,6 @@
       {name:"Ladebuchse + Lautsprecher", keys:["charge","speaker"], pct:5}
     ],
     console: [
-      {name:"Maintenance + HDMI-Port", keys:["maintenance","hdmi"], pct:5},
       {name:"Switch Akku + Display", keys:["battery","switch_display"], pct:5, onlyNintendo:true},
       {name:"Switch Akku + Display + USB-C", keys:["battery","switch_display","usb"], pct:10, onlyNintendo:true}
     ],
@@ -1148,9 +1152,6 @@
 
   // ==========================
   // Pricing logic
-  // - Smartphone/Tablet: Aftermarket / Aftermarket+ / OEM
-  // - Laptop/Console/Controller: Aftermarket / OEM
-  // - PC: ONLY OEM
   // ==========================
   function isIphone(m){ return /iphone/i.test(m||""); }
   function iphoneFamily(m){
@@ -1168,227 +1169,175 @@
   }
   function isProMax(m){ return /(pro\s*max|max)/i.test(m||""); }
   function isPro(m){ return /\bpro\b/i.test(m||""); }
-  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+  function mid(r){ return Math.round((r[0]+r[1])/2); }
 
-  // Segment: Mid/Low (40–70) / High (70–120)
-  function isHighEndModel(model){
-    const s = (model||"").toLowerCase();
-    if(/\bpro\b/.test(s)) return true;
-    if(/\b15\b|\b16\b|\b17\b/.test(s)) return true;
-    return false;
-  }
-  function profitTarget(model, kind){
-    const hi = isHighEndModel(model);
-    const loRange = [40,70];
-    const hiRange = [70,120];
-
-    const tweak = ({
-      display:  +8,
-      battery:  +0,
-      backglass:+0,
-      rearcam: +10,
-      frontcam:+4,
-      charge:  +4,
-      speaker: +0,
-      wlan:    +0
-    })[kind] ?? 0;
-
-    const r = hi ? hiRange : loRange;
-    const base = Math.round((r[0] + r[1]) / 2);
-    const pm = isProMax(model) ? 8 : 0;
-
-    return clamp(base + tweak + pm, r[0], r[1]);
-  }
-
-  // Einkaufspreise (Aftermarket = AliExpress Ø)
-  const ALI_IPHONE_COST = {
-    displayBase: {
-      F_6S_8: 10,
-      F_X_XR_XS: 20,
-      F_11: 25,
-      F_12: 30,
-      F_13: 35,
-      F_14: 40,
-      F_15: 50,
-      F_16: 55,
-      F_17: 60
+  // Part ranges (used as base piece cost reference)
+  const PART_RANGES_IPHONE = {
+    display: {
+      F_6S_8:    {am:[40,70], oem:[80,110]},
+      F_X_XR_XS: {am:[60,90], oem:[110,140]},
+      F_11:      {am:[80,120], oem:[140,180]},
+      F_12:      {am:[80,120], oem:[140,180]},
+      F_13:      {am:[90,130], oem:[160,200]},
+      F_14:      {am:[100,140], oem:[180,220]},
+      F_15:      {am:[120,160], oem:[200,250]},
+      F_16:      {am:[140,200], oem:[220,280]},
+      F_17:      {am:[160,220], oem:[240,320]}
     },
-    batteryBase: {
-      F_6S_8: 12,
-      F_X_XR_XS: 18,
-      F_11: 22,
-      F_12: 28,
-      F_13: 32,
-      F_14: 38,
-      F_15: 45,
-      F_16: 48,
-      F_17: 52
+    battery: {
+      F_6S_8:    {am:[25,35], oem:[50,70]},
+      F_X_XR_XS: {am:[35,45], oem:[70,90]},
+      F_11:      {am:[40,50], oem:[90,110]},
+      F_12:      {am:[40,50], oem:[90,110]},
+      F_13:      {am:[45,60], oem:[100,120]},
+      F_14:      {am:[45,60], oem:[100,120]},
+      F_15:      {am:[50,70], oem:[110,140]},
+      F_16:      {am:[50,70], oem:[110,140]},
+      F_17:      {am:[60,80], oem:[130,160]}
     },
-    backglassBase: {
-      F_6S_8: 6,
-      F_X_XR_XS: 7,
-      F_11: 8,
-      F_12: 9,
-      F_13: 10,
-      F_14: 11,
-      F_15: 12,
-      F_16: 13,
-      F_17: 14
-    },
-    frontCamBase: 14,
-    rearCamStdBase: 24,
-    rearCamProBase: 34,
-    chargeBase: 12,
-    speakerBase: 8,
-    wlanBase: 10
+    cameraRearStd: {am:[60,100], oem:[120,160]},
+    cameraRearPro: {am:[90,140], oem:[160,220]},
+    cameraFront:   {am:[25,45],  oem:[60,90]},
+    charge:        {am:[20,50],  oem:[60,90]},
+    speaker:       {am:[10,30],  oem:[40,60]},
+    sensor:        {am:[10,25],  oem:[30,50]}
   };
 
-  function aliDisplayCost(model){
-    const fam = iphoneFamily(model);
-    let c = ALI_IPHONE_COST.displayBase[fam] ?? 35;
-    if(isPro(model)) c += 20;      // iPhone 13 Pro -> 55
-    if(isProMax(model)) c += 10;   // iPhone 15 Pro Max -> 80
-    return c;
-  }
-  function aliBatteryCost(model){
-    const fam = iphoneFamily(model);
-    let c = ALI_IPHONE_COST.batteryBase[fam] ?? 30;
-    if(isPro(model)) c += 3;
-    if(isProMax(model)) c += 5;
+  // Margins
+  function marginFor(kind, quality, model){
+    const lowEnd = !/15|16|17|pro/i.test((model||"").toLowerCase());
+    const hiEnd = /15|16|17|pro/i.test((model||"").toLowerCase());
+    const baseLow = {aftermarket:55, aftermarket_plus:60, oem:55};
+    const baseHi  = {aftermarket:75, aftermarket_plus:85, oem:85};
+    const pick = hiEnd ? baseHi : baseLow;
 
-    // fixe EK-Beispiele
-    const s = (model||"").toLowerCase();
-    if(s.includes("12 pro max")) c = 30;
-    if(s.includes("15 pro max")) c = 50;
-
-    return c;
-  }
-  function aliBackglassCost(model){
-    const fam = iphoneFamily(model);
-    return (ALI_IPHONE_COST.backglassBase[fam] ?? 10);
-  }
-  function aliOtherCost(kind, model){
-    const fam = iphoneFamily(model);
-    const famFactor = ({
-      F_6S_8: 0.90,
-      F_X_XR_XS: 1.00,
-      F_11: 1.05,
-      F_12: 1.10,
-      F_13: 1.15,
-      F_14: 1.20,
-      F_15: 1.30,
-      F_16: 1.35,
-      F_17: 1.40
-    })[fam] ?? 1.15;
-
-    let base = 12;
-    if(kind==="frontcam") base = ALI_IPHONE_COST.frontCamBase;
-    if(kind==="rearcam")  base = (isPro(model)||isProMax(model)) ? ALI_IPHONE_COST.rearCamProBase : ALI_IPHONE_COST.rearCamStdBase;
-    if(kind==="charge")   base = ALI_IPHONE_COST.chargeBase;
-    if(kind==="speaker")  base = ALI_IPHONE_COST.speakerBase;
-    if(kind==="wlan")     base = ALI_IPHONE_COST.wlanBase;
-
-    return Math.round(base * famFactor);
+    const map = {
+      display: pick,
+      battery: {aftermarket:45, aftermarket_plus:50, oem:50},
+      backglass:{aftermarket:55, aftermarket_plus:55, oem:55},
+      frontcam:{aftermarket:45, aftermarket_plus:50, oem:50},
+      rearcam: {aftermarket:55, aftermarket_plus:70, oem:70},
+      charge:  {aftermarket:50, aftermarket_plus:55, oem:55},
+      speaker: {aftermarket:35, aftermarket_plus:40, oem:40},
+      wlan:    {aftermarket:40, aftermarket_plus:45, oem:45}
+    };
+    const v = (map[kind] && map[kind][quality]) || (quality==="oem" ? 50 : 50);
+    return v;
   }
 
-  // Tier-Einkauf (Aftermarket / Aftermarket+ / OEM)
-  function tierCostPhoneTablet(kind, model, quality){
-    let base = 0;
-
-    if(kind==="display") base = aliDisplayCost(model);
-    else if(kind==="battery") base = aliBatteryCost(model);
-    else if(kind==="backglass") base = aliBackglassCost(model);
-    else base = aliOtherCost(kind, model);
-
-    if(quality === "aftermarket_plus"){
-      const mult = ({
-        display: 2.0,
-        battery: 1.8,
-        backglass: 1.6,
-        rearcam: 1.9,
-        frontcam: 1.8,
-        charge: 1.7,
-        speaker: 1.7,
-        wlan: 1.7
-      })[kind] ?? 1.8;
-
-      const minAdd = ({
-        display: 35,
-        battery: 20,
-        backglass: 15,
-        rearcam: 25,
-        frontcam: 20,
-        charge: 18,
-        speaker: 12,
-        wlan: 12
-      })[kind] ?? 20;
-
-      return Math.round(Math.max(base * mult, base + minAdd));
-    }
-
-    if(quality === "oem"){
-      const mult = ({
-        display: 2.7,
-        battery: 2.3,
-        backglass: 2.0,
-        rearcam: 2.6,
-        frontcam: 2.4,
-        charge: 2.3,
-        speaker: 2.3,
-        wlan: 2.3
-      })[kind] ?? 2.4;
-
-      const minAdd = ({
-        display: 70,
-        battery: 35,
-        backglass: 20,
-        rearcam: 55,
-        frontcam: 35,
-        charge: 30,
-        speaker: 20,
-        wlan: 20
-      })[kind] ?? 35;
-
-      return Math.round(Math.max(base * mult, base + minAdd));
-    }
-
-    return Math.round(base);
+  function tier(quality){
+    if(quality === "aftermarket_plus") return "plus";
+    if(quality === "oem") return "oem";
+    return "am";
   }
 
+  // ✅ Apply global adjustments for phone/tablet:
+  // - Display: -30
+  // - Battery: -30
+  // - Cameras: -10 (front + rear)
+  // - Charge: always 49
+  // - Speaker: always 59
+  // - WLAN: iPhone 6s–12 Pro Max => 39, from iPhone 13+ => 59
+  // - Backglass (iPhone): iPhone 14+ => 59, iPhone 13 Pro Max and below => 39
+  // - All final prices end with 9
   function phoneTabletPrice(kind, brand, model, quality){
     if(kind==="backup") return 29;
     if(kind==="diagnose") return 29;
 
-    // iPhone: AliExpress / Aftermarket+ / OEM Logik
+    // FIXPRICES (all smartphones/tablets)
+    if(kind==="charge") return 49;
+    if(kind==="speaker") return 59;
+
+    // iPhone-specific fixed rules
+    const fam = iphoneFamily(model);
+    const tq = tier(quality);
+
     if(isIphone(model)){
-      // Rückglas/Panel: kein Aftermarket+ (wird zusätzlich in calcPrice geblockt)
-      if(kind==="backglass" && quality==="aftermarket_plus"){
-        quality = "aftermarket";
+      if(kind==="wlan"){
+        const fixed = (fam==="F_6S_8" || fam==="F_X_XR_XS" || fam==="F_11" || fam==="F_12") ? 39 : 59;
+        return fixed; // already ends with 9
       }
-      const partCost = tierCostPhoneTablet(kind, model, quality);
-      const profit = profitTarget(model, kind);
-      return partCost + profit;
+      if(kind==="backglass"){
+        // iPhone 14+ => 59, iPhone 13 Pro Max and below => 39
+        const fixed = (fam==="F_14" || fam==="F_15" || fam==="F_16" || fam==="F_17") ? 59 : 39;
+        return fixed;
+      }
     }
 
-    // Fallback (andere Marken)
-    const genericCost = {
-      display:  quality==="oem" ? 180 : (quality==="aftermarket_plus" ? 140 : 95),
-      battery:  quality==="oem" ? 70  : (quality==="aftermarket_plus" ? 55  : 35),
-      backglass:quality==="oem" ? 55  : 25,
-      frontcam: quality==="oem" ? 65  : (quality==="aftermarket_plus" ? 50  : 35),
-      rearcam:  quality==="oem" ? 110 : (quality==="aftermarket_plus" ? 85  : 60),
-      charge:   quality==="oem" ? 70  : (quality==="aftermarket_plus" ? 55  : 35),
-      speaker:  quality==="oem" ? 45  : (quality==="aftermarket_plus" ? 35  : 20),
-      wlan:     quality==="oem" ? 45  : (quality==="aftermarket_plus" ? 35  : 20)
-    }[kind] ?? 20;
+    // iPhone calculated (then adjustments + endWith9)
+    if(isIphone(model)){
+      let base = 0;
 
-    return genericCost + profitTarget(model, kind);
+      if(kind==="display"){
+        const amR = PART_RANGES_IPHONE.display[fam].am;
+        const oR  = PART_RANGES_IPHONE.display[fam].oem;
+        const part = tq==="oem" ? mid(oR)
+                   : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2)
+                   : mid(amR);
+        base = part + marginFor("display", quality, model);
+        base -= 30;
+        return endWith9(base);
+      }
+
+      if(kind==="battery"){
+        const amR = PART_RANGES_IPHONE.battery[fam].am;
+        const oR  = PART_RANGES_IPHONE.battery[fam].oem;
+        const part = tq==="oem" ? mid(oR)
+                   : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2)
+                   : mid(amR);
+        base = part + marginFor("battery", quality, model);
+        base -= 30;
+        return endWith9(base);
+      }
+
+      if(kind==="frontcam"){
+        const amR = PART_RANGES_IPHONE.cameraFront.am;
+        const oR  = PART_RANGES_IPHONE.cameraFront.oem;
+        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
+        base = part + marginFor("frontcam", quality, model);
+        base -= 10;
+        return endWith9(base);
+      }
+
+      if(kind==="rearcam"){
+        const src = (isPro(model)||isProMax(model)) ? PART_RANGES_IPHONE.cameraRearPro : PART_RANGES_IPHONE.cameraRearStd;
+        const amR = src.am, oR = src.oem;
+        const part = tq==="oem" ? mid(oR) : tq==="plus" ? Math.round((mid(amR)+mid(oR))/2) : mid(amR);
+        base = part + marginFor("rearcam", quality, model);
+        base -= 10;
+        return endWith9(base);
+      }
+
+      if(kind==="wlan"){
+        // already handled above, but keep safe fallback
+        const fixed = (fam==="F_6S_8" || fam==="F_X_XR_XS" || fam==="F_11" || fam==="F_12") ? 39 : 59;
+        return fixed;
+      }
+    }
+
+    // Generic smartphone/tablet fallback (then adjustments + endWith9)
+    const baseMap = {
+      display: quality==="oem" ? 260 : (quality==="aftermarket_plus" ? 220 : 180),
+      battery: quality==="oem" ? 130 : (quality==="aftermarket_plus" ? 110 : 90),
+      backglass: 150,
+      frontcam: quality==="oem" ? 95 : (quality==="aftermarket_plus" ? 85 : 75),
+      rearcam: quality==="oem" ? 180 : (quality==="aftermarket_plus" ? 150 : 130),
+      wlan: quality==="oem" ? 90 : (quality==="aftermarket_plus" ? 80 : 65)
+    };
+
+    let v = baseMap[kind] || 29;
+
+    if(kind==="display") v -= 30;
+    if(kind==="battery") v -= 30;
+    if(kind==="frontcam" || kind==="rearcam") v -= 10;
+
+    // charge/speaker are already fixed above
+    return endWith9(v);
   }
 
   // Other devices: labor / fixed
   function otherPrice(device, kind, model){
     if(kind==="diagnose") return 29;
-    if(kind==="maintenance") return 29;
     if(kind==="data") return 29;
 
     const baseLabor = 29;
@@ -1401,24 +1350,40 @@
 
     if(device==="console"){
       const low = (model||"").toLowerCase();
-      if(kind==="switch_display"){
-        const isNintendo = /switch/.test(low);
-        if(!isNintendo) return 0;
-        const isOled = /oled/.test(low);
-        const part = isOled ? 90 : 20;
-        const profit = 55;
-        return part + profit;
-      }
-      if(kind==="usb"){
-        const isNintendo = /switch/.test(low);
-        if(!isNintendo) return 0;
-        return 29;
-      }
+
+      // HDMI: all consoles 49
       if(kind==="hdmi"){
-        return 39;
+        return 49;
       }
+
+      // PSU fixed by console model
       if(kind==="psu"){
-        return 29;
+        if(low.includes("xbox one s")) return 59;
+        if(low.includes("xbox one x")) return 69;
+        if(low.includes("series s") || low.includes("series x")) return 69;
+        if(low.includes("ps5")) return 69;
+        if(low.includes("ps4")) return 59;
+        return 59;
+      }
+
+      // Nintendo Switch specifics
+      const isNintendo = /switch/.test(low);
+
+      if(kind==="usb"){
+        if(!isNintendo) return 0;
+        return 49;
+      }
+
+      if(kind==="battery"){
+        if(!isNintendo) return 0;
+        return 59;
+      }
+
+      if(kind==="switch_display"){
+        if(!isNintendo) return 0;
+        if(/lite/.test(low)) return 79;
+        if(/oled/.test(low)) return 119;
+        return 79; // normal Switch
       }
     }
 
@@ -1508,8 +1473,7 @@
       if(device==="console"){
         const low = (model||"").toLowerCase();
         const isNintendo = /switch/.test(low);
-        if(r.k==="switch_display" && !isNintendo) return;
-        if(r.k==="usb" && !isNintendo) return;
+        if((r.k==="switch_display" || r.k==="usb" || r.k==="battery") && !isNintendo) return;
       }
 
       const card = document.createElement("label");
@@ -1575,11 +1539,15 @@
         <option value="aftermarket_plus">Aftermarket+ (bessere Qualität)</option>
         <option value="oem">OEM (Original / Premium)</option>
       `;
-      // ✅ Updated wording + Lieferzeit 2–3 Wochen bei Aftermarket
+      // ✅ sichtbarer + Lieferzeit-Hinweis für Aftermarket
       qInfo.innerHTML =
-        `<b>Aftermarket:</b> preiswert (AliExpress-Teile) – funktional, aber nicht OEM-Niveau. <b>Lieferzeit bei Bestellung: ca. 2–3 Wochen.</b><br>
-         <b>Aftermarket+:</b> bessere Qualität als Standard-Aftermarket (orientiert an iFixit/eBay-Niveau), jedoch nicht original.<br>
-         <b>OEM:</b> Originalteile – <b>nicht immer sofort verfügbar</b> (wir informieren dich vorab).`;
+        `<div class="note" style="margin-top:10px;">
+          <b style="color:var(--text)">Wichtig – Teilequalität</b><br>
+          <b>Aftermarket:</b> repariert das Defekte zuverlässig, aber nicht OEM-Niveau (Qualität/Passform kann variieren).<br>
+          <span class="muted"><b>Lieferzeit:</b> Falls Teile bestellt werden müssen, kann Aftermarket <b>ca. 2–3 Wochen</b> dauern.</span><br><br>
+          <b>Aftermarket+:</b> bessere Qualität als Standard-Aftermarket, jedoch nicht original (oft schneller verfügbar).<br>
+          <b>OEM:</b> Originalteile – <b>nicht immer sofort verfügbar</b> (wir informieren dich vorab).
+        </div>`;
       setShow("qualityWrap", true);
       return;
     }
@@ -1592,8 +1560,12 @@
         <option value="oem">OEM (Original)</option>
       `;
       qInfo.innerHTML =
-        `<b>Aftermarket:</b> preiswert & funktional.<br>
-         <b>OEM:</b> Originalteile – je nach Modell ggf. eingeschränkte Verfügbarkeit.`;
+        `<div class="note" style="margin-top:10px;">
+          <b style="color:var(--text)">Wichtig – Teilequalität</b><br>
+          <b>Aftermarket:</b> preiswert & funktional (Qualität kann variieren).<br>
+          <span class="muted"><b>Lieferzeit:</b> Bei Bestellung kann es <b>ca. 2–3 Wochen</b> dauern.</span><br><br>
+          <b>OEM:</b> Originalteile – je nach Modell ggf. eingeschränkte Verfügbarkeit.
+        </div>`;
       setShow("qualityWrap", true);
       return;
     }
@@ -1689,15 +1661,12 @@
       return;
     }
 
-    // Quality rules:
-    // - phone/tablet: 3 tiers required if any repair besides backup/diagnose
-    // - laptop/console/controller: after/oem required for repairs (optional for diagnosis-only)
-    // - ✅ pc: force oem, no dropdown
+    // Quality rules
     let quality = "oem";
     if(d==="pc"){
       quality = "oem";
     } else if(d==="phone" || d==="tablet" || d==="laptop" || d==="console" || d==="controller"){
-      const needsQuality = keys.some(k => !["backup","diagnose","data","maintenance"].includes(k));
+      const needsQuality = keys.some(k => !["backup","diagnose","data"].includes(k));
       quality = (byId("c_quality") && byId("c_quality").value) ? byId("c_quality").value : "";
       if(needsQuality && !quality){
         byId("out").innerHTML = "Bitte <b>Teile-Qualität</b> auswählen.";
@@ -1706,12 +1675,6 @@
       if(!needsQuality && !quality){
         quality = "aftermarket";
       }
-    }
-
-    // ✅ Rückglas/Panel-Regel: nur Aftermarket (AliExpress) oder OEM — kein Aftermarket+
-    if((d==="phone" || d==="tablet") && keys.includes("backglass") && quality==="aftermarket_plus"){
-      byId("out").innerHTML = "Für <b>Rückglas/Panel</b> bieten wir <b>Aftermarket (AliExpress)</b> oder <b>OEM</b> an. Bitte passe die Teile-Qualität an.";
-      return;
     }
 
     // OS key virtual for bundles
@@ -1748,7 +1711,7 @@
         frontcam:"Vordere Kamera", rearcam:"Hintere Kamera",
         charge:"Ladebuchse", speaker:"Lautsprecher", wlan:"WLAN/Bluetooth",
         backup:"Backup / Datenübertragung",
-        maintenance:"Maintenance", ssd:"SSD/HDD Austausch", ram:"RAM Austausch",
+        ssd:"SSD/HDD Austausch", ram:"RAM Austausch",
         gpu:"GPU Austausch", cpu:"CPU Austausch", mb:"Mainboard Austausch", psu:"PSU/Netzteil",
         data:"Datenübertragung", wifi:"WLAN/Bluetooth Modul",
         stick:"Stick-Drift (beide Sticks)", buttons:"Buttons (alle)",
@@ -1820,11 +1783,8 @@
       ? `<div class="muted" style="margin-top:6px;">OEM-Hinweis: Je nach Modell kann OEM <b>nicht sofort verfügbar</b> sein (wir sagen dir das vorab).</div>`
       : "";
 
-    // ✅ Professional Aftermarket delivery note (2–3 Wochen)
-    const aftermarketDeliveryNote = ((d==="phone"||d==="tablet") && quality==="aftermarket")
-      ? `<div class="muted" style="margin-top:6px;">
-           Transparenzhinweis: Aftermarket-Komponenten werden auftragsbezogen beschafft. Die Lieferzeit kann je nach Teil/Modell ca. <b>2–3 Wochen</b> betragen.
-         </div>`
+    const amShip = ((d==="phone"||d==="tablet"||d==="laptop"||d==="console"||d==="controller") && quality==="aftermarket")
+      ? `<div class="muted" style="margin-top:6px;"><b>Aftermarket-Hinweis:</b> Falls Teile bestellt werden müssen, kann die Lieferung <b>ca. 2–3 Wochen</b> dauern. Wir informieren dich transparent.</div>`
       : "";
 
     byId("out").innerHTML = `
@@ -1836,13 +1796,9 @@
       <div class="divider"></div>
       <div class="muted">
         Diagnose-Regel: 29 € nur wenn keine Reparatur erfolgt. Bei Reparatur wird Diagnose angerechnet (0 €).<br>
-        Teile-Lieferzeit: ${
-          ((d==="phone"||d==="tablet") && quality==="aftermarket")
-            ? `Bei <b>Aftermarket</b> kann die Beschaffung je nach Teil/Modell ca. <b>2–3 Wochen</b> dauern (auftragsbezogene Bestellung).`
-            : `falls Bestellung nötig, meist <b>1–3 Werktage</b> (modellabhängig).`
-        }
+        Hinweis: Eine grundlegende Innenreinigung/Checks sind im Rahmen jeder Reparatur inkludiert.
       </div>
-      ${aftermarketDeliveryNote}
+      ${amShip}
       ${oemWarn}
     `;
   }
@@ -2016,14 +1972,15 @@
     if(!b){ byId("buyOut").innerHTML="Bitte Marke wählen."; return; }
     if(!model){ byId("buyOut").innerHTML="Bitte Modell eingeben."; return; }
 
-    // ✅ PC/Laptop: keinen Preis – nur Hinweis
+    // ✅ PC/Laptop: keinen Preis – nur Hinweis (sichtbarer)
     if(t==="pc" || t==="laptop"){
       byId("buyPrice").textContent = `Kein fixer Preis`;
       byId("buyOut").innerHTML = `
         <div class="muted"><b>Auswahl:</b> ${escapeHtml(labelDevice(t))} · ${escapeHtml(b)} · ${escapeHtml(model)}</div>
         <div class="divider"></div>
-        <div class="muted">
-          Der Ankauf von ${t==="pc" ? "PCs" : "Laptops"} hängt stark von den <b>Komponenten</b> ab (CPU/GPU/RAM/SSD, Zustand, Zubehör).
+        <div class="note" style="margin-top:0;">
+          <b style="color:var(--text)">Hinweis:</b><br>
+          Der Ankauf von ${t==="pc" ? "PCs" : "Laptops"} hängt stark von den <b>Komponenten</b> ab (CPU/GPU/RAM/SSD, Zustand, Zubehör).<br>
           Bitte sende eine Anfrage unten unter <b>„Fragen / Ankauf / Aufrüsten“</b> mit Details – wir machen dir ein faires Angebot.
         </div>
       `;
