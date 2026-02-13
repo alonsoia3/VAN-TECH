@@ -2174,21 +2174,25 @@
   // ==========================
   // Fragen Formular -> Google Apps Script (ohne Mailto)
   // ==========================
-  function resetQuestion(){
-    byId("q_topic").value="";
-    byId("q_first").value="";
-    byId("q_last").value="";
-    byId("q_email").value="";
-    byId("q_phone").value="";
-    byId("q_place").value="";
-    byId("q_street").value="";
-    byId("q_msg").value="";
-    byId("q_req_reset").checked=false;
-    byId("q_req_photos").checked=false;
-    byId("q_req_final").checked=false;
-    setShow("ankaufReqWrap", false);
-    byId("q_status").textContent="";
-  }
+ function resetQuestion(){
+  byId("q_topic").value="";
+  byId("q_first").value="";
+  byId("q_last").value="";
+  byId("q_email").value="";
+  byId("q_phone").value="";
+  byId("q_place").value="";
+  byId("q_street").value="";
+  byId("q_device").value="";
+  byId("q_model").value="";
+  byId("q_msg").value="";
+  byId("q_req_reset").checked=false;
+  byId("q_req_photos").checked=false;
+  byId("q_req_final").checked=false;
+  setShow("ankaufReqWrap", false);
+  byId("q_status").textContent="";
+  // keep calendar/time as is
+}
+
 
   async function submitQuestion(){
     const topic = byId("q_topic").value;
